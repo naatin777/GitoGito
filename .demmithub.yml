@@ -1,4 +1,4 @@
 language: en - English
-editor: Antigravity --wait
+editor: agy --wait
 provider: OpenRouter
 model: mistralai/devstral-2512:free
