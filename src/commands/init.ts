@@ -1,6 +1,5 @@
 import { BaseCommand, type Command } from "../lib/command.ts";
 import { SetupFlow } from "../components/setup_flow.tsx";
-import { render } from "ink";
 import React from "react";
 import {
   GlobalFlag,
@@ -9,6 +8,7 @@ import {
 } from "../constants/commands/flags.ts";
 import { envService } from "../services/env.ts";
 import { ConfigService } from "../services/config.ts";
+import { runTui } from "../utils/tui.ts";
 
 const InitCommandFlag = { ...HelpFlag, ...LocalFlag, ...GlobalFlag };
 const InitCommandOption = {};
@@ -53,7 +53,6 @@ export class InitCommand
       console.error("Config already exists");
       return;
     }
-    const { waitUntilExit } = render(React.createElement(SetupFlow));
-    await waitUntilExit();
+    await runTui(React.createElement(SetupFlow));
   }
 }

@@ -1,7 +1,6 @@
 import { BaseCommand, type Command } from "../../lib/command.ts";
 import { ConfigService } from "../../services/config.ts";
 import { EditorSelector } from "../../components/selection.tsx";
-import { render } from "ink";
 import React from "react";
 import {
   ConfigCommandFlag,
@@ -10,6 +9,7 @@ import {
   type ConfigCommandOptionType,
 } from "../config.ts";
 import { envService } from "../../services/env.ts";
+import { runTui } from "../../utils/tui.ts";
 
 export class EditorCommand
   extends BaseCommand<ConfigCommandFlagType, ConfigCommandOptionType> {
@@ -42,7 +42,7 @@ export class EditorCommand
       return;
     }
 
-    const { waitUntilExit } = render(
+    await runTui(
       React.createElement(EditorSelector, {
         onSelect: async (editor: string) => {
           const configService = ConfigService.createFromFlags(
@@ -55,6 +55,5 @@ export class EditorCommand
         },
       }),
     );
-    await waitUntilExit();
   }
 }

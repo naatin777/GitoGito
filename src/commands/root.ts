@@ -2,7 +2,7 @@ import React from "react";
 import { HelpFlag, VersionFlag } from "../constants/commands/flags.ts";
 import { BaseCommand, type Command } from "../lib/command.ts";
 import { Version } from "../features/version/ui.tsx";
-import { render } from "ink";
+import { runTui } from "../utils/tui.ts";
 
 type RootCommandInit = {
   name: string;
@@ -58,8 +58,7 @@ export class RootCommand
         version: this.version,
       });
 
-      const { waitUntilExit } = render(version);
-      await waitUntilExit();
+      await runTui(version);
       return;
     }
 
