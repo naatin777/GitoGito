@@ -16,15 +16,15 @@ export const EditCommitMessageHeader = () => {
 
   useInput((input, key) => {
     if (isFocused) {
-      if (key.leftArrow) dispatch({ type: "CURSOR_LEFT" });
-      else if (key.rightArrow) dispatch({ type: "CURSOR_RIGHT" });
+      if (key.leftArrow) dispatch({ type: "HEADER_CURSOR_LEFT" });
+      else if (key.rightArrow) dispatch({ type: "HEADER_CURSOR_RIGHT" });
       else if (key.downArrow) dispatch({ type: "FOCUS_BODY" });
       else if (key.upArrow) dispatch({ type: "FOCUS_FOOTER" });
-      else if (key.backspace || key.delete) dispatch({ type: "DELETE" });
-      else if (key.ctrl && input === "a") dispatch({ type: "GO_TO_START" });
-      else if (key.ctrl && input === "e") dispatch({ type: "GO_TO_END" });
+      else if (key.backspace || key.delete) dispatch({ type: "HEADER_DELETE" });
+      else if (key.ctrl && input === "a") dispatch({ type: "HEADER_GO_TO_START" });
+      else if (key.ctrl && input === "e") dispatch({ type: "HEADER_GO_TO_END" });
       else if (!key.ctrl && !key.meta) {
-        if (!key.return) dispatch({ type: "TYPE", char: input });
+        if (!key.return || !(input === "\r")) dispatch({ type: "HEADER_TYPE", char: input });
         else dispatch({ type: "FOCUS_BODY" });
       }
     }
