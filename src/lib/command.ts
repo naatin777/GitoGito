@@ -1,7 +1,7 @@
 import { parseArgs } from "@std/cli";
 import React from "react";
 import { Help } from "../features/help/ui.tsx";
-import { render } from "ink";
+import { runTui } from "../utils/tui.ts";
 
 export type FlagType = Record<string, {
   value: boolean;
@@ -173,7 +173,6 @@ export abstract class BaseCommand<
       error,
     });
 
-    const { waitUntilExit } = render(help);
-    await waitUntilExit();
+    await runTui(help)
   }
 }

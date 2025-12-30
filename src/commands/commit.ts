@@ -1,8 +1,8 @@
 import { BaseCommand, type Command } from "../lib/command.ts";
 import { Commit } from "../features/commit/ui.tsx";
-import { render } from "ink";
 import React from "react";
 import { HelpFlag } from "../constants/commands/flags.ts";
+import { runTui } from "../utils/tui.ts";
 
 const CommitCommandOption = {};
 const CommitCommandFlag = { ...HelpFlag };
@@ -42,7 +42,6 @@ export class CommitCommand
     }
 
     const commit = React.createElement(Commit, null);
-    const { waitUntilExit } = render(commit);
-    await waitUntilExit();
+    await runTui(commit);
   }
 }
