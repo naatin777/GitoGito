@@ -1,4 +1,4 @@
-import { Box, render, Text, useInput } from "ink";
+import { Box, useInput } from "ink";
 import { EditCommitMessageStatusBar } from "./StatusBar.tsx";
 import { EditCommitMessageHeader } from "./Header.tsx";
 import { EditCommitMessageBody } from "./Body.tsx";
@@ -7,6 +7,19 @@ import {
   EditCommitMessageProvider,
   useEditCommitMessageStore,
 } from "../state/context.tsx";
+import { runTui } from "../../../utils/tui.ts";
+
+export const BORDER_WIDTH = 1 as const;
+export const BORDER_PADDING = 1 as const;
+export const BORDER_SIZE = BORDER_WIDTH + BORDER_PADDING * 2;
+export const LABEL_WIDTH = 6 as const;
+export const EDITOR_GAP = 1 as const;
+export const GUTTER_WIDTH = 1 as const;
+export const GUTTER_MARGIN = 1 as const;
+export const GUTTER_SIZE = GUTTER_WIDTH + GUTTER_MARGIN * 2;
+export const RESERVED_WIDTH = 2 as const;
+export const NOT_INPUT_WIDTH = LABEL_WIDTH + BORDER_SIZE + GUTTER_SIZE +
+  RESERVED_WIDTH;
 
 export const EditCommitMessageContents = () => {
   const { state, dispatch } = useEditCommitMessageStore();
@@ -20,14 +33,14 @@ export const EditCommitMessageContents = () => {
   });
 
   return (
-    <Box height="100%" flexDirection="column">
+    <Box flexDirection="column">
       <EditCommitMessageStatusBar />
       <Box
         flexDirection="column"
         borderColor="cyan"
         borderStyle="round"
-        paddingX={1}
-        gap={1}
+        rowGap={EDITOR_GAP}
+        paddingX={BORDER_PADDING}
       >
         <EditCommitMessageHeader />
         <EditCommitMessageBody />
@@ -37,26 +50,12 @@ export const EditCommitMessageContents = () => {
   );
 };
 
-const encoder = new TextEncoder();
-const write = (txt: string) => Deno.stdout.writeSync(encoder.encode(txt));
-const ENTER_ALT_SCREEN = "\x1b[?1049h\x1b[2J\x1b[H";
-const EXIT_ALT_SCREEN = "\x1b[?1049l";
 // deno-coverage-ignore-start
 if (import.meta.main) {
-  write(ENTER_ALT_SCREEN);
-
-  try {
-    const instance = render(
-      <EditCommitMessageProvider>
-        <EditCommitMessageContents />
-      </EditCommitMessageProvider>,
-    );
-
-    await instance.waitUntilExit();
-  } catch (err) {
-    console.error(err);
-  } finally {
-    write(EXIT_ALT_SCREEN);
-  }
+  runTui(
+    <EditCommitMessageProvider>
+      <EditCommitMessageContents />
+    </EditCommitMessageProvider>,
+  );
 }
 // deno-coverage-ignore-stop
