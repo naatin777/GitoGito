@@ -16,5 +16,10 @@ export type Choice<T> = {
   description: string;
 };
 
+export type Suggestion = {
+  value: string;
+  description: string;
+};
+
 export type IssueCreateResponse =
   RestEndpointMethodTypes["issues"]["create"]["response"];
