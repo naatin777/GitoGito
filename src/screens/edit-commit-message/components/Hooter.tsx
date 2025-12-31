@@ -1,5 +1,6 @@
 import { Box, Text, useInput } from "ink";
 import { useEditCommitMessageStore } from "../state/context.tsx";
+import { LABEL_WIDTH } from "./Contents.tsx";
 
 export const EditCommitMessageFooter = () => {
   const { state, dispatch } = useEditCommitMessageStore();
@@ -21,16 +22,16 @@ export const EditCommitMessageFooter = () => {
       flexDirection="row"
       borderColor={isFocused ? "green" : undefined}
     >
-      <Box width={7}>
+      <Box width={LABEL_WIDTH} flexDirection="column">
         <Text color={isFocused ? "green" : undefined} bold>Footer</Text>
       </Box>
-      <Box width={2}>
+      <Box width={1} marginX={1}>
         <Text color={isFocused ? "green" : undefined}>
-          {isFocused ? `❯ ` : `│ `}
+          {isFocused ? `❯` : `│`}
         </Text>
       </Box>
       <Box>
-        <Text>{"aaaaaaaa"}</Text>
+        <Text>{""}</Text>
       </Box>
     </Box>
   );

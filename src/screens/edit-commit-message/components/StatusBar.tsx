@@ -20,9 +20,9 @@ export const EditCommitMessageStatusBar = () => {
       <Box flexDirection="row" justifyContent="flex-start">
         <Text bold>Please write a commit message</Text>
       </Box>
-      <Box flexDirection="row" justifyContent="flex-end">
+      <Box flexDirection="row" justifyContent="flex-end" gap={2}>
         {shortcuts.map((shortcut) => (
-          <Box key={shortcut.key} paddingX={1}>
+          <Box key={shortcut.key}>
             <Text color="gray">[{shortcut.key}]</Text>
             <Text color="gray">{shortcut.description}</Text>
           </Box>
