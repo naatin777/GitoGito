@@ -1,4 +1,4 @@
-import type { Suggestion } from "../../type.ts";
+import type { CommitConfig, Suggestion } from "../../type.ts";
 
 export const COMMIT_MESSAGE_PREFIXL: Suggestion[] = [
   { value: "fix", description: "A bug fix" },
@@ -39,3 +39,11 @@ export const COMMIT_MESSAGE_PREFIXL: Suggestion[] = [
       "Changes to the build process or auxiliary tools and libraries such as documentation generation",
   },
 ] as const satisfies Suggestion[];
+
+export const DEFAULT_COMMIT_CONFIG: CommitConfig = {
+  rules: {
+    maxHeaderLength: 50,
+    requireScope: false,
+  },
+  type: COMMIT_MESSAGE_PREFIXL,
+};
