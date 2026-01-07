@@ -1,4 +1,7 @@
 import { render } from "ink";
+import React from "react";
+import { Provider } from "react-redux";
+import { store } from "../store/index.ts";
 
 const encoder = new TextEncoder();
 const write = (txt: string) => Deno.stdout.writeSync(encoder.encode(txt));
@@ -9,7 +12,11 @@ export async function runTui(component: React.ReactNode, isAltScreen = true) {
   write(isAltScreen ? ENTER_ALT_SCREEN : "");
 
   try {
-    const instance = render(component);
+    const wrappedComponent = React.createElement(
+      Provider,
+      { store, children: component },
+    );
+    const instance = render(wrappedComponent);
 
     await instance.waitUntilExit();
   } catch (err) {

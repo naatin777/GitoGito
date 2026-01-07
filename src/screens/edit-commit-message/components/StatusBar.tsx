@@ -1,17 +1,15 @@
-import { Box, render, Text } from "ink";
-import {
-  EditCommitMessageProvider,
-  useEditCommitMessageStore,
-} from "../state/context.tsx";
+import { Box, Text } from "ink";
+import { useAppSelector } from "../../../store/hooks.ts";
 import {
   AI_MODE_SHORTCUTS,
   NORMAL_MODE_SHORTCUTS,
 } from "../../../constants/shortcuts.ts";
+import { runTui } from "../../../utils/tui.ts";
 
 export const EditCommitMessageStatusBar = () => {
-  const { state } = useEditCommitMessageStore();
+  const mode = useAppSelector((state) => state.editCommitMessage.form.mode);
 
-  const shortcuts = state.form.mode === "normal"
+  const shortcuts = mode === "normal"
     ? NORMAL_MODE_SHORTCUTS
     : AI_MODE_SHORTCUTS;
 
@@ -34,10 +32,6 @@ export const EditCommitMessageStatusBar = () => {
 
 // deno-coverage-ignore-start
 if (import.meta.main) {
-  render(
-    <EditCommitMessageProvider>
-      <EditCommitMessageStatusBar />
-    </EditCommitMessageProvider>,
-  );
+  runTui(<EditCommitMessageStatusBar />);
 }
 // deno-coverage-ignore-stop

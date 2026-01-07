@@ -1,103 +1,51 @@
-import { useEffect, useReducer } from "react";
-import { commitReducer, type CommitState } from "./reducer.ts";
-import { GitService } from "../../services/git/git_service.ts";
-import { COMMIT_SYSTEM_MESSAGE } from "../../constants/message.ts";
-import { CommitSchema } from "../../schema.ts";
-import { editText } from "../../utils/edit.ts";
+import { useEffect } from "react";
 import { useApp } from "ink";
-import { AIService } from "../../services/ai.ts";
-
-const initialState: CommitState = { step: "loading" };
+import { useAppDispatch, useAppSelector } from "../../store/hooks.ts";
+import {
+  generateCommitMessages,
+  editCommitMessage,
+  commitMessage,
+  selectMessage,
+} from "../../store/slices/commitSlice.ts";
 
 export function useCommitFlow() {
-  const [state, dispatch] = useReducer(commitReducer, initialState);
+  const dispatch = useAppDispatch();
+  const state = useAppSelector((state) => state.commit);
   const { exit } = useApp();
-
-  const generateCommitMessages = async () => {
-    const gitService = new GitService();
-    const diff = await gitService.diff.getGitDiffStaged();
-    if (!diff) {
-      dispatch({ type: "ERROR" });
-      return;
-    }
-    const aiService = await AIService.create();
-    const result = await aiService.generateStructuredOutput(
-      [
-        {
-          role: "system",
-          content: COMMIT_SYSTEM_MESSAGE,
-        },
-        {
-          role: "user",
-          content: diff,
-        },
-      ],
-      COMMIT_SYSTEM_MESSAGE,
-      CommitSchema,
-    );
-    if (!result) {
-      dispatch({ type: "ERROR" });
-      return;
-    }
-    dispatch({ type: "SELECT", messages: result });
-  };
-
-  const selectCommitMessage = (
-    messages: {
-      header: string;
-      body: string | null;
-      footer: string | null;
-    } | undefined,
-  ) => {
-    if (!messages) {
-      dispatch({ type: "ERROR" });
-      return;
-    }
-    dispatch({ type: "EDIT", selectedMessage: messages });
-  };
-
-  const editCommitMessage = async () => {
-    if (state.step !== "edit") {
-      dispatch({ type: "ERROR" });
-      return;
-    }
-    const combinedCommitMessage = [
-      state.selectedMessage.header,
-      state.selectedMessage.body,
-      state.selectedMessage.footer,
-    ]
-      .filter(Boolean).join("\n\n");
-    const editedCombinedCommitMessage = await editText(combinedCommitMessage);
-    if (editedCombinedCommitMessage.trim()) {
-      dispatch({ type: "COMMIT", commitMessage: editedCombinedCommitMessage });
-    } else {
-      dispatch({ type: "ERROR" });
-    }
-  };
-
-  const commitMessage = async () => {
-    if (state.step !== "commit") {
-      dispatch({ type: "ERROR" });
-      return;
-    }
-    const gitService = new GitService();
-    await gitService.commit.commitWithMessages([
-      state.commitMessage,
-    ]);
-    dispatch({ type: "DONE" });
-  };
 
   useEffect(() => {
     if (state.step === "done" || state.step === "error") {
       exit();
     }
-  }, [state.step]);
+  }, [state.step, exit]);
 
   return {
     state,
-    generateCommitMessages,
-    selectCommitMessage,
-    editCommitMessage,
-    commitMessage,
+    generateCommitMessages: async () => {
+      await dispatch(generateCommitMessages());
+    },
+    selectCommitMessage: (
+      message:
+        | {
+          header: string;
+          body: string | null;
+          footer: string | null;
+        }
+        | undefined,
+    ) => {
+      if (message) {
+        dispatch(selectMessage(message));
+      }
+    },
+    editCommitMessage: async () => {
+      if (state.step === "edit") {
+        await dispatch(editCommitMessage(state.selectedMessage));
+      }
+    },
+    commitMessage: async () => {
+      if (state.step === "commit") {
+        await dispatch(commitMessage(state.commitMessage));
+      }
+    },
   };
 }

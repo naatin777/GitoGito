@@ -1,18 +1,23 @@
 import { Box, Text, useInput } from "ink";
-import { useEditCommitMessageStore } from "../state/context.tsx";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks.ts";
+import {
+  focusHeader,
+  focusBody,
+} from "../../../store/slices/editCommitMessageSlice.ts";
 import { LABEL_WIDTH } from "./Contents.tsx";
 
 export const EditCommitMessageFooter = () => {
-  const { state, dispatch } = useEditCommitMessageStore();
-  const isFocused = state.form.focus === "footer";
+  const dispatch = useAppDispatch();
+  const focus = useAppSelector((state) => state.editCommitMessage.form.focus);
+  const isFocused = focus === "footer";
 
   useInput((_input, key) => {
     if (isFocused) {
       if (key.downArrow) {
-        dispatch({ type: "FOCUS_HEADER" });
+        dispatch(focusHeader());
       }
       if (key.upArrow) {
-        dispatch({ type: "FOCUS_BODY" });
+        dispatch(focusBody());
       }
     }
   });

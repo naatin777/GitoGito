@@ -3,10 +3,11 @@ import { EditCommitMessageStatusBar } from "./StatusBar.tsx";
 import { EditCommitMessageHeader } from "./Header.tsx";
 import { EditCommitMessageBody } from "./Body.tsx";
 import { EditCommitMessageFooter } from "./Hooter.tsx";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks.ts";
 import {
-  EditCommitMessageProvider,
-  useEditCommitMessageStore,
-} from "../state/context.tsx";
+  changeToAiMode,
+  changeToNormalMode,
+} from "../../../store/slices/editCommitMessageSlice.ts";
 import { runTui } from "../../../utils/tui.ts";
 
 export const BORDER_WIDTH = 1 as const;
@@ -22,13 +23,14 @@ export const NOT_INPUT_WIDTH = LABEL_WIDTH + BORDER_SIZE + GUTTER_SIZE +
   RESERVED_WIDTH;
 
 export const EditCommitMessageContents = () => {
-  const { state, dispatch } = useEditCommitMessageStore();
+  const dispatch = useAppDispatch();
+  const mode = useAppSelector((state) => state.editCommitMessage.form.mode);
   useInput((input, key) => {
-    if (key.ctrl && input === "g" && state.form.mode === "normal") {
-      dispatch({ type: "CHANGE_TO_AI_MODE" });
+    if (key.ctrl && input === "g" && mode === "normal") {
+      dispatch(changeToAiMode());
     }
-    if (key.escape && state.form.mode === "ai") {
-      dispatch({ type: "CHANGE_TO_NORMAL_MODE" });
+    if (key.escape && mode === "ai") {
+      dispatch(changeToNormalMode());
     }
   });
 
@@ -52,10 +54,6 @@ export const EditCommitMessageContents = () => {
 
 // deno-coverage-ignore-start
 if (import.meta.main) {
-  runTui(
-    <EditCommitMessageProvider>
-      <EditCommitMessageContents />
-    </EditCommitMessageProvider>,
-  );
+  runTui(<EditCommitMessageContents />);
 }
 // deno-coverage-ignore-stop
