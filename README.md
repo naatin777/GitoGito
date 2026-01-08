@@ -1,3 +1,1 @@
 # DemmitHub
-
-Ghost Text Dropdown
