@@ -17,15 +17,21 @@ application.
    - Manages application state using **Redux Toolkit**.
    - Handles "User Flows" (e.g., Commit Flow, Issue Creation Flow).
 
-3. **Domain/Service Layer (`src/services/`)**
+3. **Domain/Service Layer (`src/services/`, `src/features/*/domain/`)**
    - Core business logic, independent of the UI.
    - **GitService**: Wraps `simple-git` with the Repository pattern.
    - **AIService**: Wraps Vercel AI SDK, enforcing Zod schemas for structured
      output.
    - **ConfigService**: Manages the 3-tier configuration (Global/Project/Local).
+   - **EditorService**: External text editor integration.
+   - **Feature domains**: Feature-specific business logic (e.g.,
+     `features/commit/domain/`, `features/issue/domain/`).
 
-4. **Infrastructure Layer (`src/lib/`, `src/utils/`)**
-   - Low-level utilities, command parsing (`BaseCommand`), and error handling.
+4. **Infrastructure Layer (`src/lib/`, `src/helpers/`)**
+   - **lib/**: Framework wrappers (`tui.ts`, `command.ts`, `errors.ts`).
+   - **helpers/**: Pure utility functions organized by category:
+     - `text/`: Text processing utilities (word-wrap, split-text-to-lines).
+     - `collections/`: Data structure helpers (cycle-zip).
 
 ---
 
