@@ -4,7 +4,7 @@ import {
   AI_MODE_SHORTCUTS,
   NORMAL_MODE_SHORTCUTS,
 } from "../../../constants/shortcuts.ts";
-import { runTui } from "../../../utils/tui.ts";
+import { runTui } from "../../../lib/tui.ts";
 
 export const EditCommitMessageStatusBar = () => {
   const mode = useAppSelector((state) => state.editCommitMessage.form.mode);

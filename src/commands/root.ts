@@ -2,7 +2,7 @@ import React from "react";
 import { HelpFlag, VersionFlag } from "../constants/commands/flags.ts";
 import { BaseCommand, type Command } from "../lib/command.ts";
 import { Version } from "../features/version/ui.tsx";
-import { runTui } from "../utils/tui.ts";
+import { runTui } from "../lib/tui.ts";
 
 type RootCommandInit = {
   name: string;

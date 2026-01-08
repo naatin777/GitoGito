@@ -58,7 +58,7 @@ export function parseCommitHeader(
   let type = "";
   let scope = "";
   let hasBreakingChange = false;
-  let hasColon = colonIndex !== -1;
+  const hasColon = colonIndex !== -1;
 
   // Determine position and extract relevant parts
   if (colonIndex !== -1) {

@@ -1,13 +1,13 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type z from "zod";
 import type { IssueSchema } from "../../schema.ts";
 import type { Issue, IssueTemplate } from "../../type.ts";
-import { getIssueTemplatePath } from "../../utils/path.ts";
+import { getIssueTemplatePath } from "../../features/issue/domain/template-paths.ts";
 import {
   parseMarkdownIssueTemplate,
   stringifyMarkdownIssue,
-} from "../../utils/parser.ts";
-import { editText } from "../../utils/edit.ts";
+} from "../../features/issue/domain/parser.ts";
+import { editText } from "../../services/editor.ts";
 import { createIssue as createIssueService } from "../../services/github/issue.ts";
 
 // Preserve existing state type

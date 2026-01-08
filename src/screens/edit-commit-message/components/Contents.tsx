@@ -8,7 +8,7 @@ import {
   changeToAiMode,
   changeToNormalMode,
 } from "../../../store/slices/editCommitMessageSlice.ts";
-import { runTui } from "../../../utils/tui.ts";
+import { runTui } from "../../../lib/tui.ts";
 
 export const BORDER_WIDTH = 1 as const;
 export const BORDER_PADDING = 1 as const;

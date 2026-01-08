@@ -1,20 +1,20 @@
 import { Box, Text, useInput, useStdout } from "ink";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks.ts";
 import {
-  headerType,
-  headerDelete,
-  headerCursorLeft,
-  headerCursorRight,
-  headerGoToStart,
-  headerGoToEnd,
-  headerSuggestionNext,
-  headerSuggestionPrev,
-  headerSuggestionAccept,
-  headerSuggestionCancel,
   focusBody,
   focusFooter,
+  headerCursorLeft,
+  headerCursorRight,
+  headerDelete,
+  headerGoToEnd,
+  headerGoToStart,
+  headerSuggestionAccept,
+  headerSuggestionCancel,
+  headerSuggestionNext,
+  headerSuggestionPrev,
+  headerType,
 } from "../../../store/slices/editCommitMessageSlice.ts";
-import { splitTextToLines } from "../../../utils/split-text-to-lines.ts";
+import { splitTextToLines } from "../../../helpers/text/split-text-to-lines.ts";
 import { EditCommitMessageLine } from "./Line.tsx";
 import {
   GUTTER_MARGIN,

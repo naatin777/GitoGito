@@ -1,6 +1,6 @@
 import { Box, render, Text } from "ink";
 import { useEffect, useState } from "react";
-import { cycleZip } from "../utils/cycle_zip.ts";
+import { cycleZip } from "../helpers/collections/cycle-zip.ts";
 
 type Frame = {
   frames: {

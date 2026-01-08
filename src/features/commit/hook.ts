@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { useApp } from "ink";
 import { useAppDispatch, useAppSelector } from "../../store/hooks.ts";
 import {
-  generateCommitMessages,
-  editCommitMessage,
   commitMessage,
+  editCommitMessage,
+  generateCommitMessages,
   selectMessage,
 } from "../../store/slices/commitSlice.ts";
 

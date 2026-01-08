@@ -1,8 +1,8 @@
 import { Box, Text, useInput } from "ink";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks.ts";
 import {
-  focusHeader,
   focusBody,
+  focusHeader,
 } from "../../../store/slices/editCommitMessageSlice.ts";
 import { LABEL_WIDTH } from "./Contents.tsx";
 
@@ -36,7 +36,7 @@ export const EditCommitMessageFooter = () => {
         </Text>
       </Box>
       <Box>
-        <Text>{""}</Text>
+        <Text></Text>
       </Box>
     </Box>
   );

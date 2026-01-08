@@ -88,7 +88,10 @@ Deno.test("wrapTextByWords - empty line in middle", () => {
 });
 
 Deno.test("wrapTextByWords - multiple paragraphs with wrapping", () => {
-  const result = wrapTextByWords("fix: add user authentication\nfeat: new feature", 20);
+  const result = wrapTextByWords(
+    "fix: add user authentication\nfeat: new feature",
+    20,
+  );
 
   // First paragraph wraps into 2 lines, second paragraph is 1 line (17 chars, fits in 20)
   assertEquals(result.length, 3);

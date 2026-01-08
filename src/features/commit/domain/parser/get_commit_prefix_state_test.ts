@@ -1,7 +1,7 @@
 import { assertEquals } from "@std/assert";
 import { describe, it } from "@std/testing/bdd";
 import { getCommitPrefixState } from "./get_commit_prefix_state.ts";
-import type { CommitConfig } from "../../type.ts";
+import type { CommitConfig } from "../../../../type.ts";
 
 describe("getCommitPrefixState", () => {
   describe("Type editing - Initial state", () => {

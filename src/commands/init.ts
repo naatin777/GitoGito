@@ -8,7 +8,7 @@ import {
 } from "../constants/commands/flags.ts";
 import { envService } from "../services/env.ts";
 import { ConfigService } from "../services/config.ts";
-import { runTui } from "../utils/tui.ts";
+import { runTui } from "../lib/tui.ts";
 
 const InitCommandFlag = { ...HelpFlag, ...LocalFlag, ...GlobalFlag };
 const InitCommandOption = {};

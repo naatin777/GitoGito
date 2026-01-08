@@ -1,5 +1,5 @@
 import { Box, Text } from "ink";
-import type { Line } from "../../../utils/split-text-to-lines.ts";
+import type { Line } from "../../../helpers/text/split-text-to-lines.ts";
 
 interface LineProps {
   line: Line;

@@ -1,5 +1,5 @@
 import { stringify } from "@std/yaml";
-import type { Issue, IssueTemplate } from "../type.ts";
+import type { Issue, IssueTemplate } from "../../../type.ts";
 import { extract } from "@std/front-matter/yaml";
 
 export function parseMarkdownIssueTemplate(

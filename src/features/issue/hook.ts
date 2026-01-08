@@ -5,14 +5,14 @@ import type z from "zod";
 import type { Issue, IssueTemplate } from "../../type.ts";
 import { useAppDispatch, useAppSelector } from "../../store/hooks.ts";
 import {
-  loadTemplates,
-  selectTemplate,
-  submitOverview,
-  setGeneratedIssues,
-  selectIssue,
-  editIssue,
   createIssue,
+  editIssue,
+  loadTemplates,
+  selectIssue,
+  selectTemplate,
   setError,
+  setGeneratedIssues,
+  submitOverview,
 } from "../../store/slices/issueSlice.ts";
 
 export function useIssueFlow() {

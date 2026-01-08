@@ -1,9 +1,9 @@
 import { assertEquals } from "@std/assert";
 import {
-  parseCommitHeader,
-  getSuggestedSuffixes,
-  getCompletionSuggestions,
   filterSuggestions,
+  getCompletionSuggestions,
+  getSuggestedSuffixes,
+  parseCommitHeader,
 } from "./commit-header-completion.ts";
 
 Deno.test("parseCommitHeader - type position", () => {

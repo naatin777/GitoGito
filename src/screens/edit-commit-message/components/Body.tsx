@@ -33,7 +33,7 @@ export const EditCommitMessageBody = () => {
         </Text>
       </Box>
       <Box>
-        <Text>{""}</Text>
+        <Text></Text>
       </Box>
     </Box>
   );

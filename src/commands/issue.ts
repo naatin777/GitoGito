@@ -2,7 +2,7 @@ import { BaseCommand, type Command } from "../lib/command.ts";
 import { Issue } from "../features/issue/ui.tsx";
 import React from "react";
 import { HelpFlag } from "../constants/commands/flags.ts";
-import { runTui } from "../utils/tui.ts";
+import { runTui } from "../lib/tui.ts";
 
 const IssueCommandFlag = { ...HelpFlag };
 const IssueCommandOption = {};

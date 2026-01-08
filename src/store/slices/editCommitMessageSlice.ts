@@ -77,8 +77,7 @@ const editCommitMessageSlice = createSlice({
     // Header actions
     headerType: (state, action) => {
       const { char } = action.payload;
-      state.header.value =
-        state.header.value.slice(0, state.header.cursor) +
+      state.header.value = state.header.value.slice(0, state.header.cursor) +
         char +
         state.header.value.slice(state.header.cursor);
       state.header.cursor += char.length;
@@ -112,19 +111,17 @@ const editCommitMessageSlice = createSlice({
       state.header.cursor = state.header.value.length;
     },
     headerSuggestionNext: (state) => {
-      state.header.suggestionIndex =
-        state.header.suggestionIndex === undefined
-          ? 0
-          : (state.header.suggestionIndex + 1) %
-            state.header.filteredSuggestion.length;
+      state.header.suggestionIndex = state.header.suggestionIndex === undefined
+        ? 0
+        : (state.header.suggestionIndex + 1) %
+          state.header.filteredSuggestion.length;
     },
     headerSuggestionPrev: (state) => {
-      state.header.suggestionIndex =
-        state.header.suggestionIndex === undefined
-          ? undefined
-          : (state.header.suggestionIndex - 1 +
-            state.header.filteredSuggestion.length) %
-            state.header.filteredSuggestion.length;
+      state.header.suggestionIndex = state.header.suggestionIndex === undefined
+        ? undefined
+        : (state.header.suggestionIndex - 1 +
+          state.header.filteredSuggestion.length) %
+          state.header.filteredSuggestion.length;
     },
     headerSuggestionAccept: (state) => {
       if (state.header.suggestionIndex !== undefined) {
@@ -142,16 +139,14 @@ const editCommitMessageSlice = createSlice({
     // Body actions
     bodyType: (state, action) => {
       const { char } = action.payload;
-      state.body.value =
-        state.body.value.slice(0, state.body.cursor) +
+      state.body.value = state.body.value.slice(0, state.body.cursor) +
         char +
         state.body.value.slice(state.body.cursor);
       state.body.cursor += char.length;
     },
     bodyDelete: (state) => {
       if (state.body.cursor === 0) return;
-      state.body.value =
-        state.body.value.slice(0, state.body.cursor - 1) +
+      state.body.value = state.body.value.slice(0, state.body.cursor - 1) +
         state.body.value.slice(state.body.cursor);
       state.body.cursor -= 1;
     },
@@ -174,8 +169,7 @@ const editCommitMessageSlice = createSlice({
     // Footer actions
     footerType: (state, action) => {
       const { char } = action.payload;
-      state.footer.value =
-        state.footer.value.slice(0, state.footer.cursor) +
+      state.footer.value = state.footer.value.slice(0, state.footer.cursor) +
         char +
         state.footer.value.slice(state.footer.cursor);
       state.footer.cursor += char.length;

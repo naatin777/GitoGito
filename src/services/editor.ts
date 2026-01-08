@@ -1,5 +1,5 @@
-import { ConfigService } from "../services/config.ts";
-import { envService } from "../services/env.ts";
+import { ConfigService } from "./config.ts";
+import { envService } from "./env.ts";
 
 export async function editText(text: string): Promise<string> {
   const tempFile = await Deno.makeTempFile({ suffix: ".txt" });
