@@ -447,29 +447,105 @@ describe("themeSlice", () => {
 
 ### 7.2 Test Selectors
 
+**IMPORTANT: Avoid using `any` type in tests**
+
+When testing selectors, you need to create mock state objects. However,
+importing `RootState` from the store can cause circular dependencies and trigger
+unwanted module initialization.
+
+❌ **Bad: Using `any` type**
+
 ```typescript
-import { selectDecoratedFullText } from "./commitSelectors.ts";
+function createMockState(): any {
+  return { editCommitMessage: { ... } };
+}
+```
 
-describe("commitSelectors", () => {
-  test("returns full text when decorated", () => {
-    const state = {
-      editCommitMessage: {
-        header: {
-          value: "fix: bug",
-          decorated: {
-            fullText: "WIP: fix: bug",
-            prefixes: ["WIP: "],
-            userText: "fix: bug",
-            suffixes: [],
-          },
-        },
+✅ **Good: Use structural typing in selectors**
+
+The best practice is to define selectors using structural typing instead of
+requiring the full `RootState`. This makes selectors testable without circular
+dependencies.
+
+**In your selector file:**
+
+```typescript
+// commitSelectors.ts
+import { createSelector } from "@reduxjs/toolkit";
+import type { EditCommitMessageState } from "../../store/slices/editCommitMessageTypes.ts";
+
+/**
+ * State shape required by commit selectors
+ * Uses structural typing - any state with editCommitMessage will work
+ */
+export type CommitSelectorState = {
+  editCommitMessage: EditCommitMessageState;
+};
+
+// Input selectors use structural type, not full RootState
+export const selectCommitHeader = (state: CommitSelectorState) =>
+  state.editCommitMessage.header;
+
+export const selectHeaderFullText = createSelector(
+  [selectCommitHeader],
+  (header) => header.decorated ? header.decorated.fullText : header.value,
+);
+```
+
+**In your test file:**
+
+```typescript
+import { assertEquals } from "@std/assert";
+import type { EditCommitMessageState } from "../../store/slices/editCommitMessageTypes.ts";
+import {
+  type CommitSelectorState,
+  selectHeaderFullText,
+} from "./commitSelectors.ts";
+
+// Use the exported type from selectors
+function createMockState(
+  overrides: Partial<EditCommitMessageState> = {},
+): CommitSelectorState {
+  return {
+    editCommitMessage: {
+      form: { mode: "normal", focus: "header", flags: {} },
+      header: { value: "", cursor: 0 /* ... */ },
+      body: { value: "", cursor: 0 },
+      footer: { value: "", cursor: 0 },
+      ...overrides,
+    },
+  };
+}
+
+Deno.test("returns full text when decorated", () => {
+  const state = createMockState({
+    header: {
+      value: "fix: bug",
+      cursor: 8,
+      suggestion: [],
+      filteredSuggestion: [],
+      suggestionIndex: undefined,
+      decorated: {
+        fullText: "WIP: fix: bug",
+        prefixes: ["WIP: "],
+        userText: "fix: bug",
+        suffixes: [],
+        decorationRanges: [],
       },
-    } as RootState;
-
-    expect(selectDecoratedFullText(state)).toBe("WIP: fix: bug");
+    },
   });
+
+  assertEquals(selectHeaderFullText(state), "WIP: fix: bug");
 });
 ```
+
+**Why this approach is better:**
+
+1. ✅ No `any` types - full type safety
+2. ✅ No circular dependencies - selectors don't import from store
+3. ✅ Better testability - mock only what you need
+4. ✅ Structural typing - selectors work with any compatible state shape
+5. ✅ Single source of truth - test uses the same type as production code
 
 ### 7.3 Test RTK Query
 
