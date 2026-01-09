@@ -1,5 +1,5 @@
 /**
- * Header slice: commit message header with autocomplete suggestions
+ * Header slice: commit message header with autocomplete suggestions and decorators
  */
 
 import type { PayloadAction } from "@reduxjs/toolkit";
@@ -12,6 +12,11 @@ import {
   typeChar,
 } from "../../helpers/redux/text-field-reducers.ts";
 import type { EditCommitMessageState } from "./editCommitMessageTypes.ts";
+import { parseCommitHeader } from "../../features/commit/domain/commit-header-completion.ts";
+import {
+  applyDecorators,
+  type CommitDecoratorContext,
+} from "../../features/commit/domain/commit-decorator.ts";
 
 /**
  * Updates filtered suggestions based on current header value
@@ -22,6 +27,32 @@ function updateFilteredSuggestions(state: EditCommitMessageState): void {
   ) => suggestion.value.startsWith(state.header.value));
 }
 
+/**
+ * Apply decorators to header based on current state
+ */
+function updateDecorators(state: EditCommitMessageState): void {
+  // Parse the commit header to extract type, scope, etc.
+  const parsed = parseCommitHeader(
+    state.header.value,
+    state.header.cursor,
+  );
+
+  // Create decorator context
+  const context: CommitDecoratorContext = {
+    headerText: state.header.value,
+    type: parsed.type,
+    scope: parsed.scope,
+    hasBreakingChange: parsed.hasBreakingChange,
+    description: parsed.currentToken,
+    flags: state.form.flags,
+    cursorPosition: state.header.cursor,
+  };
+
+  // Apply all registered decorators
+  const decorated = applyDecorators(context);
+  state.header.decorated = decorated;
+}
+
 export const headerSlice = {
   headerType: (
     state: EditCommitMessageState,
@@ -30,11 +61,13 @@ export const headerSlice = {
     const { char } = action.payload;
     typeChar(state.header, char);
     updateFilteredSuggestions(state);
+    updateDecorators(state);
   },
 
   headerDelete: (state: EditCommitMessageState) => {
     deleteChar(state.header);
     updateFilteredSuggestions(state);
+    updateDecorators(state);
   },
 
   headerCursorLeft: (state: EditCommitMessageState) => {
@@ -75,6 +108,7 @@ export const headerSlice = {
       state.header.value = suggestion.value;
       state.header.cursor = suggestion.value.length;
       state.header.suggestionIndex = undefined;
+      updateDecorators(state);
     }
   },
 

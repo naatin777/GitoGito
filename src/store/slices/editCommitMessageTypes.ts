@@ -1,4 +1,15 @@
 import type { Suggestion } from "../../type.ts";
+import type { DecoratedMessage } from "../../features/commit/domain/commit-decorator.ts";
+
+/**
+ * CLI flags that affect decorators
+ */
+export type CommitFlags = {
+  wip?: boolean;
+  draft?: boolean;
+  emoji?: boolean; // Enable/disable emoji decorators
+  [key: string]: boolean | undefined;
+};
 
 /**
  * Form state: mode and focus management
@@ -6,10 +17,11 @@ import type { Suggestion } from "../../type.ts";
 export type FormState = {
   mode: "normal" | "ai";
   focus: "header" | "body" | "footer";
+  flags: CommitFlags; // CLI flags for decorators
 };
 
 /**
- * Header state: with suggestion functionality
+ * Header state: with suggestion functionality and decorators
  */
 export type HeaderState = {
   value: string;
@@ -17,6 +29,9 @@ export type HeaderState = {
   suggestion: Suggestion[];
   filteredSuggestion: Suggestion[];
   suggestionIndex: number | undefined;
+
+  // Decorator state
+  decorated: DecoratedMessage | null;
 };
 
 /**

@@ -1,4 +1,5 @@
 import { Box, useInput } from "ink";
+import { useEffect } from "react";
 import { EditCommitMessageStatusBar } from "./StatusBar.tsx";
 import { EditCommitMessageHeader } from "./Header.tsx";
 import { EditCommitMessageBody } from "./Body.tsx";
@@ -9,6 +10,7 @@ import {
   changeToNormalMode,
 } from "../../../store/slices/editCommitMessageSlice.ts";
 import { runTui } from "../../../lib/tui.ts";
+import { initializeDecorators } from "../../../features/commit/domain/init-decorators.ts";
 
 export const BORDER_WIDTH = 1 as const;
 export const BORDER_PADDING = 1 as const;
@@ -25,6 +27,12 @@ export const NOT_INPUT_WIDTH = LABEL_WIDTH + BORDER_SIZE + GUTTER_SIZE +
 export const EditCommitMessageContents = () => {
   const dispatch = useAppDispatch();
   const mode = useAppSelector((state) => state.editCommitMessage.form.mode);
+
+  // Initialize decorators on mount
+  useEffect(() => {
+    initializeDecorators();
+  }, []);
+
   useInput((input, key) => {
     if (key.ctrl && input === "g" && mode === "normal") {
       dispatch(changeToAiMode());

@@ -1,8 +1,12 @@
 /**
- * Form slice: mode and focus management for edit commit message
+ * Form slice: mode, focus, and flags management for edit commit message
  */
 
-import type { EditCommitMessageState } from "./editCommitMessageTypes.ts";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import type {
+  CommitFlags,
+  EditCommitMessageState,
+} from "./editCommitMessageTypes.ts";
 
 export const formSlice = {
   changeToAiMode: (state: EditCommitMessageState) => {
@@ -23,5 +27,20 @@ export const formSlice = {
 
   focusFooter: (state: EditCommitMessageState) => {
     state.form.focus = "footer";
+  },
+
+  setFlags: (
+    state: EditCommitMessageState,
+    action: PayloadAction<CommitFlags>,
+  ) => {
+    state.form.flags = action.payload;
+  },
+
+  toggleFlag: (
+    state: EditCommitMessageState,
+    action: PayloadAction<keyof CommitFlags>,
+  ) => {
+    const flag = action.payload;
+    state.form.flags[flag] = !state.form.flags[flag];
   },
 };

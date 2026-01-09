@@ -10,6 +10,7 @@ const initialState: EditCommitMessageState = {
   form: {
     mode: "normal",
     focus: "header",
+    flags: {}, // Initialize with empty flags
   },
   header: {
     value: "",
@@ -17,6 +18,7 @@ const initialState: EditCommitMessageState = {
     suggestion: COMMIT_MESSAGE_PREFIXL,
     filteredSuggestion: COMMIT_MESSAGE_PREFIXL,
     suggestionIndex: undefined,
+    decorated: null, // Initialize with no decorations
   },
   body: {
     value: "",
@@ -55,6 +57,8 @@ export const {
   focusHeader,
   focusBody,
   focusFooter,
+  setFlags,
+  toggleFlag,
   headerType,
   headerDelete,
   headerCursorLeft,
