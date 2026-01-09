@@ -78,13 +78,12 @@ Deno.test("getSuggestedSuffixes - for type", () => {
   const context = parseCommitHeader("fix", 3);
   const suffixes = getSuggestedSuffixes(context);
 
-  assertEquals(suffixes.length, 3);
+  // Without available scopes, should only suggest colon variants
+  assertEquals(suffixes.length, 2);
   assertEquals(suffixes[0].value, "fix:");
   assertEquals(suffixes[0].description, "No scope");
   assertEquals(suffixes[1].value, "fix!:");
   assertEquals(suffixes[1].description, "Breaking change");
-  assertEquals(suffixes[2].value, "fix(");
-  assertEquals(suffixes[2].description, "Add scope");
 });
 
 Deno.test("getSuggestedSuffixes - for scope", () => {
@@ -178,6 +177,29 @@ Deno.test("getCompletionSuggestions - description (no suggestions)", () => {
 
   const result = getCompletionSuggestions("fix: add ", 9, types, scopes);
 
+  assertEquals(result.inline, null);
+  assertEquals(result.list.length, 0);
+});
+
+Deno.test("parseCommitHeader - after closed scope before colon", () => {
+  const result = parseCommitHeader("style(src):", 10);
+
+  assertEquals(result.position, "description");
+  assertEquals(result.type, "style");
+  assertEquals(result.scope, "src");
+});
+
+Deno.test("getCompletionSuggestions - after complete type with scope and colon", () => {
+  const types = [
+    { value: "style", description: "Code style changes" },
+  ];
+  const scopes = [
+    { value: "src", description: "Source code" },
+  ];
+
+  const result = getCompletionSuggestions("style(src):", 11, types, scopes);
+
+  // After colon, no suggestions should be shown
   assertEquals(result.inline, null);
   assertEquals(result.list.length, 0);
 });

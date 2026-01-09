@@ -86,6 +86,31 @@ export function parseCommitHeader(
     type = beforeCursor.slice(0, openParenIndex).replace("!", "");
     scope = currentToken;
     hasBreakingChange = bangIndex !== -1 && bangIndex < openParenIndex;
+  } else if (
+    closeParenIndex !== -1 &&
+    cursor > closeParenIndex
+  ) {
+    // Cursor is after closed scope (e.g., "fix(auth)|" or "fix(auth):|")
+    // This should not show type suggestions
+    // Check if there's a colon in the full message (after cursor)
+    const fullColonIndex = message.indexOf(":");
+    if (fullColonIndex !== -1) {
+      // Colon exists somewhere in message, treat as description
+      position = "description";
+      const descriptionStart = fullColonIndex + 1;
+      currentToken = message.slice(descriptionStart, cursor).trimStart();
+    } else {
+      // No colon yet, don't show type completions
+      position = "unknown";
+      currentToken = "";
+    }
+
+    // Extract type and scope from prefix
+    const prefix = beforeCursor.slice(0, closeParenIndex + 1);
+    const prefixParts = parsePrefix(prefix);
+    type = prefixParts.type;
+    scope = prefixParts.scope;
+    hasBreakingChange = prefixParts.hasBreakingChange;
   } else {
     // Cursor is in type
     position = "type";

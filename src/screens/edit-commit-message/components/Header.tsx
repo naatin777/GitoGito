@@ -184,63 +184,110 @@ export const EditCommitMessageHeader = () => {
             - Highlighted suggestion (selected with Tab) has inverse colors
             - Format: "→ [typed][suggestion] - description" */
         }
-        <Box flexDirection="column">
-          {isFocused &&
-            (() => {
-              const VISIBLE_COUNT = 5;
-              const totalSuggestions = header.filteredSuggestion.length;
-              const scrollOffset = header.suggestionScrollOffset;
-              const visibleEnd = Math.min(
-                scrollOffset + VISIBLE_COUNT,
-                totalSuggestions,
-              );
-              const visibleSuggestions = header.filteredSuggestion.slice(
-                scrollOffset,
-                visibleEnd,
-              );
+        {isFocused &&
+          (() => {
+            const VISIBLE_COUNT = 5;
+            const ARROW_WIDTH = GUTTER_WIDTH + GUTTER_MARGIN * 2; // "→ " with margins
+            const totalSuggestions = header.filteredSuggestion.length;
+            const scrollOffset = header.suggestionScrollOffset;
+            const visibleEnd = Math.min(
+              scrollOffset + VISIBLE_COUNT,
+              totalSuggestions,
+            );
+            const visibleSuggestions = header.filteredSuggestion.slice(
+              scrollOffset,
+              visibleEnd,
+            );
 
-              return visibleSuggestions.map((suggestion, visibleIndex) => {
-                // Calculate the actual index in the full suggestions array
-                const actualIndex = scrollOffset + visibleIndex;
+            return (
+              <Box flexDirection="column">
+                {visibleSuggestions.map((suggestion, visibleIndex) => {
+                  // Calculate the actual index in the full suggestions array
+                  const actualIndex = scrollOffset + visibleIndex;
 
-                return (
-                  <Box key={actualIndex} flexDirection="row">
-                    {/* Arrow indicator - green when selected */}
-                    <Box width={1} marginX={1}>
-                      <Text
-                        color={header.suggestionIndex === actualIndex
-                          ? "green"
-                          : undefined}
-                      >
-                        {`→`}
-                      </Text>
+                  // Build suggestion text with truncation if needed
+                  const typedPart = header.value;
+                  const completionPart = suggestion.value.slice(
+                    header.value.length,
+                  );
+                  const descriptionPart = ` - ${suggestion.description}`;
+                  const fullText = typedPart + completionPart + descriptionPart;
+
+                  // Truncate if text exceeds input width
+                  let displayTyped = typedPart;
+                  let displayCompletion = completionPart;
+                  let displayDescription = descriptionPart;
+
+                  if (fullText.length > inputWidth) {
+                    const ellipsis = "...";
+                    const availableWidth = inputWidth - ellipsis.length;
+
+                    // Priority: typed > completion > description
+                    if (typedPart.length > availableWidth) {
+                      // Even typed part is too long (unlikely)
+                      displayTyped = typedPart.slice(0, availableWidth);
+                      displayCompletion = "";
+                      displayDescription = "";
+                    } else if (
+                      typedPart.length + completionPart.length > availableWidth
+                    ) {
+                      // Typed + completion exceeds limit
+                      displayCompletion = completionPart.slice(
+                        0,
+                        availableWidth - typedPart.length,
+                      );
+                      displayDescription = "";
+                    } else {
+                      // Description needs truncation
+                      displayDescription = descriptionPart.slice(
+                        0,
+                        availableWidth - typedPart.length - completionPart.length,
+                      );
+                    }
+                    displayDescription += ellipsis;
+                  }
+
+                  return (
+                    <Box key={actualIndex} flexDirection="row">
+                      {/* Arrow indicator - fixed width to align with gutter */}
+                      <Box width={ARROW_WIDTH}>
+                        <Text
+                          color={header.suggestionIndex === actualIndex
+                            ? "green"
+                            : undefined}
+                        >
+                          {`→`}
+                        </Text>
+                      </Box>
+                      {/* Suggestion text - constrained to input width */}
+                      <Box width={inputWidth}>
+                        <Text>
+                          {/* Already typed part - green text */}
+                          <Text
+                            color="green"
+                            inverse={header.suggestionIndex === actualIndex}
+                          >
+                            {displayTyped}
+                          </Text>
+                          {/* Completion part - blue text */}
+                          <Text
+                            color="blue"
+                            inverse={header.suggestionIndex === actualIndex}
+                          >
+                            {displayCompletion}
+                          </Text>
+                          {/* Description - gray text */}
+                          <Text color="gray">
+                            {displayDescription}
+                          </Text>
+                        </Text>
+                      </Box>
                     </Box>
-                    {/* Already typed part - green text */}
-                    <Text
-                      color="green"
-                      inverse={header.suggestionIndex === actualIndex}
-                    >
-                      {header.value}
-                    </Text>
-                    {/* Completion part - blue text */}
-                    <Text
-                      color="blue"
-                      inverse={header.suggestionIndex === actualIndex}
-                    >
-                      {`${suggestion.value.slice(header.value.length)}`}
-                    </Text>
-                    {/* Description - gray text */}
-                    <Text
-                      wrap="truncate"
-                      color="gray"
-                    >
-                      {` - ${suggestion.description}`}
-                    </Text>
-                  </Box>
-                );
-              });
-            })()}
-        </Box>
+                  );
+                })}
+              </Box>
+            );
+          })()}
       </Box>
     </Box>
   );
