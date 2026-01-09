@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { GitDiffRepository } from "./diff_repository.ts";
+import { GitDiffRepository } from "./diff-repository.ts";
 
 Deno.test("getGitDiffStaged", async () => {
   const mockGit = {

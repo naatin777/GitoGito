@@ -1,5 +1,5 @@
 import { assertEquals, assertRejects } from "@std/assert";
-import { GitRemoteRepository } from "./remote_repository.ts";
+import { GitRemoteRepository } from "./remote-repository.ts";
 
 Deno.test("getOwnerAndRepo", async () => {
   const mockGit = {

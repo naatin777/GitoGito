@@ -1,6 +1,6 @@
 import { assertEquals } from "@std/assert";
 import { describe, it } from "@std/testing/bdd";
-import { getCommitDescriptionState } from "./get_commit_description_state.ts";
+import { getCommitDescriptionState } from "./get-commit-description-state.ts";
 
 describe("getCommitDescriptionState", () => {
   describe("Basic description editing", () => {

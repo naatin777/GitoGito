@@ -1,7 +1,7 @@
 import { DEFAULT_COMMIT_CONFIG } from "../../../../constants/commit-message/prefix.ts";
 import type { CommitConfig } from "../../../../type.ts";
-import { getCommitDescriptionState } from "./get_commit_description_state.ts";
-import { getCommitPrefixState } from "./get_commit_prefix_state.ts";
+import { getCommitDescriptionState } from "./get-commit-description-state.ts";
+import { getCommitPrefixState } from "./get-commit-prefix-state.ts";
 
 export type TokenType =
   | "type"
