@@ -89,7 +89,7 @@ DemmitHub follows a layered architecture with clear separation of concerns.
 
 ### Examples
 
-| File Type  | ✅ Correct             | ❌ Incorrect                                   |
+| File Type  | ✅ Correct              | ❌ Incorrect                                    |
 | ---------- | ---------------------- | ---------------------------------------------- |
 | TypeScript | `user-service.ts`      | `user_service.ts`, `userService.ts`            |
 | Component  | `UserCard.tsx`         | `user_card.tsx`, `user-card.tsx`               |
@@ -105,3 +105,8 @@ DemmitHub follows a layered architecture with clear separation of concerns.
 
 If a prompt regarding specifications is received, please describe it in the docs
 folder.
+
+When using `if (import.meta.main)`, enclose it with
+// deno-coverage-ignore-start
+
+// deno-coverage-ignore-stop

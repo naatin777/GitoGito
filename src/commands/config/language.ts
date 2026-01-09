@@ -1,6 +1,6 @@
 import { BaseCommand, type Command } from "../../lib/command.ts";
 import { ConfigService } from "../../services/config.ts";
-import { LanguageSelector } from "../../components/selection.tsx";
+import { LanguageSelector } from "../../components/Selection.tsx";
 import React from "react";
 import {
   ConfigCommandFlag,

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type z from "zod";
 import { CommitSchema } from "../../schema.ts";
-import { GitService } from "../../services/git/git_service.ts";
+import { GitService } from "../../services/git/git-service.ts";
 import { AIService } from "../../services/ai.ts";
 import { COMMIT_SYSTEM_MESSAGE } from "../../constants/message.ts";
 import { editText } from "../../services/editor.ts";
