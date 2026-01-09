@@ -6,6 +6,7 @@
 import { assertEquals } from "@std/assert";
 import type { EditCommitMessageState } from "../../store/slices/editCommitMessageTypes.ts";
 import {
+  type CommitSelectorState,
   selectAbsoluteCursor,
   selectCommitFlags,
   selectFullCommitMessage,
@@ -30,12 +31,16 @@ import {
   selectSelectedSuggestion,
 } from "./commitSelectors.ts";
 
-// Helper to create mock state for testing
-// Uses 'as any' to avoid circular dependency with RootState from store
+/**
+ * Helper to create mock state for testing
+ * Uses CommitSelectorState type exported from selectors
+ * This avoids circular dependency with store/index.ts
+ * @param overrides - Partial state to override defaults
+ * @returns Test state object
+ */
 function createMockState(
   overrides: Partial<EditCommitMessageState> = {},
-  // deno-lint-ignore no-explicit-any
-): any {
+): CommitSelectorState {
   return {
     editCommitMessage: {
       form: {

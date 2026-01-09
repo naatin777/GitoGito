@@ -4,30 +4,39 @@
  */
 
 import { createSelector } from "@reduxjs/toolkit";
-import type { RootState } from "../../store/index.ts";
+import type { EditCommitMessageState } from "../../store/slices/editCommitMessageTypes.ts";
 
 // ============================================================================
 // Input Selectors (基本的なstate取得)
 // ============================================================================
 
+/**
+ * State shape required by commit selectors
+ * Uses structural typing instead of depending on full RootState
+ * This allows testing without circular dependencies
+ */
+export type CommitSelectorState = {
+  editCommitMessage: EditCommitMessageState;
+};
+
 /** Select entire editCommitMessage state */
-export const selectEditCommitMessage = (state: RootState) =>
+export const selectEditCommitMessage = (state: CommitSelectorState) =>
   state.editCommitMessage;
 
 /** Select form state */
-export const selectCommitForm = (state: RootState) =>
+export const selectCommitForm = (state: CommitSelectorState) =>
   state.editCommitMessage.form;
 
 /** Select header state */
-export const selectCommitHeader = (state: RootState) =>
+export const selectCommitHeader = (state: CommitSelectorState) =>
   state.editCommitMessage.header;
 
 /** Select body state */
-export const selectCommitBody = (state: RootState) =>
+export const selectCommitBody = (state: CommitSelectorState) =>
   state.editCommitMessage.body;
 
 /** Select footer state */
-export const selectCommitFooter = (state: RootState) =>
+export const selectCommitFooter = (state: CommitSelectorState) =>
   state.editCommitMessage.footer;
 
 // ============================================================================
@@ -294,8 +303,8 @@ export const makeSelectCursorInRange = () =>
   createSelector(
     [
       selectHeaderCursor,
-      (_state: RootState, start: number) => start,
-      (_state: RootState, _start: number, end: number) => end,
+      (_state: CommitSelectorState, start: number) => start,
+      (_state: CommitSelectorState, _start: number, end: number) => end,
     ],
     (cursor, start, end) => {
       return cursor >= start && cursor <= end;
