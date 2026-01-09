@@ -1,6 +1,6 @@
 import { Box, render } from "ink";
 import { useState } from "react";
-import { TextInput } from "./text_input.tsx";
+import { TextInput } from "./TextInput.tsx";
 import { Spinner } from "./spinner.tsx";
 import { IssueAgentSchema, type IssueSchema } from "../schema.ts";
 import { ISSUE_SYSTEM_MESSAGE } from "../constants/message.ts";
@@ -60,7 +60,7 @@ export function AgentLoop({
     <Box flexDirection="column">
       <TextInput
         label={`? ${currentQ} › `}
-        onSubmit={(val) => {
+        onSubmit={(val: string) => {
           const userAnswer = val || "leave it to you";
           const newHistory = [
             ...history,

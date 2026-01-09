@@ -1,5 +1,5 @@
 import { BaseCommand, type Command } from "../lib/command.ts";
-import { SetupFlow } from "../components/setup_flow.tsx";
+import { SetupFlow } from "../components/SetupFlow.tsx";
 import React from "react";
 import {
   GlobalFlag,

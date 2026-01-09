@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Select } from "./select.tsx";
-import { TextInput } from "./text_input.tsx";
+import { TextInput } from "./TextInput.tsx";
 import { LANGUAGES } from "../constants/language.ts";
 import { EDITORS } from "../constants/editor.ts";
 

@@ -63,3 +63,38 @@ DemmitHub follows a layered architecture with clear separation of concerns.
 - External API integration → `services/`
 - Framework wrapper → `lib/`
 - Shared component → `components/` (if used by 2+ features)
+
+## 4. Naming Conventions
+
+**IMPORTANT**: Maintain consistent file naming across the codebase.
+
+### File Naming Rules
+
+1. **TypeScript Files (.ts) - Use kebab-case**:
+   - All TypeScript files must use **kebab-case** (lowercase with hyphens)
+   - Examples: `commit-message.ts`, `auth-middleware.ts`, `text-field-reducers.ts`
+   - **Prohibition**: Never mix underscores (_) with hyphens
+
+2. **Component Files (.tsx) - Use PascalCase**:
+   - React/Ink component files must use **PascalCase** to match component names
+   - Examples: `CommitMessage.tsx`, `UserCard.tsx`, `EditCommitMessage.tsx`
+   - **Prohibition**: Never use snake_case (e.g., `user_card.tsx`)
+
+3. **Test Files - Use kebab-case with `-test.ts` suffix**:
+   - Test files follow: `[original-file-name]-test.ts` or `[original-file-name]-test.tsx`
+   - Examples: `commit-message-test.ts`, `word-wrap-test.ts`
+   - **Prohibition**: Do not use `_test.ts` or `.test.ts` patterns
+
+### Examples
+
+| File Type | ✅ Correct | ❌ Incorrect |
+|-----------|-----------|-------------|
+| TypeScript | `user-service.ts` | `user_service.ts`, `userService.ts` |
+| Component | `UserCard.tsx` | `user_card.tsx`, `user-card.tsx` |
+| Test | `user-service-test.ts` | `user_service_test.ts`, `user-service.test.ts` |
+
+### Enforcement
+
+- When creating new files, always follow these naming conventions
+- When reviewing code, suggest renaming for any violations
+- Use `git mv` for renaming to preserve file history

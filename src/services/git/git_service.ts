@@ -1,9 +1,9 @@
 import { type SimpleGit, simpleGit } from "simple-git";
-import { GitCommitRepository } from "./commit_repository.ts";
-import { GitDiffRepository } from "./diff_repository.ts";
-import { GitRemoteRepository } from "./remote_repository.ts";
-import { GitRevParseRepository } from "./rev_parse_repository.ts";
-import { GitStatusRepository } from "./status_repository.ts";
+import { GitCommitRepository } from "./commit-repository.ts";
+import { GitDiffRepository } from "./diff-repository.ts";
+import { GitRemoteRepository } from "./remote-repository.ts";
+import { GitRevParseRepository } from "./rev-parse-repository.ts";
+import { GitStatusRepository } from "./status-repository.ts";
 
 export class GitService {
   private readonly git: SimpleGit;
