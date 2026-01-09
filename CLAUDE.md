@@ -72,7 +72,8 @@ DemmitHub follows a layered architecture with clear separation of concerns.
 
 1. **TypeScript Files (.ts) - Use kebab-case**:
    - All TypeScript files must use **kebab-case** (lowercase with hyphens)
-   - Examples: `commit-message.ts`, `auth-middleware.ts`, `text-field-reducers.ts`
+   - Examples: `commit-message.ts`, `auth-middleware.ts`,
+     `text-field-reducers.ts`
    - **Prohibition**: Never mix underscores (_) with hyphens
 
 2. **Component Files (.tsx) - Use PascalCase**:
@@ -81,17 +82,18 @@ DemmitHub follows a layered architecture with clear separation of concerns.
    - **Prohibition**: Never use snake_case (e.g., `user_card.tsx`)
 
 3. **Test Files - Use kebab-case with `-test.ts` suffix**:
-   - Test files follow: `[original-file-name]-test.ts` or `[original-file-name]-test.tsx`
+   - Test files follow: `[original-file-name]-test.ts` or
+     `[original-file-name]-test.tsx`
    - Examples: `commit-message-test.ts`, `word-wrap-test.ts`
    - **Prohibition**: Do not use `_test.ts` or `.test.ts` patterns
 
 ### Examples
 
-| File Type | ✅ Correct | ❌ Incorrect |
-|-----------|-----------|-------------|
-| TypeScript | `user-service.ts` | `user_service.ts`, `userService.ts` |
-| Component | `UserCard.tsx` | `user_card.tsx`, `user-card.tsx` |
-| Test | `user-service-test.ts` | `user_service_test.ts`, `user-service.test.ts` |
+| File Type  | ✅ Correct             | ❌ Incorrect                                   |
+| ---------- | ---------------------- | ---------------------------------------------- |
+| TypeScript | `user-service.ts`      | `user_service.ts`, `userService.ts`            |
+| Component  | `UserCard.tsx`         | `user_card.tsx`, `user-card.tsx`               |
+| Test       | `user-service-test.ts` | `user_service_test.ts`, `user-service.test.ts` |
 
 ### Enforcement
 
