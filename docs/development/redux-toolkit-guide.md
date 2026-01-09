@@ -472,7 +472,7 @@ dependencies.
 ```typescript
 // commitSelectors.ts
 import { createSelector } from "@reduxjs/toolkit";
-import type { EditCommitMessageState } from "../../store/slices/editCommitMessageTypes.ts";
+import type { EditCommitMessageState } from "../edit-commit-message/types.ts";
 
 /**
  * State shape required by commit selectors
@@ -496,7 +496,7 @@ export const selectHeaderFullText = createSelector(
 
 ```typescript
 import { assertEquals } from "@std/assert";
-import type { EditCommitMessageState } from "../../store/slices/editCommitMessageTypes.ts";
+import type { EditCommitMessageState } from "../edit-commit-message/types.ts";
 import {
   type CommitSelectorState,
   selectHeaderFullText,

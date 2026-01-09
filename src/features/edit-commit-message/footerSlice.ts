@@ -11,7 +11,7 @@ import {
   moveCursorToStart,
   typeChar,
 } from "../../helpers/redux/text-field-reducers.ts";
-import type { EditCommitMessageState } from "./editCommitMessageTypes.ts";
+import type { EditCommitMessageState } from "./types.ts";
 
 export const footerSlice = {
   footerType: (

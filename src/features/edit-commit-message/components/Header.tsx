@@ -16,7 +16,7 @@
  */
 
 import { Box, Text, useInput, useStdout } from "ink";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks.ts";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks.ts";
 import {
   focusBody,
   focusFooter,
@@ -30,7 +30,7 @@ import {
   headerSuggestionNext,
   headerSuggestionPrev,
   headerType,
-} from "../../../store/slices/editCommitMessageSlice.ts";
+} from "../editCommitMessageSlice.ts";
 import { splitTextToLines } from "../../../helpers/text/split-text-to-lines.ts";
 import { EditCommitMessageLine } from "./Line.tsx";
 import { DecoratedText } from "./DecoratedText.tsx";

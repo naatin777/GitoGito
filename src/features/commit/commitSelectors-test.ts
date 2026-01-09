@@ -4,7 +4,7 @@
  */
 
 import { assertEquals } from "@std/assert";
-import type { EditCommitMessageState } from "../../store/slices/editCommitMessageTypes.ts";
+import type { EditCommitMessageState } from "../edit-commit-message/types.ts";
 import {
   type CommitSelectorState,
   selectAbsoluteCursor,

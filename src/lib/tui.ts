@@ -1,7 +1,7 @@
 import { render } from "ink";
 import React from "react";
 import { Provider } from "react-redux";
-import { store } from "../store/index.ts";
+import { store } from "../app/store.ts";
 
 const _encoder = new TextEncoder();
 // const write = (txt: string) => Deno.stdout.writeSync(_encoder.encode(txt));

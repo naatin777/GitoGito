@@ -1,5 +1,5 @@
 import { Box, Text } from "ink";
-import { useAppSelector } from "../../../store/hooks.ts";
+import { useAppSelector } from "../../../app/hooks.ts";
 import {
   AI_MODE_SHORTCUTS,
   NORMAL_MODE_SHORTCUTS,

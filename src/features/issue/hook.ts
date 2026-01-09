@@ -3,7 +3,7 @@ import { useApp } from "ink";
 import type { IssueSchema } from "../../schema.ts";
 import type z from "zod";
 import type { Issue, IssueTemplate } from "../../type.ts";
-import { useAppDispatch, useAppSelector } from "../../store/hooks.ts";
+import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
 import {
   createIssue,
   editIssue,
@@ -13,7 +13,7 @@ import {
   setError,
   setGeneratedIssues,
   submitOverview,
-} from "../../store/slices/issueSlice.ts";
+} from "./issueSlice.ts";
 
 export function useIssueFlow() {
   const dispatch = useAppDispatch();

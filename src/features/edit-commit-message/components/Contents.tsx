@@ -4,11 +4,11 @@ import { EditCommitMessageStatusBar } from "./StatusBar.tsx";
 import { EditCommitMessageHeader } from "./Header.tsx";
 import { EditCommitMessageBody } from "./Body.tsx";
 import { EditCommitMessageFooter } from "./Hooter.tsx";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks.ts";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks.ts";
 import {
   changeToAiMode,
   changeToNormalMode,
-} from "../../../store/slices/editCommitMessageSlice.ts";
+} from "../editCommitMessageSlice.ts";
 import { runTui } from "../../../lib/tui.ts";
 import { initializeDecorators } from "../../../features/commit/domain/init-decorators.ts";
 

@@ -12,10 +12,11 @@ application.
    - Responsible only for rendering and capturing user input.
    - **Rule**: No complex logic here. Delegate to Hooks.
 
-2. **Application Layer (`src/features/*/hook.ts`, `src/store/`)**
+2. **Application Layer (`src/features/*/hook.ts`, `src/app/`, `src/features/*/xxxSlice.ts`)**
    - Connects UI to the underlying services.
    - Manages application state using **Redux Toolkit**.
    - Handles "User Flows" (e.g., Commit Flow, Issue Creation Flow).
+   - State management follows Feature-based structure (slices colocated with features).
 
 3. **Domain/Service Layer (`src/services/`, `src/features/*/domain/`)**
    - Core business logic, independent of the UI.
@@ -37,13 +38,16 @@ application.
 
 ## 2. Key Design Patterns
 
-### The "Feature Slice" Pattern
+### The "Feature Slice" Pattern (2026 Redux Toolkit Best Practice)
 
-Every major feature (e.g., `commit`, `issue`) is isolated across three files:
+Every major feature (e.g., `commit`, `issue`) is isolated within its feature folder:
 
-1. **State**: `src/store/slices/[feature]Slice.ts` (Redux state machine)
+1. **State**: `src/features/[feature]/[feature]Slice.ts` (Redux state machine)
 2. **Logic**: `src/features/[feature]/hook.ts` (Custom hook)
 3. **View**: `src/features/[feature]/ui.tsx` (Component)
+4. **Domain**: `src/features/[feature]/domain/` (Business logic)
+
+This follows the **Feature-based Folder Structure** recommended by Redux Toolkit 2026, where all related code (state, logic, UI) is colocated within the feature directory.
 
 ### The Command Pattern
 

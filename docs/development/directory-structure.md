@@ -11,9 +11,8 @@ DemmitHub follows a 4-layer architecture:
 
 1. **Infrastructure Layer** → `src/lib/`, `src/helpers/`
 2. **Service/Domain Layer** → `src/services/`, `src/features/*/domain/`
-3. **Application Layer** → `src/features/*/hook.ts`, `src/store/`
-4. **Presentation Layer** → `src/features/*/ui.tsx`, `src/components/`,
-   `src/screens/`
+3. **Application Layer** → `src/features/*/hook.ts`, `src/features/*/xxxSlice.ts`, `src/app/`
+4. **Presentation Layer** → `src/features/*/ui.tsx`, `src/features/*/components/`, `src/components/`
 
 ## Directory Reference
 
@@ -63,40 +62,58 @@ used throughout the application.
 **When to use**: Integrating with an external API, database, or third-party
 service.
 
-### src/features/ - Feature Slices
+### src/features/ - Feature Slices (Redux Toolkit 2026 Best Practice)
 
-**Purpose**: Self-contained feature modules following the Feature Slice pattern.
+**Purpose**: Self-contained feature modules following the Feature-based Folder Structure.
 
 **Structure**: Each feature directory contains:
 
 - `ui.tsx` - React/Ink component (Presentation layer)
 - `hook.ts` - Custom hook with business logic (Application layer)
+- `xxxSlice.ts` - Redux Toolkit slice (State management) **← Colocated with feature**
 - `domain/` - Feature-specific business logic and helpers
+- `components/` - Feature-specific UI components (for complex features)
 
 **Examples**:
 
 ```
 features/
 ├── commit/
-│   ├── ui.tsx
-│   ├── hook.ts
-│   └── domain/
+│   ├── commitSlice.ts        # Redux state management
+│   ├── ui.tsx                # Main UI component
+│   ├── hook.ts               # Custom hook
+│   ├── commitSelectors.ts    # Memoized selectors
+│   └── domain/               # Business logic
 │       ├── commit-header-completion.ts
 │       └── parser/
-│           ├── get_commit_state.ts
+│           ├── get-commit-state.ts
 │           └── ...
 ├── issue/
+│   ├── issueSlice.ts         # Redux state management
 │   ├── ui.tsx
 │   ├── hook.ts
 │   └── domain/
 │       ├── parser.ts
 │       └── template-paths.ts
+├── edit-commit-message/      # Complex feature with multiple components
+│   ├── editCommitMessageSlice.ts
+│   ├── headerSlice.ts
+│   ├── bodySlice.ts
+│   ├── footerSlice.ts
+│   ├── formSlice.ts
+│   ├── types.ts
+│   └── components/           # Feature-specific components
+│       ├── EditCommitMessage.tsx
+│       ├── Header.tsx
+│       ├── Body.tsx
+│       └── ...
 ```
 
 **Rules**:
 
-- ✅ Feature-specific UI, logic, and domain code
+- ✅ Feature-specific UI, logic, state, and domain code **all in one place**
 - ✅ Self-contained and cohesive
+- ✅ Redux slices colocated with the feature they manage
 - ❌ Importing from other features (use services/ or helpers/ for shared code)
 - ❌ Generic utilities (those go in helpers/)
 
@@ -126,26 +143,47 @@ features/
 **When to use**: Creating a generic utility function that could be used by
 multiple features.
 
-### src/store/ - State Management
+### src/app/ - Application Foundation (Redux Toolkit 2026)
 
-**Purpose**: Redux Toolkit slices for global state management.
+**Purpose**: Global application configuration and typed hooks.
 
 **Contains**:
 
-- `slices/` - Redux slices (e.g., commitSlice, issueSlice,
-  editCommitMessageSlice)
-- `hooks.ts` - Typed Redux hooks
-- `index.ts` - Store configuration
+- `store.ts` - Redux store configuration (combines all feature reducers)
+- `hooks.ts` - Typed Redux hooks (`useAppDispatch`, `useAppSelector`)
 
 **Rules**:
 
-- ✅ State machines for complex flows
-- ✅ Global application state
-- ❌ Business logic (delegate to services/hooks)
-- ❌ Side effects (use thunks sparingly)
+- ✅ Only store configuration and typed hooks
+- ✅ Import feature reducers from `src/features/*/xxxSlice.ts`
+- ❌ No business logic
+- ❌ No feature-specific code
+- ❌ No slice definitions (those go in features/)
 
-**When to use**: Managing state that needs to be shared across components or
-persists through user interactions.
+**Example store.ts**:
+
+```typescript
+import { configureStore } from "@reduxjs/toolkit";
+import { commitReducer } from "../features/commit/commitSlice.ts";
+import { issueReducer } from "../features/issue/issueSlice.ts";
+import { editCommitMessageReducer } from "../features/edit-commit-message/editCommitMessageSlice.ts";
+
+export const store = configureStore({
+  reducer: {
+    commit: commitReducer,
+    issue: issueReducer,
+    editCommitMessage: editCommitMessageReducer,
+  },
+});
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+```
+
+**When to use**:
+- Configuring the Redux store
+- Adding a new feature reducer to the store
+- Never for slice definitions (use features/ instead)
 
 ### src/commands/ - CLI Entry Points
 
@@ -178,20 +216,17 @@ features.
 
 **When to use**: Extracting a UI component that is used by multiple features.
 
-### src/screens/ - Complex Screen Components
+### ~~src/screens/~~ (Deprecated - Moved to features/)
 
-**Purpose**: Multi-component screen flows that don't fit the feature slice
-pattern.
+**Previous Purpose**: Multi-component screen flows.
 
-**Contains**: Complex UIs like `edit-commit-message/`.
+**Migration**: All screen components have been moved to their respective feature folders under `features/*/components/`.
 
-**Rules**:
+**Example**:
+- Old: `src/screens/edit-commit-message/`
+- New: `src/features/edit-commit-message/components/`
 
-- ✅ Complex multi-component screens
-- ✅ Self-contained screen logic
-- ❌ Simple single-component UIs (use features/ or components/)
-
-**When to use**: Creating a complex, multi-step UI flow.
+**Reason for change**: Following Redux Toolkit 2026 best practices, complex UIs are now colocated with their feature's state management and business logic for better maintainability.
 
 ### src/constants/ - Configuration & Constants
 
@@ -219,6 +254,7 @@ Use this flowchart to decide where new code belongs:
 ```
 Is it a new feature or command?
 ├─ Yes → src/features/[feature-name]/
+│        (includes slice, ui, hook, domain, components)
 └─ No
    ├─ Is it a pure utility function?
    │  └─ Yes → src/helpers/text/ or src/helpers/collections/
@@ -229,8 +265,8 @@ Is it a new feature or command?
          ├─ Is it a framework wrapper?
          │  └─ Yes → src/lib/
          └─ No
-            ├─ Is it global state?
-            │  └─ Yes → src/store/
+            ├─ Is it Redux store configuration?
+            │  └─ Yes → src/app/
             └─ No
                ├─ Is it a shared UI component?
                │  └─ Yes → src/components/
@@ -241,14 +277,26 @@ Is it a new feature or command?
 
 ## Common Patterns
 
-### Adding a New Feature
+### Adding a New Feature (Redux Toolkit 2026)
 
 1. Create `src/features/[feature-name]/`
-2. Add `ui.tsx` for the UI component
-3. Add `hook.ts` for business logic
-4. If needed, add `domain/` for feature-specific helpers
-5. Create command in `src/commands/[feature-name].ts`
-6. Add Redux slice in `src/store/slices/[feature]Slice.ts`
+2. Add `[feature-name]Slice.ts` for Redux state management **← In the feature folder**
+3. Add `ui.tsx` for the UI component
+4. Add `hook.ts` for business logic (connects slice to UI)
+5. If needed, add `domain/` for feature-specific helpers
+6. If complex, add `components/` for multiple UI components
+7. Create command in `src/commands/[feature-name].ts`
+8. Register reducer in `src/app/store.ts`:
+   ```typescript
+   import { featureReducer } from "../features/[feature-name]/[feature-name]Slice.ts";
+
+   export const store = configureStore({
+     reducer: {
+       // ... other reducers
+       [featureName]: featureReducer,
+     },
+   });
+   ```
 
 ### Creating a Helper Function
 

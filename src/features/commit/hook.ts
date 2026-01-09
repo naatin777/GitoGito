@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useApp } from "ink";
-import { useAppDispatch, useAppSelector } from "../../store/hooks.ts";
+import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
 import {
   commitMessage,
   editCommitMessage,
   generateCommitMessages,
   selectMessage,
-} from "../../store/slices/commitSlice.ts";
+} from "./commitSlice.ts";
 
 export function useCommitFlow() {
   const dispatch = useAppDispatch();

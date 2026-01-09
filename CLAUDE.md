@@ -39,30 +39,35 @@ DemmitHub follows a layered architecture with clear separation of concerns.
   - AI, Git, GitHub API, Config, Editor integration
   - Rule: Encapsulate external dependencies, use repository pattern
 
-- **`src/features/`** - Feature Slices
-  - Each feature has: `ui.tsx` (view), `hook.ts` (logic), `domain/` (business
-    logic)
-  - Examples: `commit/`, `issue/`, `help/`, `version/`
-  - Rule: Keep related code together, feature should be self-contained
+- **`src/app/`** - Application Foundation (Redux Toolkit 2026)
+  - `store.ts` - Redux store configuration
+  - `hooks.ts` - Typed Redux hooks (`useAppDispatch`, `useAppSelector`)
+  - Rule: Only store setup and hooks, no slices
+
+- **`src/features/`** - Feature Slices (Redux Toolkit 2026 Best Practice)
+  - Each feature has: `xxxSlice.ts` (state), `ui.tsx` (view), `hook.ts` (logic),
+    `domain/` (business logic), `components/` (complex UIs)
+  - Examples: `commit/`, `issue/`, `edit-commit-message/`, `help/`, `version/`
+  - Rule: Keep related code together, **including Redux slices**
 
 - **`src/helpers/`** - Pure Utilities
   - `text/` - Text processing (word-wrap, line splitting)
   - `collections/` - Data structure helpers
   - Rule: Pure functions only, no side effects, no dependencies
 
-- **`src/store/`** - State Management (Redux Toolkit)
 - **`src/commands/`** - CLI Entry Points
 - **`src/components/`** - Shared UI Components
-- **`src/screens/`** - Complex Screen Components
 - **`src/constants/`** - Configuration & Constants
 
 ### Where to Put New Code
 
-- New feature → `features/[feature-name]/` with `ui.tsx`, `hook.ts`, `domain/`
+- New feature → `features/[feature-name]/` with `xxxSlice.ts`, `ui.tsx`, `hook.ts`, `domain/`
+- Redux slice → **Always colocated with the feature** in `features/[feature-name]/`
 - Pure utility function → `helpers/text/` or `helpers/collections/`
 - External API integration → `services/`
 - Framework wrapper → `lib/`
 - Shared component → `components/` (if used by 2+ features)
+- Store configuration → `app/store.ts` (register feature reducers)
 
 ## 4. Naming Conventions
 
