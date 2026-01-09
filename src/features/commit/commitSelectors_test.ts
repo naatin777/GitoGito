@@ -54,6 +54,7 @@ function createMockState(
         suggestion: [],
         filteredSuggestion: [],
         suggestionIndex: undefined,
+        suggestionScrollOffset: 0,
         decorated: null,
       },
       body: {
@@ -129,6 +130,7 @@ Deno.test("selectHeaderFullText - returns decorated full text when decorated", (
       suggestion: [],
       filteredSuggestion: [],
       suggestionIndex: undefined,
+      suggestionScrollOffset: 0,
       decorated: {
         prefixes: ["WIP: "],
         userText: "fix: bug",
@@ -154,6 +156,7 @@ Deno.test("selectHasDecorations - returns true when decorated", () => {
       suggestion: [],
       filteredSuggestion: [],
       suggestionIndex: undefined,
+      suggestionScrollOffset: 0,
       decorated: {
         prefixes: ["WIP: "],
         userText: "fix: bug",
@@ -179,6 +182,7 @@ Deno.test("selectAbsoluteCursor - returns absolute cursor with decorations", () 
       suggestion: [],
       filteredSuggestion: [],
       suggestionIndex: undefined,
+      suggestionScrollOffset: 0,
       decorated: {
         prefixes: ["WIP: "],
         userText: "fix: bug",
@@ -208,6 +212,7 @@ Deno.test("selectHasSuggestions - returns true when suggestions exist", () => {
         { value: "feat", description: "A new feature" },
       ],
       suggestionIndex: undefined,
+      suggestionScrollOffset: 0,
       decorated: null,
     },
   });
@@ -229,6 +234,7 @@ Deno.test("selectIsSuggestionSelected - returns true when suggestion selected", 
         { value: "fix", description: "A bug fix" },
       ],
       suggestionIndex: 0,
+      suggestionScrollOffset: 0,
       decorated: null,
     },
   });
@@ -251,6 +257,7 @@ Deno.test("selectSelectedSuggestion - returns selected suggestion", () => {
         { value: "feat", description: "A new feature" },
       ],
       suggestionIndex: 1,
+      suggestionScrollOffset: 0,
       decorated: null,
     },
   });
@@ -288,6 +295,7 @@ Deno.test("selectFullCommitMessage - combines header, body, and footer", () => {
       suggestion: [],
       filteredSuggestion: [],
       suggestionIndex: undefined,
+      suggestionScrollOffset: 0,
       decorated: null,
     },
     body: {
@@ -324,6 +332,7 @@ Deno.test("selectIsCommitMessageValid - returns false when header is empty", () 
       suggestion: [],
       filteredSuggestion: [],
       suggestionIndex: undefined,
+      suggestionScrollOffset: 0,
       decorated: null,
     },
   });

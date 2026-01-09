@@ -152,10 +152,12 @@ export const EditCommitMessageHeader = () => {
                 {isFocused ? index === 0 ? `❯` : ` ` : `│`}
               </Text>
             </Box>
-            {/* First line with decorated message: use DecoratedText for proper styling
+            {
+              /* First line with decorated message: use DecoratedText for proper styling
                 - Prefixes/suffixes are dimmed
                 - User text has normal color with cursor
-                Note: For multi-line decorated messages, only first line shows decoration */}
+                Note: For multi-line decorated messages, only first line shows decoration */
+            }
             {header.decorated && index === 0
               ? (
                 <DecoratedText
@@ -175,47 +177,69 @@ export const EditCommitMessageHeader = () => {
               )}
           </Box>
         ))}
-        {/* Autocomplete suggestions list
+        {
+          /* Autocomplete suggestions list
             - Shows filtered suggestions based on current input
+            - Limited to 5 visible items with scrolling support
             - Highlighted suggestion (selected with Tab) has inverse colors
-            - Format: "→ [typed][suggestion] - description" */}
+            - Format: "→ [typed][suggestion] - description" */
+        }
         <Box flexDirection="column">
           {isFocused &&
-            header.filteredSuggestion.map((suggestion, index) => (
-              <Box key={index} flexDirection="row">
-                {/* Arrow indicator - green when selected */}
-                <Box width={1} marginX={1}>
-                  <Text
-                    color={header.suggestionIndex === index
-                      ? "green"
-                      : undefined}
-                  >
-                    {`→`}
-                  </Text>
-                </Box>
-                {/* Already typed part - green text */}
-                <Text
-                  color="green"
-                  inverse={header.suggestionIndex === index}
-                >
-                  {header.value}
-                </Text>
-                {/* Completion part - blue text */}
-                <Text
-                  color="blue"
-                  inverse={header.suggestionIndex === index}
-                >
-                  {`${suggestion.value.slice(header.value.length)}`}
-                </Text>
-                {/* Description - gray text */}
-                <Text
-                  wrap="truncate"
-                  color="gray"
-                >
-                  {` - ${suggestion.description}`}
-                </Text>
-              </Box>
-            ))}
+            (() => {
+              const VISIBLE_COUNT = 5;
+              const totalSuggestions = header.filteredSuggestion.length;
+              const scrollOffset = header.suggestionScrollOffset;
+              const visibleEnd = Math.min(
+                scrollOffset + VISIBLE_COUNT,
+                totalSuggestions,
+              );
+              const visibleSuggestions = header.filteredSuggestion.slice(
+                scrollOffset,
+                visibleEnd,
+              );
+
+              return visibleSuggestions.map((suggestion, visibleIndex) => {
+                // Calculate the actual index in the full suggestions array
+                const actualIndex = scrollOffset + visibleIndex;
+
+                return (
+                  <Box key={actualIndex} flexDirection="row">
+                    {/* Arrow indicator - green when selected */}
+                    <Box width={1} marginX={1}>
+                      <Text
+                        color={header.suggestionIndex === actualIndex
+                          ? "green"
+                          : undefined}
+                      >
+                        {`→`}
+                      </Text>
+                    </Box>
+                    {/* Already typed part - green text */}
+                    <Text
+                      color="green"
+                      inverse={header.suggestionIndex === actualIndex}
+                    >
+                      {header.value}
+                    </Text>
+                    {/* Completion part - blue text */}
+                    <Text
+                      color="blue"
+                      inverse={header.suggestionIndex === actualIndex}
+                    >
+                      {`${suggestion.value.slice(header.value.length)}`}
+                    </Text>
+                    {/* Description - gray text */}
+                    <Text
+                      wrap="truncate"
+                      color="gray"
+                    >
+                      {` - ${suggestion.description}`}
+                    </Text>
+                  </Box>
+                );
+              });
+            })()}
         </Box>
       </Box>
     </Box>

@@ -29,6 +29,7 @@ export type HeaderState = {
   suggestion: Suggestion[];
   filteredSuggestion: Suggestion[];
   suggestionIndex: number | undefined;
+  suggestionScrollOffset: number; // Scroll position for suggestion list window
 
   // Decorator state
   decorated: DecoratedMessage | null;

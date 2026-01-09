@@ -100,3 +100,8 @@ DemmitHub follows a layered architecture with clear separation of concerns.
 - When creating new files, always follow these naming conventions
 - When reviewing code, suggest renaming for any violations
 - Use `git mv` for renaming to preserve file history
+
+## 5. Other
+
+If a prompt regarding specifications is received, please describe it in the docs
+folder.

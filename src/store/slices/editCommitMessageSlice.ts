@@ -18,6 +18,7 @@ const initialState: EditCommitMessageState = {
     suggestion: COMMIT_MESSAGE_PREFIXL,
     filteredSuggestion: COMMIT_MESSAGE_PREFIXL,
     suggestionIndex: undefined,
+    suggestionScrollOffset: 0,
     decorated: null, // Initialize with no decorations
   },
   body: {
