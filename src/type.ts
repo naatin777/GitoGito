@@ -28,6 +28,7 @@ export type CommitConfig = {
     requireScope: boolean;
   };
   type: Suggestion[];
+  scope: Suggestion[];
 };
 
 export type IssueCreateResponse =

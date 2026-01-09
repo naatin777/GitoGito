@@ -1,3 +1,20 @@
+/**
+ * EditCommitMessageHeader component
+ *
+ * Displays and handles the commit message header (first line) with:
+ * - Autocomplete suggestions for commit types (feat, fix, etc.)
+ * - Decorator support for prefixes/suffixes (e.g., issue numbers)
+ * - Multi-line text wrapping
+ * - Keyboard navigation and editing
+ *
+ * Key Features:
+ * - Tab: cycle through autocomplete suggestions
+ * - Arrow keys: navigate cursor, move between sections
+ * - Ctrl+A/E: jump to start/end of line
+ * - Return: accept suggestion or move to body
+ * - Escape: cancel suggestion selection
+ */
+
 import { Box, Text, useInput, useStdout } from "ink";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks.ts";
 import {
@@ -33,52 +50,89 @@ export const EditCommitMessageHeader = () => {
   const { stdout } = useStdout();
   const inputWidth = stdout.columns - NOT_INPUT_WIDTH;
 
-  // Use decorated message if available, otherwise use raw value
+  // Display text: use decorated message if available, otherwise use raw value
+  // - Decorated: includes prefixes (e.g., "[#123] ") before user text
+  // - Raw: just the user's input (e.g., "feat: add feature")
   const displayText = header.decorated
     ? header.decorated.fullText
     : header.value;
   const lines = splitTextToLines(displayText, inputWidth);
 
-  // Calculate cursor position in decorated message
+  // Calculate absolute cursor position in the full display text
+  // - For decorated messages: prefix length + cursor position in user text
+  // - For non-decorated: just cursor position (prefix length = 0)
   const prefixLength = header.decorated
     ? header.decorated.prefixes.join("").length
     : 0;
   const absoluteCursor = prefixLength + header.cursor;
 
   useInput((input, key) => {
-    if (isFocused) {
-      if (key.tab && !key.shift) {
-        dispatch(headerSuggestionNext());
-      } else if (key.tab && key.shift) {
-        dispatch(headerSuggestionPrev());
+    if (!isFocused) return;
+
+    // Tab key: cycle through suggestions
+    if (key.tab && !key.shift) {
+      dispatch(headerSuggestionNext());
+      return;
+    }
+    if (key.tab && key.shift) {
+      dispatch(headerSuggestionPrev());
+      return;
+    }
+
+    // Suggestion mode: accept or cancel
+    if (header.suggestionIndex !== undefined) {
+      if (key.return || input === "\r") {
+        dispatch(headerSuggestionAccept());
+      } else if (key.escape) {
+        dispatch(headerSuggestionCancel());
       }
-      if (!key.ctrl && !key.meta) {
-        if (!key.return || !(input === "\r")) {
-          dispatch(headerType({ char: input }));
-        }
-      }
-      if (key.backspace || key.delete) {
-        dispatch(headerDelete());
-      }
-      if (header.suggestionIndex === undefined) {
-        if (key.leftArrow) dispatch(headerCursorLeft());
-        else if (key.rightArrow) dispatch(headerCursorRight());
-        else if (key.downArrow) dispatch(focusBody());
-        else if (key.upArrow) dispatch(focusFooter());
-        else if (key.ctrl && input === "a") {
-          dispatch(headerGoToStart());
-        } else if (key.ctrl && input === "e") {
-          dispatch(headerGoToEnd());
-        } else if (key.return || (input === "\r")) {
-          dispatch(focusBody());
-        }
-      } else {
-        if (key.return || input === "\r") {
-          dispatch(headerSuggestionAccept());
-        } else if (key.escape) {
-          dispatch(headerSuggestionCancel());
-        }
-      }
+      return;
+    }
+
+    // Normal mode: handle key inputs
+    // Delete/Backspace
+    if (key.backspace || key.delete) {
+      dispatch(headerDelete());
+      return;
+    }
+
+    // Navigation: arrow keys
+    if (key.leftArrow) {
+      dispatch(headerCursorLeft());
+      return;
+    }
+    if (key.rightArrow) {
+      dispatch(headerCursorRight());
+      return;
+    }
+    if (key.downArrow) {
+      dispatch(focusBody());
+      return;
+    }
+    if (key.upArrow) {
+      dispatch(focusFooter());
+      return;
+    }
+
+    // Ctrl shortcuts
+    if (key.ctrl && input === "a") {
+      dispatch(headerGoToStart());
+      return;
+    }
+    if (key.ctrl && input === "e") {
+      dispatch(headerGoToEnd());
+      return;
+    }
+
+    // Return key: move to body
+    if (key.return || input === "\r") {
+      dispatch(focusBody());
+      return;
+    }
+
+    // Character input (exclude ctrl/meta combinations)
+    if (!key.ctrl && !key.meta && input.length > 0) {
+      dispatch(headerType({ char: input }));
     }
   });
 
@@ -92,12 +146,16 @@ export const EditCommitMessageHeader = () => {
       <Box flexDirection="column">
         {lines.map((line, index) => (
           <Box key={`${line.start}-${line.text}`} flexDirection="row">
+            {/* Gutter: shows "❯" when focused, "│" otherwise */}
             <Box width={GUTTER_WIDTH} marginX={GUTTER_MARGIN}>
               <Text color={isFocused ? "green" : undefined}>
                 {isFocused ? index === 0 ? `❯` : ` ` : `│`}
               </Text>
             </Box>
-            {/* If decorated message exists and this is the first line, use DecoratedText */}
+            {/* First line with decorated message: use DecoratedText for proper styling
+                - Prefixes/suffixes are dimmed
+                - User text has normal color with cursor
+                Note: For multi-line decorated messages, only first line shows decoration */}
             {header.decorated && index === 0
               ? (
                 <DecoratedText
@@ -107,6 +165,7 @@ export const EditCommitMessageHeader = () => {
                 />
               )
               : (
+                /* Non-decorated or continuation lines: use standard line display */
                 <EditCommitMessageLine
                   line={line}
                   cursor={absoluteCursor}
@@ -116,10 +175,15 @@ export const EditCommitMessageHeader = () => {
               )}
           </Box>
         ))}
+        {/* Autocomplete suggestions list
+            - Shows filtered suggestions based on current input
+            - Highlighted suggestion (selected with Tab) has inverse colors
+            - Format: "→ [typed][suggestion] - description" */}
         <Box flexDirection="column">
           {isFocused &&
             header.filteredSuggestion.map((suggestion, index) => (
               <Box key={index} flexDirection="row">
+                {/* Arrow indicator - green when selected */}
                 <Box width={1} marginX={1}>
                   <Text
                     color={header.suggestionIndex === index
@@ -129,18 +193,21 @@ export const EditCommitMessageHeader = () => {
                     {`→`}
                   </Text>
                 </Box>
+                {/* Already typed part - green text */}
                 <Text
                   color="green"
                   inverse={header.suggestionIndex === index}
                 >
                   {header.value}
                 </Text>
+                {/* Completion part - blue text */}
                 <Text
                   color="blue"
                   inverse={header.suggestionIndex === index}
                 >
                   {`${suggestion.value.slice(header.value.length)}`}
                 </Text>
+                {/* Description - gray text */}
                 <Text
                   wrap="truncate"
                   color="gray"

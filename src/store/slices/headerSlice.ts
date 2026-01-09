@@ -12,19 +12,39 @@ import {
   typeChar,
 } from "../../helpers/redux/text-field-reducers.ts";
 import type { EditCommitMessageState } from "./editCommitMessageTypes.ts";
-import { parseCommitHeader } from "../../features/commit/domain/commit-header-completion.ts";
+import {
+  getCompletionSuggestions,
+  parseCommitHeader,
+} from "../../features/commit/domain/commit-header-completion.ts";
 import {
   applyDecorators,
   type CommitDecoratorContext,
 } from "../../features/commit/domain/commit-decorator.ts";
+import {
+  COMMIT_MESSAGE_PREFIXL,
+  COMMIT_MESSAGE_SCOPES,
+} from "../../constants/commit-message/prefix.ts";
 
 /**
- * Updates filtered suggestions based on current header value
+ * Updates filtered suggestions based on current header value and context
+ * Uses getCompletionSuggestions to provide context-aware suggestions:
+ * - Type suggestions when typing commit type
+ * - Suffix suggestions (:, !:, (scope):) after complete type
+ * - Scope suggestions when in scope editing mode
  */
 function updateFilteredSuggestions(state: EditCommitMessageState): void {
-  state.header.filteredSuggestion = state.header.suggestion.filter((
-    suggestion,
-  ) => suggestion.value.startsWith(state.header.value));
+  const completions = getCompletionSuggestions(
+    state.header.value,
+    state.header.cursor,
+    COMMIT_MESSAGE_PREFIXL,
+    COMMIT_MESSAGE_SCOPES,
+  );
+
+  // Update filtered suggestions with context-aware completions
+  state.header.filteredSuggestion = completions.list.map((c) => ({
+    value: c.value,
+    description: c.description,
+  }));
 }
 
 /**

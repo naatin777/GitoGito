@@ -144,39 +144,49 @@ function parsePrefix(prefix: string): {
  * Used to suggest what should come next after current input
  *
  * @param context - Parsed commit header context
+ * @param availableScopes - List of available scopes for scope suggestions
  * @returns Array of suggested suffixes with descriptions
  *
  * @example
  * const ctx = parseCommitHeader("fix", 3);
- * getSuggestedSuffixes(ctx)
+ * getSuggestedSuffixes(ctx, [{ value: "src", description: "Source code" }])
  * // => [
  * //   { value: "fix:", description: "No scope" },
  * //   { value: "fix!:", description: "Breaking change" },
- * //   { value: "fix(", description: "Add scope" }
+ * //   { value: "fix(src):", description: "Source code" },
  * // ]
  */
 export function getSuggestedSuffixes(
   context: CommitHeaderContext,
+  availableScopes: Array<{ value: string; description: string }> = [],
 ): Array<{ value: string; description: string }> {
   const suggestions: Array<{ value: string; description: string }> = [];
 
   if (context.position === "type") {
     const base = context.type;
-    // Suggest next steps after type
+    const bang = context.hasBreakingChange ? "!" : "";
+
+    // Suggest colon without scope
     suggestions.push({
-      value: `${base}:`,
+      value: `${base}${bang}:`,
       description: "No scope",
     });
+
+    // Suggest breaking change marker (if not already present)
     if (!context.hasBreakingChange) {
       suggestions.push({
         value: `${base}!:`,
         description: "Breaking change",
       });
     }
-    suggestions.push({
-      value: `${base}(`,
-      description: "Add scope",
-    });
+
+    // Suggest each available scope with complete syntax
+    for (const scope of availableScopes) {
+      suggestions.push({
+        value: `${base}${bang}(${scope.value}):`,
+        description: scope.description,
+      });
+    }
   } else if (context.position === "scope") {
     const base = context.type;
     const scopePart = context.scope;
@@ -270,7 +280,7 @@ export function getCompletionSuggestions(
       t.value === context.currentToken
     );
     if (exactMatch) {
-      const suffixes = getSuggestedSuffixes(context);
+      const suffixes = getSuggestedSuffixes(context, availableScopes);
       for (const suffix of suffixes) {
         const inlineCompletion = suffix.value.slice(
           context.currentToken.length,

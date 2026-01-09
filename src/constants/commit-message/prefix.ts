@@ -40,10 +40,26 @@ export const COMMIT_MESSAGE_PREFIXL: Suggestion[] = [
   },
 ] as const satisfies Suggestion[];
 
+export const COMMIT_MESSAGE_SCOPES: Suggestion[] = [
+  { value: "src", description: "Source code changes" },
+  { value: "components", description: "UI components" },
+  { value: "api", description: "API related changes" },
+  { value: "lib", description: "Library code" },
+  { value: "features", description: "Feature modules" },
+  { value: "services", description: "Service layer" },
+  { value: "helpers", description: "Helper utilities" },
+  { value: "store", description: "State management" },
+  { value: "types", description: "Type definitions" },
+  { value: "config", description: "Configuration files" },
+  { value: "tests", description: "Test files" },
+  { value: "docs", description: "Documentation" },
+] as const satisfies Suggestion[];
+
 export const DEFAULT_COMMIT_CONFIG: CommitConfig = {
   rules: {
     maxHeaderLength: 50,
     requireScope: false,
   },
   type: COMMIT_MESSAGE_PREFIXL,
+  scope: COMMIT_MESSAGE_SCOPES,
 };
