@@ -173,6 +173,6 @@ export abstract class BaseCommand<
       error,
     });
 
-    await runTui(help, false);
+    await runTui(help);
   }
 }
