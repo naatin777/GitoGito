@@ -1,7 +1,7 @@
 import { Box, render } from "ink";
 import { useState } from "react";
 import { TextInput } from "./TextInput.tsx";
-import { Spinner } from "./Spinner.tsx";
+import { Spinner } from "./spinner.tsx";
 import { IssueAgentSchema, type IssueSchema } from "../schema.ts";
 import { ISSUE_SYSTEM_MESSAGE } from "../constants/message.ts";
 import type z from "zod";

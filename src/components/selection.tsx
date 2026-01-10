@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Select } from "./Select.tsx";
+import { Select } from "./select.tsx";
 import { TextInput } from "./TextInput.tsx";
 import { LANGUAGES } from "../constants/language.ts";
 import { EDITORS } from "../constants/editor.ts";
@@ -15,7 +15,7 @@ export function LanguageSelector(
         value: `${l.code} - ${l.label}`,
         description: `Use ${l.label} for AI responses`,
       }))}
-      onSelect={(val) => val && onSelect(val)}
+      onSelect={(val?: string) => val && onSelect(val)}
     />
   );
 }
@@ -52,7 +52,7 @@ export function EditorSelector(
     <Select
       message="Select editor"
       choices={choices}
-      onSelect={(val) => {
+      onSelect={(val?: string) => {
         if (val === "CUSTOM") {
           setShowCustom(true);
         } else if (val) {

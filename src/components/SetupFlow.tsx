@@ -4,7 +4,7 @@ import {
   EditorSelector,
   LanguageSelector,
   OverviewInput,
-} from "./Selection.tsx";
+} from "./selection.tsx";
 import {
   type Config,
   type ConfigScope,

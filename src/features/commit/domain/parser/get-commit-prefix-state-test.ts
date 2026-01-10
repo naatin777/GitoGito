@@ -485,6 +485,7 @@ describe("getCommitPrefixState", () => {
         { value: "feature", description: "A new feature" },
         { value: "bugfix", description: "A bug fix" },
       ],
+      scope: [],
     };
 
     it("Custom type recognized", () => {
