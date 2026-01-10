@@ -3,8 +3,8 @@ import { useIssueFlow } from "./hook.ts";
 import { Spinner } from "../../components/spinner.tsx";
 import { Select } from "../../components/select.tsx";
 import { Carousel } from "../../components/carousel.tsx";
-import { TextInput } from "../../components/text_input.tsx";
-import { AgentLoop } from "../../components/agent_loop.tsx";
+import { TextInput } from "../../components/TextInput.tsx";
+import { AgentLoop } from "../../components/AgentLoop.tsx";
 import { ISSUE_SYSTEM_MESSAGE } from "../../constants/message.ts";
 
 export function Issue() {

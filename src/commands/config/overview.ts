@@ -9,7 +9,7 @@ import {
   type ConfigCommandOptionType,
 } from "../config.ts";
 import { envService } from "../../services/env.ts";
-import { runTui } from "../../utils/tui.ts";
+import { runTui } from "../../lib/tui.ts";
 
 export class OverviewCommand
   extends BaseCommand<ConfigCommandFlagType, ConfigCommandOptionType> {
