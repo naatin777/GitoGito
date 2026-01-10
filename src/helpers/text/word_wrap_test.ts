@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { wrapTextByWords } from "./word-wrap.ts";
+import { wrapTextByWords } from "./word_wrap.ts";
 
 Deno.test("wrapTextByWords - fits in single line", () => {
   const result = wrapTextByWords("fix: add user authentication", 50);

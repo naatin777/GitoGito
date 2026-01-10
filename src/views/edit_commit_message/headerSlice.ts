@@ -10,20 +10,20 @@ import {
   moveCursorToEnd,
   moveCursorToStart,
   typeChar,
-} from "../../helpers/redux/text-field-reducers.ts";
+} from "../../helpers/redux/text_field_reducers.ts";
 import type { EditCommitMessageState } from "./types.ts";
 import {
   getCompletionSuggestions,
   parseCommitHeader,
-} from "../../features/commit/domain/commit-header-completion.ts";
+} from "../../features/commit/domain/commit_header_completion.ts";
 import {
   applyDecorators,
   type CommitDecoratorContext,
-} from "../../features/commit/domain/commit-decorator.ts";
+} from "../../features/commit/domain/commit_decorator.ts";
 import {
   COMMIT_MESSAGE_PREFIXL,
   COMMIT_MESSAGE_SCOPES,
-} from "../../constants/commit-message/prefix.ts";
+} from "../../constants/commit_message/prefix.ts";
 
 /**
  * Maximum number of suggestions visible at once

@@ -6,7 +6,7 @@ import {
   type CommitDecoratorContext,
   decoratorRegistry,
   registerDecorator,
-} from "./commit-decorator.ts";
+} from "./commit_decorator.ts";
 
 // Helper to create test context
 function createTestContext(

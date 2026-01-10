@@ -2,7 +2,7 @@
  * Built-in commit message decorators
  */
 
-import type { CommitDecorator } from "./commit-decorator.ts";
+import type { CommitDecorator } from "./commit_decorator.ts";
 
 /**
  * WIP Prefix Decorator

@@ -10,7 +10,7 @@ import {
   moveCursorToEnd,
   moveCursorToStart,
   typeChar,
-} from "../../helpers/redux/text-field-reducers.ts";
+} from "../../helpers/redux/text_field_reducers.ts";
 import type { EditCommitMessageState } from "./types.ts";
 
 export const footerSlice = {

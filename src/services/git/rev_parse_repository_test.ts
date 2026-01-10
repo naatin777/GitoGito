@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { GitRevParseRepository } from "./rev-parse-repository.ts";
+import { GitRevParseRepository } from "./rev_parse_repository.ts";
 
 Deno.test("isGitRepository", async () => {
   const mockGit = {

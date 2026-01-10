@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { COMMIT_MESSAGE_PREFIXL } from "../../constants/commit-message/prefix.ts";
+import { COMMIT_MESSAGE_PREFIXL } from "../../constants/commit_message/prefix.ts";
 import { bodySlice } from "./bodySlice.ts";
 import type { EditCommitMessageState } from "./types.ts";
 import { footerSlice } from "./footerSlice.ts";

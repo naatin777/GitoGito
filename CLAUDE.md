@@ -47,7 +47,7 @@ DemmitHub follows a layered architecture with clear separation of concerns.
 - **`src/features/`** - Feature Slices (Redux Toolkit 2026 Best Practice)
   - Each feature has: `xxxSlice.ts` (state), `ui.tsx` (view), `hook.ts` (logic),
     `domain/` (business logic), `components/` (complex UIs)
-  - Examples: `commit/`, `issue/`, `edit-commit-message/`, `help/`, `version/`
+  - Examples: `commit/`, `issue/`, `edit_commit_message/`, `help/`, `version/`
   - Rule: Keep related code together, **including Redux slices**
 
 - **`src/helpers/`** - Pure Utilities
@@ -73,34 +73,37 @@ DemmitHub follows a layered architecture with clear separation of concerns.
 
 ## 4. Naming Conventions
 
-**IMPORTANT**: Maintain consistent file naming across the codebase.
+**IMPORTANT**: This project follows the
+[Deno Style Guide](https://docs.deno.com/runtime/contributing/style_guide/) for
+file naming conventions.
 
 ### File Naming Rules
 
-1. **TypeScript Files (.ts) - Use kebab-case**:
-   - All TypeScript files must use **kebab-case** (lowercase with hyphens)
-   - Examples: `commit-message.ts`, `auth-middleware.ts`,
-     `text-field-reducers.ts`
-   - **Prohibition**: Never mix underscores (_) with hyphens
+1. **TypeScript Files (.ts) - Use snake_case**:
+   - All TypeScript files must use **snake_case** (lowercase with underscores)
+   - Examples: `commit_message.ts`, `auth_middleware.ts`,
+     `text_field_reducers.ts`
+   - **Deno Style Guide Rule**: "Use underscores, not dashes in filenames"
+   - **Prohibition**: Never use hyphens (-) in file names
 
 2. **Component Files (.tsx) - Use PascalCase**:
    - React/Ink component files must use **PascalCase** to match component names
    - Examples: `CommitMessage.tsx`, `UserCard.tsx`, `EditCommitMessage.tsx`
    - **Prohibition**: Never use snake_case (e.g., `user_card.tsx`)
 
-3. **Test Files - Use kebab-case with `-test.ts` suffix**:
-   - Test files follow: `[original-file-name]-test.ts` or
-     `[original-file-name]-test.tsx`
-   - Examples: `commit-message-test.ts`, `word-wrap-test.ts`
-   - **Prohibition**: Do not use `_test.ts` or `.test.ts` patterns
+3. **Test Files - Use snake_case with `_test.ts` suffix**:
+   - Test files follow: `[original_file_name]_test.ts` or
+     `[original_file_name]_test.tsx`
+   - Examples: `commit_message_test.ts`, `word_wrap_test.ts`
+   - **Prohibition**: Do not use `-test.ts` or `.test.ts` patterns
 
 ### Examples
 
 | File Type  | ✅ Correct             | ❌ Incorrect                                   |
 | ---------- | ---------------------- | ---------------------------------------------- |
-| TypeScript | `user-service.ts`      | `user_service.ts`, `userService.ts`            |
+| TypeScript | `user_service.ts`      | `user-service.ts`, `userService.ts`            |
 | Component  | `UserCard.tsx`         | `user_card.tsx`, `user-card.tsx`               |
-| Test       | `user-service-test.ts` | `user_service_test.ts`, `user-service.test.ts` |
+| Test       | `user_service_test.ts` | `user-service-test.ts`, `user-service.test.ts` |
 
 ### Enforcement
 

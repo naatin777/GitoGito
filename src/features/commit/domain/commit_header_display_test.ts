@@ -1,12 +1,12 @@
 import { assertEquals } from "@std/assert";
-import type { CompletionSuggestion } from "./commit-header-completion.ts";
+import type { CompletionSuggestion } from "./commit_header_completion.ts";
 import {
   formatCharacterCount,
   formatDropdownItems,
   formatDropdownItemText,
   formatGhostText,
   formatHeaderWithGhostText,
-} from "./commit-header-display.ts";
+} from "./commit_header_display.ts";
 
 Deno.test("formatGhostText - with valid suggestion", () => {
   const suggestion: CompletionSuggestion = {

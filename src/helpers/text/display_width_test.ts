@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { getDisplayWidth } from "./display-width.ts";
+import { getDisplayWidth } from "./display_width.ts";
 
 Deno.test("getDisplayWidth - ASCII characters", () => {
   assertEquals(getDisplayWidth("hello"), 5);

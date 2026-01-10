@@ -1,6 +1,6 @@
 import { assertEquals } from "@std/assert";
 import { describe, it } from "@std/testing/bdd";
-import { getCommitPrefixState } from "./get-commit-prefix-state.ts";
+import { getCommitPrefixState } from "./get_commit_prefix_state.ts";
 import type { CommitConfig } from "../../../../type.ts";
 
 describe("getCommitPrefixState", () => {

@@ -1,6 +1,6 @@
-import { DEFAULT_COMMIT_CONFIG } from "../../../../constants/commit-message/prefix.ts";
+import { DEFAULT_COMMIT_CONFIG } from "../../../../constants/commit_message/prefix.ts";
 import type { CommitConfig } from "../../../../type.ts";
-import type { UserSituation } from "./get-commit-state.ts";
+import type { UserSituation } from "./get_commit_state.ts";
 
 export const getCommitDescriptionState = (
   message: string,

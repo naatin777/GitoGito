@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { GitCommitRepository } from "./commit-repository.ts";
+import { GitCommitRepository } from "./commit_repository.ts";
 
 Deno.test("commitWithMessage", async () => {
   const mockGit = {

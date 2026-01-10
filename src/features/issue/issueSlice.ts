@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type z from "zod";
 import type { IssueSchema } from "../../schema.ts";
 import type { Issue, IssueTemplate } from "../../type.ts";
-import { getIssueTemplatePath } from "../../features/issue/domain/template-paths.ts";
+import { getIssueTemplatePath } from "../../features/issue/domain/template_paths.ts";
 import {
   parseMarkdownIssueTemplate,
   stringifyMarkdownIssue,

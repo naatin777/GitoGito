@@ -1,11 +1,11 @@
 import { assertEquals } from "@std/assert";
-import type { CommitDecoratorContext } from "./commit-decorator.ts";
+import type { CommitDecoratorContext } from "./commit_decorator.ts";
 import {
   breakingChangeDecorator,
   draftPrefixDecorator,
   typeEmojiDecorator,
   wipPrefixDecorator,
-} from "./builtin-decorators.ts";
+} from "./builtin_decorators.ts";
 
 // Helper to create test context
 function createContext(

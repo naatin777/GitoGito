@@ -10,7 +10,7 @@ import {
   changeToNormalMode,
 } from "../editCommitMessageSlice.ts";
 import { runTui } from "../../../lib/tui.ts";
-import { initializeDecorators } from "../../../features/commit/domain/init-decorators.ts";
+import { initializeDecorators } from "../../../features/commit/domain/init_decorators.ts";
 
 export const BORDER_WIDTH = 1 as const;
 export const BORDER_PADDING = 1 as const;

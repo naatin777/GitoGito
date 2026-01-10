@@ -31,7 +31,7 @@ import {
   headerSuggestionPrev,
   headerType,
 } from "../editCommitMessageSlice.ts";
-import { splitTextToLines } from "../../../helpers/text/split-text-to-lines.ts";
+import { splitTextToLines } from "../../../helpers/text/split_text_to_lines.ts";
 import { EditCommitMessageLine } from "./Line.tsx";
 import { DecoratedText } from "./DecoratedText.tsx";
 import {

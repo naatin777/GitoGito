@@ -3,8 +3,8 @@
  * This should be called once at application startup to register built-in decorators
  */
 
-import { decoratorRegistry } from "./commit-decorator.ts";
-import { registerBuiltinDecorators } from "./builtin-decorators.ts";
+import { decoratorRegistry } from "./commit_decorator.ts";
+import { registerBuiltinDecorators } from "./builtin_decorators.ts";
 
 /**
  * Flag to track if decorators have been initialized

@@ -1,5 +1,5 @@
 import type { Suggestion } from "../../type.ts";
-import type { DecoratedMessage } from "../../features/commit/domain/commit-decorator.ts";
+import type { DecoratedMessage } from "../../features/commit/domain/commit_decorator.ts";
 
 /**
  * CLI flags that affect decorators

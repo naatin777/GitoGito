@@ -4,7 +4,7 @@ import {
   getCompletionSuggestions,
   getSuggestedSuffixes,
   parseCommitHeader,
-} from "./commit-header-completion.ts";
+} from "./commit_header_completion.ts";
 
 Deno.test("parseCommitHeader - type position", () => {
   const result = parseCommitHeader("fix", 3);

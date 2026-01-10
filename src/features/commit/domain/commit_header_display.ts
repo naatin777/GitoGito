@@ -3,8 +3,8 @@
  * Provides functions for formatting Ghost Text and Dropdown suggestions
  */
 
-import { getDisplayWidth } from "../../../helpers/text/display-width.ts";
-import type { CompletionSuggestion } from "./commit-header-completion.ts";
+import { getDisplayWidth } from "../../../helpers/text/display_width.ts";
+import type { CompletionSuggestion } from "./commit_header_completion.ts";
 
 /**
  * Ghost Text style - the completion text shown inline after cursor

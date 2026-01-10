@@ -7,9 +7,9 @@ import {
   applyDecorators,
   type CommitDecoratorContext,
   registerDecorator,
-} from "./commit-decorator.ts";
-import { registerBuiltinDecorators } from "./builtin-decorators.ts";
-import { decoratorRegistry } from "./commit-decorator.ts";
+} from "./commit_decorator.ts";
+import { registerBuiltinDecorators } from "./builtin_decorators.ts";
+import { decoratorRegistry } from "./commit_decorator.ts";
 
 // Example 1: Basic usage with WIP flag
 function example1_WipFlag() {

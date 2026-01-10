@@ -1,6 +1,6 @@
 import { assertEquals } from "@std/assert";
 import { describe, it } from "@std/testing/bdd";
-import { getCommitHeaderState } from "./get-commit-state.ts";
+import { getCommitHeaderState } from "./get_commit_state.ts";
 
 describe("getCommitHeaderState", () => {
   describe("Prefix editing (before colon)", () => {
