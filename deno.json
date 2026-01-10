@@ -1,10 +1,11 @@
 {
   "name": "demmithub",
-  "displayName": "DemmitHub",
-  "description": "AI-powered CLI for generating smart commit messages, pull requests, and issues.",
   "version": "0.0.0",
   "license": "MIT",
-  "exports": "./src/main.ts",
+  "description": "AI-powered CLI for generating smart commit messages, pull requests, and issues.",
+  "exports": {
+    "./cli": "./src/main.ts"
+  },
   "imports": {
     "@octokit/plugin-rest-endpoint-methods": "npm:@octokit/plugin-rest-endpoint-methods@^17.0.0",
     "@openrouter/ai-sdk-provider": "npm:@openrouter/ai-sdk-provider@^1.5.4",
