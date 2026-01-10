@@ -13,12 +13,27 @@ export class GitService {
   public readonly status: GitStatusRepository;
   public readonly remote: GitRemoteRepository;
 
-  constructor(git: SimpleGit = simpleGit()) {
+  constructor(
+    git: SimpleGit = simpleGit(),
+    repos: {
+      diff: GitDiffRepository;
+      commit: GitCommitRepository;
+      rev_parse: GitRevParseRepository;
+      status: GitStatusRepository;
+      remote: GitRemoteRepository;
+    } = {
+      diff: new GitDiffRepository(git),
+      commit: new GitCommitRepository(git),
+      rev_parse: new GitRevParseRepository(git),
+      status: new GitStatusRepository(git),
+      remote: new GitRemoteRepository(git),
+    },
+  ) {
     this.git = git;
-    this.diff = new GitDiffRepository(this.git);
-    this.commit = new GitCommitRepository(this.git);
-    this.rev_parse = new GitRevParseRepository(this.git);
-    this.status = new GitStatusRepository(this.git);
-    this.remote = new GitRemoteRepository(this.git);
+    this.diff = repos.diff;
+    this.commit = repos.commit;
+    this.rev_parse = repos.rev_parse;
+    this.status = repos.status;
+    this.remote = repos.remote;
   }
 }
