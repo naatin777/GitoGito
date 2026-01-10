@@ -3,10 +3,7 @@
  */
 
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type {
-  CommitFlags,
-  EditCommitMessageState,
-} from "./types.ts";
+import type { CommitFlags, EditCommitMessageState } from "./types.ts";
 
 export const formSlice = {
   changeToAiMode: (state: EditCommitMessageState) => {

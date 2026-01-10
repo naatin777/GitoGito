@@ -241,7 +241,8 @@ export const EditCommitMessageHeader = () => {
                       // Description needs truncation
                       displayDescription = descriptionPart.slice(
                         0,
-                        availableWidth - typedPart.length - completionPart.length,
+                        availableWidth - typedPart.length -
+                          completionPart.length,
                       );
                     }
                     displayDescription += ellipsis;

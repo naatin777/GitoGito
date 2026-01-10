@@ -11,8 +11,10 @@ DemmitHub follows a 4-layer architecture:
 
 1. **Infrastructure Layer** → `src/lib/`, `src/helpers/`
 2. **Service/Domain Layer** → `src/services/`, `src/features/*/domain/`
-3. **Application Layer** → `src/features/*/hook.ts`, `src/features/*/xxxSlice.ts`, `src/app/`
-4. **Presentation Layer** → `src/features/*/ui.tsx`, `src/features/*/components/`, `src/components/`
+3. **Application Layer** → `src/features/*/hook.ts`,
+   `src/features/*/xxxSlice.ts`, `src/app/`
+4. **Presentation Layer** → `src/features/*/ui.tsx`,
+   `src/features/*/components/`, `src/components/`
 
 ## Directory Reference
 
@@ -64,13 +66,15 @@ service.
 
 ### src/features/ - Feature Slices (Redux Toolkit 2026 Best Practice)
 
-**Purpose**: Self-contained feature modules following the Feature-based Folder Structure.
+**Purpose**: Self-contained feature modules following the Feature-based Folder
+Structure.
 
 **Structure**: Each feature directory contains:
 
 - `ui.tsx` - React/Ink component (Presentation layer)
 - `hook.ts` - Custom hook with business logic (Application layer)
-- `xxxSlice.ts` - Redux Toolkit slice (State management) **← Colocated with feature**
+- `xxxSlice.ts` - Redux Toolkit slice (State management) **← Colocated with
+  feature**
 - `domain/` - Feature-specific business logic and helpers
 - `components/` - Feature-specific UI components (for complex features)
 
@@ -181,6 +185,7 @@ export type AppDispatch = typeof store.dispatch;
 ```
 
 **When to use**:
+
 - Configuring the Redux store
 - Adding a new feature reducer to the store
 - Never for slice definitions (use features/ instead)
@@ -220,13 +225,17 @@ features.
 
 **Previous Purpose**: Multi-component screen flows.
 
-**Migration**: All screen components have been moved to their respective feature folders under `features/*/components/`.
+**Migration**: All screen components have been moved to their respective feature
+folders under `features/*/components/`.
 
 **Example**:
+
 - Old: `src/screens/edit-commit-message/`
 - New: `src/features/edit-commit-message/components/`
 
-**Reason for change**: Following Redux Toolkit 2026 best practices, complex UIs are now colocated with their feature's state management and business logic for better maintainability.
+**Reason for change**: Following Redux Toolkit 2026 best practices, complex UIs
+are now colocated with their feature's state management and business logic for
+better maintainability.
 
 ### src/constants/ - Configuration & Constants
 
@@ -280,7 +289,8 @@ Is it a new feature or command?
 ### Adding a New Feature (Redux Toolkit 2026)
 
 1. Create `src/features/[feature-name]/`
-2. Add `[feature-name]Slice.ts` for Redux state management **← In the feature folder**
+2. Add `[feature-name]Slice.ts` for Redux state management **← In the feature
+   folder**
 3. Add `ui.tsx` for the UI component
 4. Add `hook.ts` for business logic (connects slice to UI)
 5. If needed, add `domain/` for feature-specific helpers
