@@ -232,8 +232,8 @@ export function CommitHeader() {
 // app/store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import { baseApi } from "../services/api.ts";
-import { themeReducer } from "../features/theme/themeSlice.ts";
-import { editCommitMessageReducer } from "../features/commit/editCommitMessageSlice.ts";
+import { themeReducer } from "../features/theme/theme_slice.ts";
+import { editCommitMessageReducer } from "../views/edit_commit_message/edit_commit_message_slice.ts";
 
 export const store = configureStore({
   reducer: {
@@ -274,14 +274,14 @@ function App() {
 ```
 features/
   └── commit/
-       ├── editCommitMessageSlice.ts    # UI state (cursor, focus, etc.)
-       ├── commitApi.ts                  # API endpoints (if needed)
-       ├── commitSelectors.ts            # Memoized selectors
-       ├── commitTypes.ts                # Feature-specific types
-       ├── domain/                       # Business logic
-       │    ├── commit-decorator.ts
-       │    └── commit-header-completion.ts
-       └── components/                   # UI components
+       ├── commit_slice.ts              # UI state (cursor, focus, etc.)
+       ├── commit_api.ts                # API endpoints (if needed)
+       ├── commit_selectors.ts          # Memoized selectors
+       ├── commit_types.ts              # Feature-specific types
+       ├── domain/                      # Business logic
+       │    ├── commit_decorator.ts
+       │    └── commit_header_completion.ts
+       └── components/                  # UI components
             ├── Header.tsx
             ├── Body.tsx
             └── Footer.tsx

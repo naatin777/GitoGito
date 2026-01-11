@@ -45,10 +45,16 @@ DemmitHub follows a layered architecture with clear separation of concerns.
   - Rule: Only store setup and hooks, no slices
 
 - **`src/features/`** - Feature Slices (Redux Toolkit 2026 Best Practice)
-  - Each feature has: `xxxSlice.ts` (state), `ui.tsx` (view), `hook.ts` (logic),
-    `domain/` (business logic), `components/` (complex UIs)
-  - Examples: `commit/`, `issue/`, `edit_commit_message/`, `help/`, `version/`
+  - Each feature has: `xxx_slice.ts` (state), `ui.tsx` (view), `hook.ts`
+    (logic), `domain/` (business logic), `components/` (complex UIs)
+  - Examples: `commit/`, `issue/`, `help/`, `version/`
   - Rule: Keep related code together, **including Redux slices**
+
+- **`src/views/`** - Complex UI Flows
+  - Multi-component UI features with advanced state management
+  - Example: `edit_commit_message/` - Advanced commit message editor
+  - Rule: Use only for exceptionally complex UIs; prefer `features/` for most
+    cases
 
 - **`src/helpers/`** - Pure Utilities
   - `text/` - Text processing (word-wrap, line splitting)
@@ -61,10 +67,11 @@ DemmitHub follows a layered architecture with clear separation of concerns.
 
 ### Where to Put New Code
 
-- New feature → `features/[feature-name]/` with `xxxSlice.ts`, `ui.tsx`,
+- New feature → `features/[feature_name]/` with `xxx_slice.ts`, `ui.tsx`,
   `hook.ts`, `domain/`
-- Redux slice → **Always colocated with the feature** in
-  `features/[feature-name]/`
+- Complex UI flow → `views/[view_name]/` (only for exceptionally complex UIs)
+- Redux slice → **Always colocated with the feature/view** in
+  `features/[feature_name]/` or `views/[view_name]/`
 - Pure utility function → `helpers/text/` or `helpers/collections/`
 - External API integration → `services/`
 - Framework wrapper → `lib/`

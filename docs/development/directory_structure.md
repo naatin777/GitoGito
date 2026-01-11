@@ -83,34 +83,22 @@ Structure.
 ```
 features/
 ├── commit/
-│   ├── commitSlice.ts        # Redux state management
+│   ├── commit_slice.ts       # Redux state management
 │   ├── ui.tsx                # Main UI component
 │   ├── hook.ts               # Custom hook
-│   ├── commitSelectors.ts    # Memoized selectors
+│   ├── commit_selectors.ts   # Memoized selectors
 │   └── domain/               # Business logic
-│       ├── commit-header-completion.ts
+│       ├── commit_header_completion.ts
 │       └── parser/
-│           ├── get-commit-state.ts
+│           ├── get_commit_state.ts
 │           └── ...
 ├── issue/
-│   ├── issueSlice.ts         # Redux state management
+│   ├── issue_slice.ts        # Redux state management
 │   ├── ui.tsx
 │   ├── hook.ts
 │   └── domain/
 │       ├── parser.ts
-│       └── template-paths.ts
-├── edit-commit-message/      # Complex feature with multiple components
-│   ├── editCommitMessageSlice.ts
-│   ├── headerSlice.ts
-│   ├── bodySlice.ts
-│   ├── footerSlice.ts
-│   ├── formSlice.ts
-│   ├── types.ts
-│   └── components/           # Feature-specific components
-│       ├── EditCommitMessage.tsx
-│       ├── Header.tsx
-│       ├── Body.tsx
-│       └── ...
+│       └── template_paths.ts
 ```
 
 **Rules**:
@@ -130,10 +118,10 @@ features/
 **Contains**:
 
 - `text/` - Text processing utilities
-  - `word-wrap.ts` - Word-boundary text wrapping
-  - `split-text-to-lines.ts` - Line splitting with metadata
+  - `word_wrap.ts` - Word-boundary text wrapping
+  - `split_text_to_lines.ts` - Line splitting with metadata
 - `collections/` - Data structure helpers
-  - `cycle-zip.ts` - Array cycling and zipping
+  - `cycle_zip.ts` - Array cycling and zipping
 
 **Rules**:
 
@@ -168,9 +156,9 @@ multiple features.
 
 ```typescript
 import { configureStore } from "@reduxjs/toolkit";
-import { commitReducer } from "../features/commit/commitSlice.ts";
-import { issueReducer } from "../features/issue/issueSlice.ts";
-import { editCommitMessageReducer } from "../features/edit-commit-message/editCommitMessageSlice.ts";
+import { commitReducer } from "../features/commit/commit_slice.ts";
+import { issueReducer } from "../features/issue/issue_slice.ts";
+import { editCommitMessageReducer } from "../views/edit_commit_message/edit_commit_message_slice.ts";
 
 export const store = configureStore({
   reducer: {
@@ -221,21 +209,45 @@ features.
 
 **When to use**: Extracting a UI component that is used by multiple features.
 
-### ~~src/screens/~~ (Deprecated - Moved to features/)
+### src/views/ - Complex UI Flows
 
-**Previous Purpose**: Multi-component screen flows.
+**Purpose**: Houses complex, multi-component UI flows that don't fit the simple
+feature pattern.
 
-**Migration**: All screen components have been moved to their respective feature
-folders under `features/*/components/`.
+**Current contents**:
+
+- `edit_commit_message/` - Advanced commit message editor with Redux state
+  management
+  - Contains: `edit_commit_message_slice.ts`, `header_slice.ts`,
+    `body_slice.ts`, `footer_slice.ts`, `form_slice.ts`, `types.ts`
+  - Components: `components/EditCommitMessage.tsx`, `Header.tsx`, `Body.tsx`,
+    `Hooter.tsx`, etc.
+
+**Relationship to features/**:
+
+- `views/` contains UI-heavy features with complex component hierarchies
+- `features/` contains simpler, more straightforward features
+- Both use the same Redux slice pattern (colocated with feature)
+
+**Rules**:
+
+- ✅ Use for exceptionally complex UI flows with multiple sub-components
+- ✅ Follow same patterns as features/ (slices colocated with view)
+- ❌ Don't use for simple features - prefer features/ directory
+- ❌ Don't mix concerns - keep state, logic, and UI together
+
+**When to use**: Only for features with complex UI hierarchies that require
+multiple specialized components. Most features should go in `features/`.
+
+### ~~src/screens/~~ (Deprecated - Moved to views/)
+
+**Migration**: The `screens/` directory has been renamed to `views/` to better
+reflect its purpose.
 
 **Example**:
 
-- Old: `src/screens/edit-commit-message/`
-- New: `src/features/edit-commit-message/components/`
-
-**Reason for change**: Following Redux Toolkit 2026 best practices, complex UIs
-are now colocated with their feature's state management and business logic for
-better maintainability.
+- Old: `src/screens/edit_commit_message/`
+- New: `src/views/edit_commit_message/`
 
 ### src/constants/ - Configuration & Constants
 
@@ -245,7 +257,7 @@ better maintainability.
 
 - `message.ts` - AI prompts
 - `shortcuts.ts` - Keyboard shortcuts
-- `commit-message/` - Commit message constants
+- `commit_message/` - Commit message constants
 
 **Rules**:
 
@@ -262,7 +274,7 @@ Use this flowchart to decide where new code belongs:
 
 ```
 Is it a new feature or command?
-├─ Yes → src/features/[feature-name]/
+├─ Yes → src/features/[feature_name]/
 │        (includes slice, ui, hook, domain, components)
 └─ No
    ├─ Is it a pure utility function?
@@ -288,17 +300,17 @@ Is it a new feature or command?
 
 ### Adding a New Feature (Redux Toolkit 2026)
 
-1. Create `src/features/[feature-name]/`
-2. Add `[feature-name]Slice.ts` for Redux state management **← In the feature
+1. Create `src/features/[feature_name]/`
+2. Add `[feature_name]_slice.ts` for Redux state management **← In the feature
    folder**
 3. Add `ui.tsx` for the UI component
 4. Add `hook.ts` for business logic (connects slice to UI)
 5. If needed, add `domain/` for feature-specific helpers
 6. If complex, add `components/` for multiple UI components
-7. Create command in `src/commands/[feature-name].ts`
+7. Create command in `src/commands/[feature_name].ts`
 8. Register reducer in `src/app/store.ts`:
    ```typescript
-   import { featureReducer } from "../features/[feature-name]/[feature-name]Slice.ts";
+   import { featureReducer } from "../features/[feature_name]/[feature_name]_slice.ts";
 
    export const store = configureStore({
      reducer: {
@@ -317,7 +329,7 @@ Is it a new feature or command?
 
 ### Integrating with External API
 
-1. Create service file in `src/services/[service-name].ts`
+1. Create service file in `src/services/[service_name].ts`
 2. Use repository pattern if dealing with data access
 3. Export functions or classes that encapsulate the integration
 4. Handle errors and provide typed interfaces
@@ -345,9 +357,72 @@ Is it a new feature or command?
 
 The current structure was established after reorganizing the original
 `src/utils/` directory, which had become a catch-all for various types of code.
-See `migration-guide.md` for details on the reorganization.
+
+### Background
+
+The original `src/utils/` directory mixed together:
+
+- Framework wrappers
+- Service integrations
+- Domain-specific business logic
+- Pure utility functions
+
+This made it difficult for developers to know where to put new code and violated
+the separation of concerns principle.
+
+### Key Import Path Changes
+
+When the reorganization was completed (2026-01-08), the following files were
+moved:
+
+| Old Path                            | New Path                                             | Category  | Reason                                      |
+| ----------------------------------- | ---------------------------------------------------- | --------- | ------------------------------------------- |
+| `utils/tui.ts`                      | `lib/tui.ts`                                         | Framework | TUI wrapper belongs in infrastructure layer |
+| `utils/edit.ts`                     | `services/editor.ts`                                 | Service   | External editor integration is a service    |
+| `utils/parser.ts`                   | `features/issue/domain/parser.ts`                    | Domain    | Issue-specific template parsing             |
+| `utils/path.ts`                     | `features/issue/domain/template_paths.ts`            | Domain    | Issue-specific path resolution              |
+| `utils/commit_header_completion.ts` | `features/commit/domain/commit_header_completion.ts` | Domain    | Commit-specific autocomplete logic          |
+| `utils/word_wrap.ts`                | `helpers/text/word_wrap.ts`                          | Utility   | Pure text processing function               |
+| `utils/split_text_to_lines.ts`      | `helpers/text/split_text_to_lines.ts`                | Utility   | Pure text processing function               |
+| `utils/cycle_zip.ts`                | `helpers/collections/cycle_zip.ts`                   | Utility   | Pure data structure helper                  |
+
+### Decision Rationale
+
+**Why lib/ for framework wrappers?**
+
+- `tui.ts` is a framework wrapper (Ink/React/Redux), not a utility
+- `command.ts` and `errors.ts` were already in `lib/`
+- Clear distinction between framework code and utilities
+
+**Why services/ for external integrations?**
+
+- `editor.ts` wraps an external tool (text editor)
+- It depends on `ConfigService`, confirming it's not a pure utility
+- Follows the service pattern for external integrations
+
+**Why features/*/domain/ for feature-specific logic?**
+
+- Commit and issue logic is feature-specific, not shared
+- Feature Slice pattern promotes colocation of related code
+- Easier to find and modify feature-specific code
+
+**Why helpers/ for pure utilities?**
+
+- "helpers" is semantically clearer than "utils"
+- Restricted to pure functions prevents it from becoming a dumping ground
+- Industry standard for this type of code
+
+### Guidelines for Future Migrations
+
+If you need to reorganize code again:
+
+1. **Plan first**: Write the migration plan before making changes
+2. **Communicate**: Share the plan with stakeholders
+3. **Phase it**: Break the work into small, verifiable phases
+4. **Type check**: Run `deno check` after each phase
+5. **Test**: Run `deno test` to ensure no breakage
+6. **Document**: Update documentation with lessons learned
 
 ## See Also
 
 - [Architecture Overview](../architecture.md) - System design and patterns
-- [Migration Guide](./migration-guide.md) - Import path changes
