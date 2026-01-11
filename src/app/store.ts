@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { commitReducer } from "../features/commit/commitSlice.ts";
-import { issueReducer } from "../features/issue/issueSlice.ts";
-import { editCommitMessageReducer } from "../views/edit_commit_message/editCommitMessageSlice.ts";
+import { commitReducer } from "../features/commit/commit_slice.ts";
+import { issueReducer } from "../features/issue/issue_slice.ts";
+import { editCommitMessageReducer } from "../views/edit_commit_message/edit_commit_message_slice.ts";
 
 export const store = configureStore({
   reducer: {

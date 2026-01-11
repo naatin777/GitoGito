@@ -13,7 +13,7 @@ import {
   setError,
   setGeneratedIssues,
   submitOverview,
-} from "./issueSlice.ts";
+} from "./issue_slice.ts";
 
 export function useIssueFlow() {
   const dispatch = useAppDispatch();

@@ -29,7 +29,7 @@ import {
   selectIsSuggestionSelected,
   selectMode,
   selectSelectedSuggestion,
-} from "./commitSelectors.ts";
+} from "./commit_selectors.ts";
 
 /**
  * Helper to create mock state for testing

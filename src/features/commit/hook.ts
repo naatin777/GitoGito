@@ -6,7 +6,7 @@ import {
   editCommitMessage,
   generateCommitMessages,
   selectMessage,
-} from "./commitSlice.ts";
+} from "./commit_slice.ts";
 
 export function useCommitFlow() {
   const dispatch = useAppDispatch();

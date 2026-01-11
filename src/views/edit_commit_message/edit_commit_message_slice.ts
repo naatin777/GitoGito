@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { COMMIT_MESSAGE_PREFIXL } from "../../constants/commit_message/prefix.ts";
-import { bodySlice } from "./bodySlice.ts";
+import { bodySlice } from "./body_slice.ts";
 import type { EditCommitMessageState } from "./types.ts";
-import { footerSlice } from "./footerSlice.ts";
-import { formSlice } from "./formSlice.ts";
-import { headerSlice } from "./headerSlice.ts";
+import { footerSlice } from "./footer_slice.ts";
+import { formSlice } from "./form_slice.ts";
+import { headerSlice } from "./header_slice.ts";
 
 const initialState: EditCommitMessageState = {
   form: {

@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks.ts";
 import {
   changeToAiMode,
   changeToNormalMode,
-} from "../editCommitMessageSlice.ts";
+} from "../edit_commit_message_slice.ts";
 import { runTui } from "../../../lib/tui.ts";
 import { initializeDecorators } from "../../../features/commit/domain/init_decorators.ts";
 
