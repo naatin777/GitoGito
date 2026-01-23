@@ -13,8 +13,8 @@ Use these commands to operate the project.
 ```bash
 # Development
 deno run --allow-all src/main.ts [command]  # Run CLI
-deno check src/main.ts                      # Type check (Required)
-deno test                                   # Run all tests
+deno test --allow-all                       # Run all tests
+deno check                                  # Type check
 deno fmt                                    # Format code
 deno lint                                   # Lint code
 
@@ -22,7 +22,6 @@ deno lint                                   # Lint code
 demmithub init             # Initialize config
 demmithub commit           # Generate commit message
 demmithub issue            # Generate issue
-demmithub config language  # Set language
 ```
 
 ## 3. Directory Structure
@@ -39,12 +38,12 @@ DemmitHub follows a layered architecture with clear separation of concerns.
   - AI, Git, GitHub API, Config, Editor integration
   - Rule: Encapsulate external dependencies, use repository pattern
 
-- **`src/app/`** - Application Foundation (Redux Toolkit 2026)
+- **`src/app/`** - Application Foundation
   - `store.ts` - Redux store configuration
   - `hooks.ts` - Typed Redux hooks (`useAppDispatch`, `useAppSelector`)
   - Rule: Only store setup and hooks, no slices
 
-- **`src/features/`** - Feature Slices (Redux Toolkit 2026 Best Practice)
+- **`src/features/`** - Feature Slices
   - Each feature has: `xxx_slice.ts` (state), `ui.tsx` (view), `hook.ts`
     (logic), `domain/` (business logic), `components/` (complex UIs)
   - Examples: `commit/`, `issue/`, `help/`, `version/`
