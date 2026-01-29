@@ -5,14 +5,16 @@ import { Spinner } from "./Spinner.tsx";
 import { IssueAgentSchema, type IssueSchema } from "../schema.ts";
 import { ISSUE_SYSTEM_MESSAGE } from "../constants/message.ts";
 import type z from "zod";
-import { AIService } from "../services/ai.ts";
+import { AIService, type UsageCallback } from "../services/ai.ts";
 
 export function AgentLoop({
   initialMessages,
   onDone,
+  onUsage,
 }: {
   initialMessages: { role: "user" | "system" | "assistant"; content: string }[];
   onDone: (res: z.infer<typeof IssueSchema>) => void;
+  onUsage?: UsageCallback;
 }) {
   const [history, setHistory] = useState(initialMessages);
   const [status, setStatus] = useState<"thinking" | "answering">("thinking");
@@ -26,6 +28,7 @@ export function AgentLoop({
         history,
         "issueAgent",
         IssueAgentSchema,
+        onUsage,
       );
 
       if (!completion) {

@@ -9,8 +9,8 @@ import {
   type Config,
   type ConfigScope,
   ConfigService,
-} from "../services/config.ts";
-import { envService } from "../services/env.ts";
+} from "../services/config/index.ts";
+import { envService } from "../services/config/env.ts";
 
 export type SetupStep = "language" | "editor" | "overview" | "done";
 
