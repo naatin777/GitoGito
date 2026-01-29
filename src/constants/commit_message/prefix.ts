@@ -1,6 +1,6 @@
 import type { CommitConfig, Suggestion } from "../../type.ts";
 
-export const COMMIT_MESSAGE_PREFIXL: Suggestion[] = [
+export const COMMIT_MESSAGE_PREFIX: Suggestion[] = [
   { value: "fix", description: "A bug fix" },
   { value: "feat", description: "A new feature" },
   { value: "docs", description: "Documentation only changes" },
@@ -60,6 +60,6 @@ export const DEFAULT_COMMIT_CONFIG: CommitConfig = {
     maxHeaderLength: 50,
     requireScope: false,
   },
-  type: COMMIT_MESSAGE_PREFIXL,
+  type: COMMIT_MESSAGE_PREFIX,
   scope: COMMIT_MESSAGE_SCOPES,
 };

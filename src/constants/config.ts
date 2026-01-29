@@ -1,4 +1,4 @@
-import type { Config } from "../services/config.ts";
+import type { Config } from "../services/config/index.ts";
 import { EDITORS } from "./editor.ts";
 import { LANGUAGES } from "./language.ts";
 
