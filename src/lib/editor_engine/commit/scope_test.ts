@@ -1,6 +1,6 @@
-import { assertEquals } from "jsr:@std/assert";
+import { assertEquals } from "@std/assert";
 import { ScopeNode } from "./scope.ts";
-import { Suggestion } from "../../../services/config/index.ts";
+import type { Suggestion } from "../../../services/config/index.ts";
 
 const mockScopes: Suggestion[] = [
   { value: "api", description: "API changes" },
@@ -288,7 +288,7 @@ Deno.test("ScopeNode - edge cases: nested parentheses", () => {
 
   // The regex [^)]+ stops at the first closing paren
   // So "(api(nested)):" will match up to the first ")"
-  const match1 = "(api(nested)):".match(completeTrigger);
+  const _match1 = "(api(nested)):".match(completeTrigger);
   // This matches "(api(" because [^)]+ stops at the first ")"
   // Actually, this won't match at all because there's no ")" followed by !?:
   // Let's test what actually happens:

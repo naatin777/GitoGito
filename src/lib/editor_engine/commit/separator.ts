@@ -1,9 +1,9 @@
 import { ConsoleNode } from "../console_node.ts";
-import { CompletionItem } from "../types.ts";
-import { CommitContext } from "./context.ts";
+import type { CompletionItem } from "../types.ts";
+import type { CommitContext } from "./context.ts";
 
 export class SeparatorNode extends ConsoleNode<CommitContext> {
-  override id = "separator" as const;
+  id = "separator" as const;
 
   constructor() {
     super(
@@ -11,8 +11,8 @@ export class SeparatorNode extends ConsoleNode<CommitContext> {
     );
   }
 
-  async getSuggestions(_input: string): Promise<CompletionItem[]> {
+  getSuggestions(_input: string): Promise<CompletionItem[]> {
     // Separator doesn't provide suggestions
-    return [];
+    return Promise.resolve([]);
   }
 }

@@ -1,6 +1,6 @@
 import { ConsoleNode } from "../console_node.ts";
-import { CompletionItem } from "../types.ts";
-import { CommitContext } from "./context.ts";
+import type { CompletionItem } from "../types.ts";
+import type { CommitContext } from "./context.ts";
 
 export class SubjectNode extends ConsoleNode<CommitContext> {
   override id = "subject" as const;
@@ -11,8 +11,8 @@ export class SubjectNode extends ConsoleNode<CommitContext> {
     ]);
   }
 
-  async getSuggestions(): Promise<CompletionItem[]> {
-    return [];
+  getSuggestions(): Promise<CompletionItem[]> {
+    return Promise.resolve([]);
   }
 
   // 親のrenderを使いつつ、文字数カウンター機能を追加（拡張）

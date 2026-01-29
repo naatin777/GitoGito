@@ -1,4 +1,4 @@
-import { assertEquals } from "jsr:@std/assert";
+import { assertEquals } from "@std/assert";
 import { SubjectNode } from "./subject.ts";
 
 Deno.test("SubjectNode - trigger: /^[\\s\\S]+/ matches any non-empty content", () => {

@@ -1,6 +1,6 @@
-import { assertEquals } from "jsr:@std/assert";
+import { assertEquals } from "@std/assert";
 import { TypeNode } from "./type.ts";
-import { Suggestion } from "../../../services/config/index.ts";
+import type { Suggestion } from "../../../services/config/index.ts";
 
 const mockTypes: Suggestion[] = [
   { value: "feat", description: "New feature" },

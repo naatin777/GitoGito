@@ -1,7 +1,7 @@
-import { Suggestion } from "../../../services/config/index.ts";
+import type { Suggestion } from "../../../services/config/index.ts";
 import { ConsoleNode } from "../console_node.ts";
-import { CompletionItem, FragmentContext, TextFragment } from "../types.ts";
-import { CommitContext } from "./context.ts";
+import type { CompletionItem, FragmentContext, TextFragment } from "../types.ts";
+import type { CommitContext } from "./context.ts";
 
 export class TypeNode extends ConsoleNode<CommitContext> {
   override id = "type" as const;
@@ -23,7 +23,7 @@ export class TypeNode extends ConsoleNode<CommitContext> {
     ]);
   }
 
-  async getSuggestions(input: string): Promise<CompletionItem[]> {
+  getSuggestions(input: string): Promise<CompletionItem[]> {
     const basic = this.types
       .filter((t) => t.value.startsWith(input))
       .map((t) => ({
@@ -34,7 +34,7 @@ export class TypeNode extends ConsoleNode<CommitContext> {
 
     const exactMatch = this.types.find((t) => t.value === input);
     if (exactMatch) {
-      return [
+      return Promise.resolve([
         ...basic,
         {
           matchValue: input,
@@ -51,9 +51,9 @@ export class TypeNode extends ConsoleNode<CommitContext> {
           unmatchedValue: "(",
           description: `${exactMatch.description} (Scope指定)`,
         },
-      ];
+      ]);
     }
-    return basic;
+    return Promise.resolve(basic);
   }
 
   override render(ctx: FragmentContext): TextFragment[] {

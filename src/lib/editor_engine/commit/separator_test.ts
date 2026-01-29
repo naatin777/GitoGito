@@ -1,4 +1,4 @@
-import { assertEquals } from "jsr:@std/assert";
+import { assertEquals } from "@std/assert";
 import { SeparatorNode } from "./separator.ts";
 
 Deno.test("SeparatorNode - trigger: /^!?:\\s*/ matches colon separator", () => {

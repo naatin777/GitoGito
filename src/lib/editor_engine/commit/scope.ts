@@ -1,7 +1,7 @@
-import { Suggestion } from "../../../services/config/index.ts";
+import type { Suggestion } from "../../../services/config/index.ts";
 import { ConsoleNode } from "../console_node.ts";
-import { CompletionItem, FragmentContext, TextFragment } from "../types.ts";
-import { CommitContext } from "./context.ts";
+import type { CompletionItem, FragmentContext, TextFragment } from "../types.ts";
+import type { CommitContext } from "./context.ts";
 
 export class ScopeNode extends ConsoleNode<CommitContext> {
   override id = "scope" as const;
@@ -13,17 +13,19 @@ export class ScopeNode extends ConsoleNode<CommitContext> {
     ]);
   }
 
-  async getSuggestions(input: string): Promise<CompletionItem[]> {
+  getSuggestions(input: string): Promise<CompletionItem[]> {
     // Remove opening paren for matching
     const cleanInput = input.replace(/^\(/, "");
 
-    return this.scopes
-      .filter((t) => t.value.startsWith(cleanInput))
-      .map((t) => ({
-        matchValue: cleanInput,
-        unmatchedValue: t.value.slice(cleanInput.length),
-        description: t.description,
-      }));
+    return Promise.resolve(
+      this.scopes
+        .filter((t) => t.value.startsWith(cleanInput))
+        .map((t) => ({
+          matchValue: cleanInput,
+          unmatchedValue: t.value.slice(cleanInput.length),
+          description: t.description,
+        })),
+    );
   }
 
   override render(ctx: FragmentContext): TextFragment[] {

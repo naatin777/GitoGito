@@ -1,9 +1,9 @@
 import {
-  CommitConfigProvider,
+  type CommitConfigProvider,
   defaultCommitConfigProvider,
 } from "../../../services/config/index.ts";
 import { PromptEngine } from "../prompt_engine.ts";
-import { CommitContext } from "./context.ts";
+import type { CommitContext } from "./context.ts";
 import { ScopeNode } from "./scope.ts";
 import { SeparatorNode } from "./separator.ts";
 import { SubjectNode } from "./subject.ts";
@@ -12,7 +12,7 @@ import { TypeNode } from "./type.ts";
 export async function createCommitEngine(
   configProvider: CommitConfigProvider = defaultCommitConfigProvider,
 ): Promise<PromptEngine<CommitContext>> {
-  const [types, scopes, rules] = await Promise.all([
+  const [types, scopes, _rules] = await Promise.all([
     configProvider.getTypes(),
     configProvider.getScopes(),
     configProvider.getRules(),
