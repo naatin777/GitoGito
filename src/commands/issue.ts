@@ -1,8 +1,8 @@
 import { BaseCommand, type Command } from "../lib/command.ts";
 import { Issue } from "../features/issue/ui.tsx";
-import { render } from "ink";
 import React from "react";
 import { HelpFlag } from "../constants/commands/flags.ts";
+import { runTui } from "../lib/tui.ts";
 
 const IssueCommandFlag = { ...HelpFlag };
 const IssueCommandOption = {};
@@ -42,7 +42,6 @@ export class IssueCommand
     }
 
     const issue = React.createElement(Issue, null);
-    const { waitUntilExit } = render(issue);
-    await waitUntilExit();
+    await runTui(issue);
   }
 }

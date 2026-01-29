@@ -1,7 +1,6 @@
 import { BaseCommand, type Command } from "../../lib/command.ts";
-import { ConfigService } from "../../services/config.ts";
-import { OverviewInput } from "../../components/selection.tsx";
-import { render } from "ink";
+import { ConfigService } from "../../services/config/index.ts";
+import { OverviewInput } from "../../components/Selection.tsx";
 import React from "react";
 import {
   ConfigCommandFlag,
@@ -9,7 +8,8 @@ import {
   ConfigCommandOption,
   type ConfigCommandOptionType,
 } from "../config.ts";
-import { envService } from "../../services/env.ts";
+import { envService } from "../../services/config/env.ts";
+import { runTui } from "../../lib/tui.ts";
 
 export class OverviewCommand
   extends BaseCommand<ConfigCommandFlagType, ConfigCommandOptionType> {
@@ -42,7 +42,7 @@ export class OverviewCommand
       return;
     }
 
-    const { waitUntilExit } = render(
+    runTui(
       React.createElement(OverviewInput, {
         onSubmit: async (overview: string) => {
           const configService = ConfigService.createFromFlags(
@@ -55,6 +55,5 @@ export class OverviewCommand
         },
       }),
     );
-    await waitUntilExit();
   }
 }

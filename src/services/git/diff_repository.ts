@@ -1,6 +1,21 @@
 import { type SimpleGit, simpleGit } from "simple-git";
 
-export class GitDiffRepository {
+/**
+ * Git diff operations interface
+ */
+export interface GitDiffRepository {
+  getGitDiffStaged(): Promise<string>;
+  getGitDiffStagedName(): Promise<string>;
+  getStagedFileNames(): Promise<string[]>;
+  getGitDiffUnstaged(): Promise<string>;
+  getGitDiffUnstagedName(): Promise<string>;
+  getUnStagedFileNames(): Promise<string[]>;
+}
+
+/**
+ * CLI implementation of GitDiffRepository using simple-git
+ */
+export class GitDiffRepositoryCliImpl implements GitDiffRepository {
   private readonly git: SimpleGit;
 
   constructor(git: SimpleGit = simpleGit()) {

@@ -1,10 +1,28 @@
 import { type SimpleGit, simpleGit } from "simple-git";
-import { GitCommitRepository } from "./commit_repository.ts";
-import { GitDiffRepository } from "./diff_repository.ts";
-import { GitRemoteRepository } from "./remote_repository.ts";
-import { GitRevParseRepository } from "./rev_parse_repository.ts";
-import { GitStatusRepository } from "./status_repository.ts";
+import {
+  type GitCommitRepository,
+  GitCommitRepositoryCliImpl,
+} from "./commit_repository.ts";
+import {
+  type GitDiffRepository,
+  GitDiffRepositoryCliImpl,
+} from "./diff_repository.ts";
+import {
+  type GitRemoteRepository,
+  GitRemoteRepositoryCliImpl,
+} from "./remote_repository.ts";
+import {
+  type GitRevParseRepository,
+  GitRevParseRepositoryCliImpl,
+} from "./rev_parse_repository.ts";
+import {
+  type GitStatusRepository,
+  GitStatusRepositoryCliImpl,
+} from "./status_repository.ts";
 
+/**
+ * GitService aggregates all git repository operations
+ */
 export class GitService {
   private readonly git: SimpleGit;
   public readonly diff: GitDiffRepository;
@@ -13,12 +31,27 @@ export class GitService {
   public readonly status: GitStatusRepository;
   public readonly remote: GitRemoteRepository;
 
-  constructor(git: SimpleGit = simpleGit()) {
+  constructor(
+    git: SimpleGit = simpleGit(),
+    repos: {
+      diff: GitDiffRepository;
+      commit: GitCommitRepository;
+      rev_parse: GitRevParseRepository;
+      status: GitStatusRepository;
+      remote: GitRemoteRepository;
+    } = {
+      diff: new GitDiffRepositoryCliImpl(git),
+      commit: new GitCommitRepositoryCliImpl(git),
+      rev_parse: new GitRevParseRepositoryCliImpl(git),
+      status: new GitStatusRepositoryCliImpl(git),
+      remote: new GitRemoteRepositoryCliImpl(git),
+    },
+  ) {
     this.git = git;
-    this.diff = new GitDiffRepository(this.git);
-    this.commit = new GitCommitRepository(this.git);
-    this.rev_parse = new GitRevParseRepository(this.git);
-    this.status = new GitStatusRepository(this.git);
-    this.remote = new GitRemoteRepository(this.git);
+    this.diff = repos.diff;
+    this.commit = repos.commit;
+    this.rev_parse = repos.rev_parse;
+    this.status = repos.status;
+    this.remote = repos.remote;
   }
 }

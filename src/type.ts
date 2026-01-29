@@ -16,5 +16,20 @@ export type Choice<T> = {
   description: string;
 };
 
+export type Suggestion = {
+  value: string;
+  description: string;
+  emoji?: string;
+};
+
+export type CommitConfig = {
+  rules: {
+    maxHeaderLength: number;
+    requireScope: boolean;
+  };
+  type: Suggestion[];
+  scope: Suggestion[];
+};
+
 export type IssueCreateResponse =
   RestEndpointMethodTypes["issues"]["create"]["response"];

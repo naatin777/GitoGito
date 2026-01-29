@@ -1,11 +1,11 @@
 import { Box, Text } from "ink";
-import { useIssueFlow } from "./hook.ts";
-import { Spinner } from "../../components/spinner.tsx";
-import { Select } from "../../components/select.tsx";
-import { Carousel } from "../../components/carousel.tsx";
-import { TextInput } from "../../components/text_input.tsx";
-import { AgentLoop } from "../../components/agent_loop.tsx";
+import { AgentLoop } from "../../components/AgentLoop.tsx";
+import { Carousel } from "../../components/Carousel.tsx";
+import { Select } from "../../components/Select.tsx";
+import { Spinner } from "../../components/Spinner.tsx";
+import { TextInput } from "../../components/TextInput.tsx";
 import { ISSUE_SYSTEM_MESSAGE } from "../../constants/message.ts";
+import { useIssueFlow } from "./hook.ts";
 
 export function Issue() {
   const {

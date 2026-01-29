@@ -1,4 +1,4 @@
-language: en - English
-editor: Antigravity --wait
+language: en
+editor: zed --wait
 provider: OpenRouter
-model: mistralai/devstral-2512:free
+model: "tngtech/deepseek-r1t2-chimera:free"
