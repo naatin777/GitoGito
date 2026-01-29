@@ -18,14 +18,18 @@ export interface EnvService {
   getHome(): string;
 }
 
-export const envService: EnvService = {
-  getAiApiKey: () => getEnv("DEMMITHUB_AI_API_KEY"),
-  getGitHubToken: () => getEnv("DEMMITHUB_GITHUB_TOKEN"),
-  getHome: () => {
+export class EnvServiceImpl implements EnvService {
+  getAiApiKey() {
+    return getEnv("DEMMITHUB_AI_API_KEY");
+  }
+  getGitHubToken() {
+    return getEnv("DEMMITHUB_GITHUB_TOKEN");
+  }
+  getHome() {
     try {
       return getEnv("HOME");
     } catch {
       return getEnv("USERPROFILE");
     }
-  },
-};
+  }
+}
