@@ -83,7 +83,7 @@ describe("ConfigService with Zod validation", () => {
       };
 
       await assertRejects(
-        async () => {
+        () => {
           ConfigSchema.parse(invalidConfig);
         },
         Error,

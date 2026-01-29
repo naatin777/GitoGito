@@ -23,7 +23,7 @@ const initialState: CommitState = { step: "loading" } as CommitState;
 // Async thunks for side effects
 export const generateCommitMessages = createAsyncThunk(
   "commit/generate",
-  async (_, { rejectWithValue, dispatch }) => {
+  async (_, { rejectWithValue, dispatch: _dispatch }) => {
     try {
       const gitService = new GitService();
       const diff = await gitService.diff.getGitDiffStaged();
@@ -40,7 +40,7 @@ export const generateCommitMessages = createAsyncThunk(
         ],
         COMMIT_SYSTEM_MESSAGE,
         CommitSchema,
-        (usage) => {
+        (_usage) => {
         },
       );
 

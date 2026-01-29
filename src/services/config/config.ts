@@ -60,7 +60,7 @@ export class ConfigService {
    * @deprecated 新APIではenvServiceのみを渡すコンストラクタを使用してください
    */
   static createFromFlags(
-    flags: { local?: boolean; global?: boolean },
+    _flags: { local?: boolean; global?: boolean },
     envService: EnvService,
   ): ConfigService {
     // フラグは無視して、新しいConfigServiceを返す
