@@ -73,7 +73,7 @@ describe("ConfigService with Zod validation", () => {
       assertEquals(result, validConfig);
     });
 
-    it("should reject invalid provider", async () => {
+    it("should reject invalid provider", () => {
       const invalidConfig = {
         language: "English",
         editor: "code --wait",
