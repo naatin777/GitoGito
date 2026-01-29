@@ -16,7 +16,7 @@ export class ScopeNode extends ConsoleNode<CommitContext> {
   async getSuggestions(input: string): Promise<CompletionItem[]> {
     // Remove opening paren for matching
     const cleanInput = input.replace(/^\(/, "");
-    
+
     return this.scopes
       .filter((t) => t.value.startsWith(cleanInput))
       .map((t) => ({
@@ -42,7 +42,7 @@ export class ScopeNode extends ConsoleNode<CommitContext> {
     // Ghost text (completion preview) only for primary segment
     if (isPrimary && completions && selectIndex !== undefined) {
       const selected = completions[selectIndex];
-      
+
       if (selected && selected.unmatchedValue) {
         frags.push({
           text: selected.unmatchedValue,

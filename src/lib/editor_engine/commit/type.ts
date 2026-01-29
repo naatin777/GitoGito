@@ -72,7 +72,7 @@ export class TypeNode extends ConsoleNode<CommitContext> {
     // Ghost text (completion preview) only for primary segment
     if (isPrimary && completions && selectIndex !== undefined) {
       const selected = completions[selectIndex];
-      
+
       if (selected && selected.unmatchedValue) {
         frags.push({
           text: selected.unmatchedValue,
