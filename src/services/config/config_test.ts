@@ -1,4 +1,4 @@
-import { assertEquals, assertRejects } from "@std/assert";
+import { assertEquals, assertRejects, assertThrows } from "@std/assert";
 import { join } from "@std/path";
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import {
@@ -82,7 +82,7 @@ describe("ConfigService with Zod validation", () => {
         model: "gpt-4",
       };
 
-      await assertRejects(
+      assertThrows(
         () => {
           ConfigSchema.parse(invalidConfig);
         },
