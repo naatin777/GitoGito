@@ -1,14 +1,22 @@
-import { z } from "zod";
+import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import {
   generateObject,
   type LanguageModel,
   type ModelMessage,
   streamObject,
 } from "ai";
+import { z } from "zod";
 import type { AI_PROVIDER_KEY } from "../constants/ai.ts";
-import { createOpenRouter } from "@openrouter/ai-sdk-provider";
-import { envService } from "./env.ts";
-import { ConfigService } from "./config.ts";
+import { envService } from "./config/env.ts";
+import { ConfigService } from "./config/index.ts";
+
+export interface TokenUsage {
+  inputTokens: number;
+  outputTokens: number;
+  totalTokens: number;
+}
+
+export type UsageCallback = (usage: TokenUsage) => void;
 
 export class AIService {
   protected modelCache: LanguageModel | null = null;
@@ -27,11 +35,11 @@ export class AIService {
   }
 
   static async create() {
-    const configService = new ConfigService("project", envService);
+    const configService = new ConfigService(envService);
     const config = await configService.getMerged();
     const provider = config.provider;
     const model = config.model;
-    const aiApiKey = await envService.getAiApiKey();
+    const aiApiKey = await configService.getAiApiKey();
     return new AIService(provider, model, aiApiKey);
   }
 
@@ -57,33 +65,61 @@ export class AIService {
     return this.modelCache!;
   }
 
+  getModelId(): string {
+    return this.model;
+  }
+
   async generateStructuredOutput<T extends z.ZodType>(
     messages: ModelMessage[],
     system: string,
     schema: T,
+    onUsage?: UsageCallback,
   ) {
-    const { object } = await generateObject({
-      model: await this.getModel(),
+    const result = await generateObject({
+      model: this.getModel(),
       system: system,
       messages: messages,
       schema: schema,
     });
-    return object;
+
+    // Track token usage if callback provided
+    if (onUsage && result.usage) {
+      onUsage({
+        inputTokens: result.usage.inputTokens || 0,
+        outputTokens: result.usage.outputTokens || 0,
+        totalTokens: result.usage.totalTokens || 0,
+      });
+    }
+
+    return result.object;
   }
 
   async streamStructuredArrayOutput<T extends z.ZodType>(
     messages: ModelMessage[],
     system: string,
     schema: T,
+    onUsage?: UsageCallback,
   ) {
-    const { elementStream } = await streamObject({
-      model: await this.getModel(),
+    const result = await streamObject({
+      model: this.getModel(),
       system: system,
       messages: messages,
       output: "array",
       schema: schema,
     });
-    return elementStream;
+
+    // Track usage when stream completes
+    if (onUsage) {
+      result.usage.then((usage) => {
+        onUsage({
+          inputTokens: usage.inputTokens || 0,
+          outputTokens: usage.outputTokens || 0,
+          totalTokens: usage.totalTokens || 0,
+        });
+      });
+    }
+
+    return result.elementStream;
   }
 }
 

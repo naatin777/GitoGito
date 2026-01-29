@@ -1,6 +1,16 @@
 import { type SimpleGit, simpleGit } from "simple-git";
 
-export class GitRemoteRepository {
+/**
+ * Git remote operations interface
+ */
+export interface GitRemoteRepository {
+  getOwnerAndRepo(): Promise<{ owner: string; repo: string }>;
+}
+
+/**
+ * CLI implementation of GitRemoteRepository using simple-git
+ */
+export class GitRemoteRepositoryCliImpl implements GitRemoteRepository {
   private readonly git: SimpleGit;
 
   constructor(git: SimpleGit = simpleGit()) {

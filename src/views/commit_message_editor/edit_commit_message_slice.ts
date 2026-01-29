@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { COMMIT_MESSAGE_PREFIXL } from "../../constants/commit_message/prefix.ts";
+import { DEFAULT_COMMIT_CONFIG } from "../../services/config/index.ts";
 import { bodySlice } from "./body_slice.ts";
-import type { EditCommitMessageState } from "./types.ts";
 import { footerSlice } from "./footer_slice.ts";
 import { formSlice } from "./form_slice.ts";
 import { headerSlice } from "./header_slice.ts";
+import type { EditCommitMessageState } from "./types.ts";
 
 const initialState: EditCommitMessageState = {
   form: {
@@ -15,8 +15,8 @@ const initialState: EditCommitMessageState = {
   header: {
     value: "",
     cursor: 0,
-    suggestion: COMMIT_MESSAGE_PREFIXL,
-    filteredSuggestion: COMMIT_MESSAGE_PREFIXL,
+    suggestion: DEFAULT_COMMIT_CONFIG.type,
+    filteredSuggestion: DEFAULT_COMMIT_CONFIG.type,
     suggestionIndex: undefined,
     suggestionScrollOffset: 0,
     decorated: null, // Initialize with no decorations

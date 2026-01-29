@@ -11,19 +11,16 @@ import {
   moveCursorToStart,
   typeChar,
 } from "../../helpers/redux/text_field_reducers.ts";
-import type { EditCommitMessageState } from "./types.ts";
-import {
-  getCompletionSuggestions,
-  parseCommitHeader,
-} from "../../features/commit/domain/commit_header_completion.ts";
+import { DEFAULT_COMMIT_CONFIG } from "../../services/config/index.ts";
 import {
   applyDecorators,
   type CommitDecoratorContext,
-} from "../../features/commit/domain/commit_decorator.ts";
+} from "./domain/commit_decorator.ts";
 import {
-  COMMIT_MESSAGE_PREFIXL,
-  COMMIT_MESSAGE_SCOPES,
-} from "../../constants/commit_message/prefix.ts";
+  getCompletionSuggestions,
+  parseCommitHeader,
+} from "./domain/commit_header_completion.ts";
+import type { EditCommitMessageState } from "./types.ts";
 
 /**
  * Maximum number of suggestions visible at once
@@ -42,8 +39,8 @@ function updateFilteredSuggestions(state: EditCommitMessageState): void {
   const completions = getCompletionSuggestions(
     state.header.value,
     state.header.cursor,
-    COMMIT_MESSAGE_PREFIXL,
-    COMMIT_MESSAGE_SCOPES,
+    DEFAULT_COMMIT_CONFIG.type,
+    DEFAULT_COMMIT_CONFIG.scope,
   );
 
   // Update filtered suggestions with context-aware completions

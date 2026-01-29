@@ -1,6 +1,16 @@
 import { type SimpleGit, simpleGit } from "simple-git";
 
-export class GitCommitRepository {
+/**
+ * Git commit operations interface
+ */
+export interface GitCommitRepository {
+  commitWithMessages(messages: string[]): Promise<string>;
+}
+
+/**
+ * CLI implementation of GitCommitRepository using simple-git
+ */
+export class GitCommitRepositoryCliImpl implements GitCommitRepository {
   private readonly git: SimpleGit;
 
   constructor(git: SimpleGit = simpleGit()) {

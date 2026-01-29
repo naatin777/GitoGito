@@ -4,7 +4,7 @@
  */
 
 import { Text } from "ink";
-import type { DecoratedMessage } from "../../../features/commit/domain/commit_decorator.ts";
+import type { DecoratedMessage } from "../domain/commit_decorator.ts";
 
 type DecoratedTextProps = {
   decorated: DecoratedMessage;

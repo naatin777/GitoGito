@@ -1,4 +1,4 @@
-import { DEFAULT_COMMIT_CONFIG } from "../../../../constants/commit_message/prefix.ts";
+import { DEFAULT_COMMIT_CONFIG } from "../../../../services/config/index.ts";
 import type { CommitConfig } from "../../../../type.ts";
 import type { UserSituation } from "./get_commit_state.ts";
 

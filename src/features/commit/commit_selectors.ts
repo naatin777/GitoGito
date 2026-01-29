@@ -4,7 +4,7 @@
  */
 
 import { createSelector } from "@reduxjs/toolkit";
-import type { EditCommitMessageState } from "../../views/edit_commit_message/types.ts";
+import type { EditCommitMessageState } from "../../views/commit_message_editor/types.ts";
 
 // ============================================================================
 // Input Selectors (基本的なstate取得)

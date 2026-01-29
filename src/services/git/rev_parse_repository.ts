@@ -1,6 +1,16 @@
 import { type SimpleGit, simpleGit } from "simple-git";
 
-export class GitRevParseRepository {
+/**
+ * Git rev-parse operations interface
+ */
+export interface GitRevParseRepository {
+  isGitRepository(): Promise<boolean>;
+}
+
+/**
+ * CLI implementation of GitRevParseRepository using simple-git
+ */
+export class GitRevParseRepositoryCliImpl implements GitRevParseRepository {
   private readonly git: SimpleGit;
 
   constructor(git: SimpleGit = simpleGit()) {

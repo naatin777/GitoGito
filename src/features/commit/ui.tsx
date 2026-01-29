@@ -1,7 +1,7 @@
 import { Box, Text } from "ink";
-import { useCommitFlow } from "./hook.ts";
-import { Spinner } from "../../components/Spinner.tsx";
 import { Select } from "../../components/Select.tsx";
+import { Spinner } from "../../components/Spinner.tsx";
+import { useCommitFlow } from "./hook.ts";
 
 export function Commit() {
   const {
@@ -33,7 +33,8 @@ export function Commit() {
       )}
       {state.step === "commit" && <Spinner handleDataLoading={commitMessage} />}
       {state.step === "done" && <Text>Done</Text>}
-      {state.step === "error" && <Text>Error</Text>}
+      {state.step === "error" && <Text color="red">Error: {state.message}
+      </Text>}
     </Box>
   );
 }

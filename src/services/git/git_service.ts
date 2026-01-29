@@ -1,10 +1,28 @@
 import { type SimpleGit, simpleGit } from "simple-git";
-import { GitCommitRepository } from "./commit_repository.ts";
-import { GitDiffRepository } from "./diff_repository.ts";
-import { GitRemoteRepository } from "./remote_repository.ts";
-import { GitRevParseRepository } from "./rev_parse_repository.ts";
-import { GitStatusRepository } from "./status_repository.ts";
+import {
+  type GitCommitRepository,
+  GitCommitRepositoryCliImpl,
+} from "./commit_repository.ts";
+import {
+  type GitDiffRepository,
+  GitDiffRepositoryCliImpl,
+} from "./diff_repository.ts";
+import {
+  type GitRemoteRepository,
+  GitRemoteRepositoryCliImpl,
+} from "./remote_repository.ts";
+import {
+  type GitRevParseRepository,
+  GitRevParseRepositoryCliImpl,
+} from "./rev_parse_repository.ts";
+import {
+  type GitStatusRepository,
+  GitStatusRepositoryCliImpl,
+} from "./status_repository.ts";
 
+/**
+ * GitService aggregates all git repository operations
+ */
 export class GitService {
   private readonly git: SimpleGit;
   public readonly diff: GitDiffRepository;
@@ -22,11 +40,11 @@ export class GitService {
       status: GitStatusRepository;
       remote: GitRemoteRepository;
     } = {
-      diff: new GitDiffRepository(git),
-      commit: new GitCommitRepository(git),
-      rev_parse: new GitRevParseRepository(git),
-      status: new GitStatusRepository(git),
-      remote: new GitRemoteRepository(git),
+      diff: new GitDiffRepositoryCliImpl(git),
+      commit: new GitCommitRepositoryCliImpl(git),
+      rev_parse: new GitRevParseRepositoryCliImpl(git),
+      status: new GitStatusRepositoryCliImpl(git),
+      remote: new GitRemoteRepositoryCliImpl(git),
     },
   ) {
     this.git = git;
