@@ -1,7 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { commitReducer } from "../features/commit/commit_slice.ts";
 import { issueReducer } from "../features/issue/issue_slice.ts";
-import { editCommitMessageReducer } from "../views/edit_commit_message/edit_commit_message_slice.ts";
+import {
+  type GitRemoteRepository,
+  GitRemoteRepositoryCliImpl,
+} from "../services/git/remote_repository.ts";
+import { editCommitMessageReducer } from "../views/commit_message_editor/edit_commit_message_slice.ts";
+
+export interface AppExtraArgument {
+  git: GitRemoteRepository;
+}
 
 export const store = configureStore({
   reducer: {
@@ -11,10 +19,10 @@ export const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        // Ignore these paths in state for non-serializable values if needed
-        ignoredActions: [],
-        ignoredPaths: [],
+      thunk: {
+        extraArgument: {
+          git: new GitRemoteRepositoryCliImpl(),
+        } satisfies AppExtraArgument,
       },
     }),
 });
