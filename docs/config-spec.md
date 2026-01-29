@@ -1,39 +1,41 @@
-# 設定ファイル構成仕様
+# Configuration File Specification
 
-## ファイル構成
+## File Structure
 
 ```
 ~/.config/my-app/
-└── config.yml            # global設定 + global APIキー
+└── config.yml            # Global settings + global API keys
 
 project/
-├── .my-app.yml           # 共通設定（git管理）
-└── .my-app.local.yml     # 個人差分 + project APIキー（gitignore）
+├── .my-app.yml           # Shared settings (git-managed)
+└── .my-app.local.yml     # Individual overrides + project API keys (gitignored)
 ```
 
-## 読み込み優先順位（低→高）
+## Loading Priority (Low → High)
 
 1. `~/.config/my-app/config.yml`
 2. `project/.my-app.yml`
 3. `project/.my-app.local.yml`
-4. 環境変数
+4. Environment variables
 
-後勝ちでマージする。環境変数が最優先。
+Settings are merged with last-win strategy. Environment variables have highest
+priority.
 
-## 各ファイルの役割
+## File Roles
 
-| ファイル | 中身 | git管理 |
-|----------|------|---------|
-| `config.yml` | global設定 + APIキー | - |
-| `.my-app.yml` | project共通設定 | ○ |
-| `.my-app.local.yml` | 個人差分 + project APIキー | ✗ |
-| 環境変数 | CI/CD・コンテナ用 | - |
+| File                  | Contents                         | Git Managed |
+| --------------------- | -------------------------------- | ----------- |
+| `config.yml`          | Global settings + API keys       | -           |
+| `.my-app.yml`         | Shared project settings          | ○           |
+| `.my-app.local.yml`   | Individual overrides + API keys  | ✗           |
+| Environment variables | For CI/CD and container contexts | -           |
 
-## セキュリティ要件
+## Security Requirements
 
-### ファイルパーミッション
+### File Permissions
 
-APIキーを含むファイルは作成・書き込み時に厳格なパーミッションを設定する。
+Files containing API keys must have strict permissions set during creation and
+writing.
 
 ```
 ~/.config/my-app/              # 700 (drwx------)
@@ -41,23 +43,23 @@ APIキーを含むファイルは作成・書き込み時に厳格なパーミ�
 project/.my-app.local.yml      # 600 (-rw-------)
 ```
 
-### Deno実装
+### Deno Implementation
 
 ```typescript
-// ディレクトリ作成
+// Create directory
 await Deno.mkdir(configDir, { recursive: true, mode: 0o700 });
 
-// ファイル書き込み
+// Write file
 await Deno.writeTextFile(configPath, content, { mode: 0o600 });
 
-// 既存ファイルのパーミッション修正
+// Fix permissions on existing file
 await Deno.chmod(configPath, 0o600);
 ```
 
-### 読み込み時のパーミッションチェック（推奨）
+### Permission Check on Load (Recommended)
 
-APIキーを含むファイルの読み込み前に、パーミッションが適切か確認する。
-他ユーザーに読み取り権限がある場合は警告を出す。
+Before reading files containing API keys, verify that permissions are
+appropriate. Warn if other users have read access.
 
 ```typescript
 const stat = await Deno.stat(configPath);
@@ -66,9 +68,10 @@ if (stat.mode && (stat.mode & 0o077) !== 0) {
 }
 ```
 
-## 設計方針
+## Design Principles
 
-- `.env`は使わない。YAMLで統一
-- 環境変数は設定ファイルを置けない環境（CI/CD、コンテナ）のフォールバック
-- APIキーを含むファイルは600、ディレクトリは700
-- 読み込み時にパーミッション警告を出す（AWSスタイル）
+- Do not use `.env` files. Standardize on YAML
+- Environment variables are fallback for environments where config files cannot
+  be placed (CI/CD, containers)
+- Files containing API keys: 600, directories: 700
+- Emit permission warnings on load (AWS-style)
