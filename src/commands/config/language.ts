@@ -1,5 +1,5 @@
 import { BaseCommand, type Command } from "../../lib/command.ts";
-import { ConfigService } from "../../services/config.ts";
+import { ConfigService } from "../../services/config/index.ts";
 import { LanguageSelector } from "../../components/Selection.tsx";
 import React from "react";
 import {
@@ -8,7 +8,7 @@ import {
   ConfigCommandOption,
   type ConfigCommandOptionType,
 } from "../config.ts";
-import { envService } from "../../services/env.ts";
+import { envService } from "../../services/config/env.ts";
 import { runTui } from "../../lib/tui.ts";
 
 export class LanguageCommand
