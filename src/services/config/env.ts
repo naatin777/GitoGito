@@ -33,3 +33,5 @@ export class EnvServiceImpl implements EnvService {
     }
   }
 }
+
+export const envService = new EnvServiceImpl();

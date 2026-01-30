@@ -1,7 +1,7 @@
 import { join } from "@std/path";
 import { dirname } from "node:path";
 import DenoJson from "../../../deno.json" with { type: "json" };
-import { type EnvService, EnvServiceImpl } from "./env.ts";
+import { type EnvService, envService } from "./env.ts";
 
 export type ConfigScope = "global" | "project" | "local";
 
@@ -13,7 +13,7 @@ export interface ConfigFile {
 
 export class ConfigFileImpl {
   constructor(
-    private envService: EnvService = new EnvServiceImpl(),
+    private envService: EnvService = envService,
   ) {}
 
   private getGlobalPath() {
@@ -82,3 +82,5 @@ export class ConfigFileImpl {
     }
   }
 }
+
+export const configFile = new ConfigFileImpl(envService);
