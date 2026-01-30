@@ -3,7 +3,8 @@ import { dirname } from "node:path";
 import DenoJson from "../../../deno.json" with { type: "json" };
 import { type EnvService, envService } from "./env.ts";
 
-export type ConfigScope = "global" | "project" | "local";
+export type CredentialsScope = "global" | "local";
+export type ConfigScope = CredentialsScope | "project";
 
 export interface ConfigFile {
   load(configScope: ConfigScope): Promise<string>;
