@@ -53,8 +53,15 @@ export class ConfigFileImpl {
 
   async load(configScope: ConfigScope): Promise<Partial<string>> {
     const path = this.getFilePath(configScope);
-    const content = await Deno.readTextFile(path);
-    return content;
+    try {
+      const content = await Deno.readTextFile(path);
+      return content;
+    } catch (error) {
+      if (error instanceof Deno.errors.NotFound) {
+        return "";
+      }
+      throw error;
+    }
   }
 
   async save(configScope: ConfigScope, data: string): Promise<void> {
