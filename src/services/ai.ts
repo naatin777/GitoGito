@@ -7,8 +7,7 @@ import {
 } from "ai";
 import { z } from "zod";
 import type { AI_PROVIDER_KEY } from "../constants/ai.ts";
-import { envService } from "./config/env.ts";
-import { ConfigService } from "./config/index.ts";
+// import { ConfigService } from "./config/index.ts";
 
 export interface TokenUsage {
   inputTokens: number;
@@ -34,13 +33,13 @@ export class AIService {
     this.aiApiKey = aiApiKey;
   }
 
-  static async create() {
-    const configService = new ConfigService(envService);
-    const config = await configService.getMerged();
-    const provider = config.provider;
-    const model = config.model;
-    const aiApiKey = await configService.getAiApiKey();
-    return new AIService(provider, model, aiApiKey);
+  static create() {
+    // const configService = new ConfigService(envService);
+    // const config = await configService.getMerged();
+    // const provider = config.provider;
+    // const model = config.model;
+    // const aiApiKey = await configService.getAiApiKey();
+    return new AIService("OpenRouter", "model", "aiApiKey");
   }
 
   protected getModel(): LanguageModel {

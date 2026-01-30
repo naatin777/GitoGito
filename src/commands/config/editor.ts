@@ -1,15 +1,10 @@
 import { BaseCommand, type Command } from "../../lib/command.ts";
-import { ConfigService } from "../../services/config/index.ts";
-import { EditorSelector } from "../../components/Selection.tsx";
-import React from "react";
 import {
   ConfigCommandFlag,
   type ConfigCommandFlagType,
   ConfigCommandOption,
   type ConfigCommandOptionType,
 } from "../config.ts";
-import { envService } from "../../services/config/env.ts";
-import { runTui } from "../../lib/tui.ts";
 
 export class EditorCommand
   extends BaseCommand<ConfigCommandFlagType, ConfigCommandOptionType> {
@@ -42,18 +37,18 @@ export class EditorCommand
       return;
     }
 
-    await runTui(
-      React.createElement(EditorSelector, {
-        onSelect: async (editor: string) => {
-          const configService = ConfigService.createFromFlags(
-            parsed,
-            envService,
-          );
-          const localConfig = await configService.getMerged();
-          localConfig.editor = editor;
-          await configService.save(localConfig);
-        },
-      }),
-    );
+    // await runTui(
+    //   React.createElement(EditorSelector, {
+    //     onSelect: async (editor: string) => {
+    //       const configService = ConfigService.createFromFlags(
+    //         parsed,
+    //         envService,
+    //       );
+    //       const localConfig = await configService.getMerged();
+    //       localConfig.editor = editor;
+    //       await configService.save(localConfig);
+    //     },
+    //   }),
+    // );
   }
 }
