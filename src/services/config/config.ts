@@ -1,4 +1,7 @@
-import { parse } from "@std/yaml";
+import { parse, stringify } from "@std/yaml";
+import { set } from "lodash";
+import type { NestedKeys, PathValue } from "../../type.ts";
+import type { ConfigScope, CredentialsScope } from "../config/file.ts";
 import type { EnvService } from "./env.ts";
 import type { ConfigFile } from "./file.ts";
 import {
@@ -71,5 +74,27 @@ export class ConfigService {
       ...localCredentials,
       ...envCredentials,
     };
+  }
+
+  async saveConfig<K extends NestedKeys<Config>>(
+    configScope: ConfigScope,
+    key: K,
+    value: PathValue<Config, K>,
+  ) {
+    const configText = await this.configFile.load(configScope);
+    const config = parse(configText) as Partial<Config>;
+    set(config, key, value);
+    await this.configFile.save(configScope, stringify(config));
+  }
+
+  async saveCredentials<K extends NestedKeys<Credentials>>(
+    credentialsScope: CredentialsScope,
+    key: K,
+    value: PathValue<Credentials, K>,
+  ) {
+    const credentialsText = await this.configFile.load(credentialsScope);
+    const credentials = parse(credentialsText) as Partial<Credentials>;
+    set(credentials, key, value);
+    await this.configFile.save(credentialsScope, stringify(credentials));
   }
 }
