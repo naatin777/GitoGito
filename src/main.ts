@@ -1,9 +1,9 @@
 import { Command } from "@cliffy/command";
 import DemmitHub from "../deno.json" with { type: "json" };
-import { commitCommand } from "./commands/commit.ts";
-import { configCommand } from "./commands/config.ts";
-import { initCommand } from "./commands/init.ts";
-import { issueCommand } from "./commands/issue.ts";
+import { commitCommand } from "./commands/commit.tsx";
+import { configCommand } from "./commands/config.tsx";
+import { initCommand } from "./commands/init.tsx";
+import { issueCommand } from "./commands/issue.tsx";
 
 if (import.meta.main) {
   await new Command()
