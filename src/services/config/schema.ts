@@ -46,11 +46,11 @@ export const CredentialsSchema = z.object({
   githubToken: z.string().optional(),
 });
 
-export const AppConfigSchema = z.object({
+export const AppContextSchema = z.object({
   ...ConfigSchema.shape,
   credentials: CredentialsSchema,
 });
 
 export type Config = z.infer<typeof ConfigSchema>;
 export type Credentials = z.infer<typeof CredentialsSchema>;
-export type AppConfig = z.infer<typeof AppConfigSchema>;
+export type AppContext = z.infer<typeof AppContextSchema>;
