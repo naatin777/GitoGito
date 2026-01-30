@@ -1,42 +1,10 @@
-import { BaseCommand, type Command } from "../../lib/command.ts";
-import {
-  ConfigCommandFlag,
-  type ConfigCommandFlagType,
-  ConfigCommandOption,
-  type ConfigCommandOptionType,
-} from "../config.ts";
+import { Command } from "@cliffy/command";
 
-export class OverviewCommand
-  extends BaseCommand<ConfigCommandFlagType, ConfigCommandOptionType> {
-  name: string = "overview";
-  description: string = "Configure the overview";
-  commands: Command[] = [];
-  defaultFlags: ConfigCommandFlagType = ConfigCommandFlag;
-  defaultOptions: ConfigCommandOptionType = ConfigCommandOption;
-
-  async execute(
-    remainingArgs: string[],
-    consumedArgs: string[],
-    flags: ConfigCommandFlagType,
-    options: ConfigCommandOptionType,
-  ): Promise<void> {
-    const parsed = this.parseArgs(remainingArgs, flags, options);
-
-    if (parsed._.length > 0) {
-      await this.executeSubCommand(
-        parsed,
-        consumedArgs,
-        flags,
-        options,
-      );
-      return;
-    }
-
-    if (parsed.help) {
-      await this.help(consumedArgs);
-      return;
-    }
-
+export const overviewCommand = new Command()
+  .description("Configure the overview")
+  .option("--local", "Set local settings.")
+  .option("--global", "Set global settings.")
+  .action(async () => {
     // runTui(
     //   React.createElement(OverviewInput, {
     //     onSubmit: async (overview: string) => {
@@ -50,5 +18,4 @@ export class OverviewCommand
     //     },
     //   }),
     // );
-  }
-}
+  });
