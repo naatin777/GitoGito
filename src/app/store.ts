@@ -5,7 +5,6 @@ import {
   type GitRemoteRepository,
   GitRemoteRepositoryCliImpl,
 } from "../services/git/remote_repository.ts";
-import { editCommitMessageReducer } from "../views/commit_message_editor/edit_commit_message_slice.ts";
 
 export interface AppExtraArgument {
   git: GitRemoteRepository;
@@ -15,7 +14,6 @@ export const store = configureStore({
   reducer: {
     commit: commitReducer,
     issue: issueReducer,
-    editCommitMessage: editCommitMessageReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

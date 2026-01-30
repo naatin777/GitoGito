@@ -1,15 +1,10 @@
 import { BaseCommand, type Command } from "../../lib/command.ts";
-import { ConfigService } from "../../services/config/index.ts";
-import { LanguageSelector } from "../../components/Selection.tsx";
-import React from "react";
 import {
   ConfigCommandFlag,
   type ConfigCommandFlagType,
   ConfigCommandOption,
   type ConfigCommandOptionType,
 } from "../config.ts";
-import { envService } from "../../services/config/env.ts";
-import { runTui } from "../../lib/tui.ts";
 
 export class LanguageCommand
   extends BaseCommand<ConfigCommandFlagType, ConfigCommandOptionType> {
@@ -42,18 +37,18 @@ export class LanguageCommand
       return;
     }
 
-    runTui(
-      React.createElement(LanguageSelector, {
-        onSelect: async (language: string) => {
-          const configService = ConfigService.createFromFlags(
-            parsed,
-            envService,
-          );
-          const localConfig = await configService.getMerged();
-          localConfig.language = language;
-          await configService.save(localConfig);
-        },
-      }),
-    );
+    // runTui(
+    //   React.createElement(LanguageSelector, {
+    //     onSelect: async (language: string) => {
+    //       const configService = ConfigService.createFromFlags(
+    //         parsed,
+    //         envService,
+    //       );
+    //       const localConfig = await configService.getMerged();
+    //       localConfig.language = language;
+    //       await configService.save(localConfig);
+    //     },
+    //   }),
+    // );
   }
 }

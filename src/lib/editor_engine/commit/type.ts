@@ -1,4 +1,3 @@
-import type { Suggestion } from "../../../services/config/index.ts";
 import { ConsoleNode } from "../console_node.ts";
 import type {
   CompletionItem,
@@ -10,7 +9,7 @@ import type { CommitContext } from "./context.ts";
 export class TypeNode extends ConsoleNode<CommitContext> {
   override id = "type" as const;
 
-  constructor(private types: Suggestion[]) {
+  constructor() {
     super([
       {
         to: "scope",
@@ -27,37 +26,9 @@ export class TypeNode extends ConsoleNode<CommitContext> {
     ]);
   }
 
-  getSuggestions(input: string): Promise<CompletionItem[]> {
-    const basic = this.types
-      .filter((t) => t.value.startsWith(input))
-      .map((t) => ({
-        matchValue: input,
-        unmatchedValue: t.value.slice(input.length),
-        description: t.description,
-      }));
-
-    const exactMatch = this.types.find((t) => t.value === input);
-    if (exactMatch) {
-      return Promise.resolve([
-        ...basic,
-        {
-          matchValue: input,
-          unmatchedValue: ": ",
-          description: `${exactMatch.description} (Subjectへ)`,
-        },
-        {
-          matchValue: input,
-          unmatchedValue: "!: ",
-          description: `${exactMatch.description} (破壊的変更)`,
-        },
-        {
-          matchValue: input,
-          unmatchedValue: "(",
-          description: `${exactMatch.description} (Scope指定)`,
-        },
-      ]);
-    }
-    return Promise.resolve(basic);
+  async getSuggestions(input: string): Promise<CompletionItem[]> {
+    await console.log(input);
+    return [];
   }
 
   override render(ctx: FragmentContext): TextFragment[] {

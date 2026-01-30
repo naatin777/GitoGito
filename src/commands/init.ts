@@ -1,14 +1,9 @@
-import { BaseCommand, type Command } from "../lib/command.ts";
-import { SetupFlow } from "../components/SetupFlow.tsx";
-import React from "react";
 import {
   GlobalFlag,
   HelpFlag,
   LocalFlag,
 } from "../constants/commands/flags.ts";
-import { envService } from "../services/config/env.ts";
-import { ConfigService } from "../services/config/index.ts";
-import { runTui } from "../lib/tui.ts";
+import { BaseCommand, type Command } from "../lib/command.ts";
 
 const InitCommandFlag = { ...HelpFlag, ...LocalFlag, ...GlobalFlag };
 const InitCommandOption = {};
@@ -47,12 +42,12 @@ export class InitCommand
       return;
     }
 
-    const configService = ConfigService.createFromFlags(parsed, envService);
-    const config = await configService.getMerged();
-    if (config) {
-      console.error("Config already exists");
-      return;
-    }
-    await runTui(React.createElement(SetupFlow));
+    // const configService = ConfigService.createFromFlags(parsed, envService);
+    // const config = await configService.getMerged();
+    // if (config) {
+    //   console.error("Config already exists");
+    //   return;
+    // }
+    // await runTui(React.createElement(SetupFlow));
   }
 }

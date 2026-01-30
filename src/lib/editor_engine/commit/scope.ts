@@ -1,4 +1,3 @@
-import type { Suggestion } from "../../../services/config/index.ts";
 import { ConsoleNode } from "../console_node.ts";
 import type {
   CompletionItem,
@@ -10,26 +9,16 @@ import type { CommitContext } from "./context.ts";
 export class ScopeNode extends ConsoleNode<CommitContext> {
   override id = "scope" as const;
 
-  constructor(private scopes: Suggestion[]) {
+  constructor() {
     super([
       { to: "separator", trigger: /^\([^)]+\)(?=!?:)/ },
       { to: "scope", trigger: /^\([^)]*/ },
     ]);
   }
 
-  getSuggestions(input: string): Promise<CompletionItem[]> {
-    // Remove opening paren for matching
-    const cleanInput = input.replace(/^\(/, "");
-
-    return Promise.resolve(
-      this.scopes
-        .filter((t) => t.value.startsWith(cleanInput))
-        .map((t) => ({
-          matchValue: cleanInput,
-          unmatchedValue: t.value.slice(cleanInput.length),
-          description: t.description,
-        })),
-    );
+  async getSuggestions(input: string): Promise<CompletionItem[]> {
+    await console.log(input);
+    return [];
   }
 
   override render(ctx: FragmentContext): TextFragment[] {
