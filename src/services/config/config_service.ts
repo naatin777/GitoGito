@@ -4,12 +4,9 @@ import type { NestedKeys, PathValue } from "../../type.ts";
 import type { ConfigScope, CredentialsScope } from "../config/file.ts";
 import type { EnvService } from "./env.ts";
 import type { ConfigFile } from "./file.ts";
-import {
-  type AppContext,
-  type Config,
-  ConfigSchema,
-  type Credentials,
-} from "./schema.ts";
+import type { AppContext } from "./schema/app_context.ts";
+import { type Config, ConfigSchema } from "./schema/config.ts";
+import type { Credentials } from "./schema/credentials.ts";
 
 export class ConfigService {
   constructor(
