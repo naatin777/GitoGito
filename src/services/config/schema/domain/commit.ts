@@ -1,13 +1,27 @@
 import { z } from "zod";
-import { SuggestionSchema } from "./suggestion.ts";
 
-export const CommitSchema = z.object({
+export const CommitConfigSchema = z.object({
   rules: z.object({
     maxHeaderLength: z.number(),
     requireScope: z.boolean(),
   }),
-  type: z.array(SuggestionSchema),
-  scope: z.array(SuggestionSchema),
+  type: z.array(
+    z.object({
+      value: z.string(),
+      description: z.string(),
+      emoji: z.string().optional(),
+    }),
+  ),
+  scope: z.array(z.string()),
 });
 
-export type Commit = z.infer<typeof CommitSchema>;
+export type CommitConfig = z.infer<typeof CommitConfigSchema>;
+
+export const DEFAULT_COMMIT_CONFIG: CommitConfig = {
+  rules: {
+    maxHeaderLength: 72,
+    requireScope: true,
+  },
+  type: [],
+  scope: [],
+} as const;

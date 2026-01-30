@@ -1,9 +1,18 @@
 import { z } from "zod";
-import { AI_PROVIDER } from "../../../../constants/ai.ts";
 
-export const AiSchema = z.object({
-  provider: z.enum(AI_PROVIDER),
+export const AiConfigSchema = z.object({
+  provider: z.enum([
+    "OpenRouter",
+    "ChatGPT",
+    "Claude",
+    "Google Gemini",
+  ]),
   model: z.string(),
 });
 
-export type Ai = z.infer<typeof AiSchema>;
+export type AiConfig = z.infer<typeof AiConfigSchema>;
+
+export const DEFAULT_AI_CONFIG: AiConfig = {
+  provider: "ChatGPT",
+  model: "gpt-4o",
+} as const;

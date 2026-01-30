@@ -1,23 +1,16 @@
 import { z } from "zod";
-import { AiSchema } from "./domain/ai.ts";
-import { ColorSchema } from "./domain/color.ts";
-import { CommitSchema } from "./domain/commit.ts";
-import { ThemeSchema } from "./domain/theme.ts";
+import { AiConfigSchema, DEFAULT_AI_CONFIG } from "./domain/ai.ts";
+import { ColorConfigSchema, DEFAULT_COLOR_CONFIG } from "./domain/color.ts";
+import { CommitConfigSchema, DEFAULT_COMMIT_CONFIG } from "./domain/commit.ts";
+import { DEFAULT_LANGUAGE, LanguageSchema } from "./domain/language.ts";
+import { DEFAULT_THEME_CONFIG, ThemeConfigSchema } from "./domain/theme.ts";
 
 export const ConfigSchema = z.object({
-  ai: AiSchema.default({ provider: "ChatGPT", model: "gpt-4o" }),
-  language: z.string().default("English"),
-  editor: z.string().default("zed --wait"),
-  overview: z.string().default(""),
-  commit: CommitSchema.default({
-    rules: { maxHeaderLength: 50, requireScope: false },
-    type: [],
-    scope: [],
-  }),
-  color: ColorSchema.optional(),
-  theme: ThemeSchema.optional(),
+  ai: AiConfigSchema.default(DEFAULT_AI_CONFIG),
+  language: LanguageSchema.default(DEFAULT_LANGUAGE),
+  commit: CommitConfigSchema.default(DEFAULT_COMMIT_CONFIG),
+  color: ColorConfigSchema.default(DEFAULT_COLOR_CONFIG),
+  theme: ThemeConfigSchema.default(DEFAULT_THEME_CONFIG),
 });
 
-export type Color = z.infer<typeof ColorSchema>;
-export type Theme = z.infer<typeof ThemeSchema>;
 export type Config = z.infer<typeof ConfigSchema>;
