@@ -33,3 +33,15 @@ export type CommitConfig = {
 
 export type IssueCreateResponse =
   RestEndpointMethodTypes["issues"]["create"]["response"];
+
+export type NestedKeys<T> = {
+  [K in keyof T & string]: T[K] extends object
+    ? `${K}` | `${K}.${NestedKeys<T[K]>}`
+    : `${K}`;
+}[keyof T & string];
+
+export type PathValue<T, P extends string> = P extends
+  `${infer Key}.${infer Rest}` ? Key extends keyof T ? PathValue<T[Key], Rest>
+  : never
+  : P extends keyof T ? T[P]
+  : never;
