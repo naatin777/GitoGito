@@ -42,8 +42,8 @@ export const ConfigSchema = z.object({
 });
 
 export const CredentialsSchema = z.object({
-  ai_api_key: z.string().optional(),
-  github_token: z.string().optional(),
+  aiApiKey: z.string().optional(),
+  githubToken: z.string().optional(),
 });
 
 export const AppConfigSchema = z.object({
