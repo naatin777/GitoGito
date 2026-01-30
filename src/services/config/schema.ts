@@ -7,6 +7,14 @@ export const SuggestionSchema = z.object({
   emoji: z.string().optional(),
 });
 
+export const ColorSchema = z.object({
+  primary: z.string(),
+});
+
+export const ThemeSchema = z.object({
+  mode: z.enum(["dark", "light", "custom"]),
+});
+
 export const CommitSchema = z.object({
   rules: z.object({
     maxHeaderLength: z.number(),
@@ -22,11 +30,15 @@ export const AiSchema = z.object({
 });
 
 export const ConfigSchema = z.object({
-  ai: AiSchema,
-  language: z.string(),
-  editor: z.string(),
-  overview: z.string(),
-  commit: CommitSchema,
+  ai: AiSchema.default({ provider: "ChatGPT", model: "gpt-4o" }),
+  language: z.string().default("English"),
+  editor: z.string().default("zed --wait"),
+  overview: z.string().default(""),
+  commit: CommitSchema.default({
+    rules: { maxHeaderLength: 50, requireScope: false },
+    type: [],
+    scope: [],
+  }),
 });
 
 export const CredentialsSchema = z.object({
