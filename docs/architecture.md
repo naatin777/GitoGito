@@ -31,7 +31,7 @@ application.
      `features/commit/domain/`, `features/issue/domain/`).
 
 4. **Infrastructure Layer (`src/lib/`, `src/helpers/`)**
-   - **lib/**: Framework wrappers (`tui.ts`, `command.ts`, `errors.ts`).
+   - **lib/**: Framework wrappers (`tui.ts`, `errors.ts`).
    - **helpers/**: Pure utility functions organized by category:
      - `text/`: Text processing utilities (word-wrap, split-text-to-lines).
      - `collections/`: Data structure helpers (cycle-zip).
@@ -61,10 +61,15 @@ and domain code should still be colocated with the view.
 
 ### The Command Pattern
 
-All CLI commands inherit from `BaseCommand` (`src/lib/command.ts`).
+All CLI commands are built using **Cliffy** (`@cliffy/command`), a mature CLI
+framework for Deno.
 
-- Encapsulates argument parsing, flag validation, and help text generation.
+- Commands are defined declaratively using Cliffy's Command API.
+- Built-in support for argument parsing, flag validation, and help text
+  generation.
 - Commands are hierarchical (Root -> Config -> Language).
+- Each command exports a Cliffy `Command` instance configured with description,
+  options, and action handler.
 
 ### AI Integration Pattern
 

@@ -24,7 +24,6 @@ DemmitHub follows a 4-layer architecture:
 
 **Contains**:
 
-- `command.ts` - BaseCommand class for CLI framework
 - `tui.ts` - Ink/React/Redux wrapper for TUI
 - `errors.ts` - Custom error classes
 
@@ -180,17 +179,35 @@ export type AppDispatch = typeof store.dispatch;
 
 ### src/commands/ - CLI Entry Points
 
-**Purpose**: Command definitions extending BaseCommand.
+**Purpose**: Command definitions using Cliffy's Command API.
 
-**Contains**: Individual command files that parse arguments and delegate to
-features.
+**Contains**: Individual command files that export Cliffy Command instances
+configured with descriptions, options, and action handlers.
+
+**Structure**: Each command exports a `Command` instance:
+
+```typescript
+import { Command } from "@cliffy/command";
+import React from "react";
+import { FeatureUI } from "../features/feature/ui.tsx";
+import { runTui } from "../lib/tui.ts";
+
+export const featureCommand = new Command()
+  .description("Feature description")
+  .option("--flag", "Flag description")
+  .action(async () => {
+    const ui = React.createElement(FeatureUI, null);
+    await runTui(ui);
+  });
+```
 
 **Rules**:
 
+- ✅ Use Cliffy's declarative Command API
 - ✅ Thin layer for CLI interface
-- ✅ Argument parsing and validation
+- ✅ Delegate to feature UI components via runTui()
 - ❌ Business logic (delegate to features)
-- ❌ UI rendering (delegate to features)
+- ❌ Direct UI rendering (use runTui)
 
 **When to use**: Adding a new CLI command.
 
@@ -391,7 +408,7 @@ moved:
 **Why lib/ for framework wrappers?**
 
 - `tui.ts` is a framework wrapper (Ink/React/Redux), not a utility
-- `command.ts` and `errors.ts` were already in `lib/`
+- `errors.ts` contains custom error classes for the application
 - Clear distinction between framework code and utilities
 
 **Why services/ for external integrations?**
