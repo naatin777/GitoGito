@@ -1,9 +1,9 @@
 import { Command } from "@cliffy/command";
 import { Commit } from "../features/commit/ui.tsx";
-import { runTui } from "../lib/tui.ts";
+import { runTuiWithRedux } from "../lib/runner.tsx";
 
 export const commitCommand = new Command()
   .description("Commit changes to the repository")
   .action(async () => {
-    await runTui(<Commit />);
+    await runTuiWithRedux(<Commit />);
   });
