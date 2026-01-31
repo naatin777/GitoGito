@@ -2,6 +2,8 @@ import { Command } from "@cliffy/command";
 
 export const languageCommand = new Command()
   .description("Configure the language")
+  .option("--local", "Set local settings.")
+  .option("--global", "Set global settings.")
   .action(async () => {
     // runTui(
     //   React.createElement(LanguageSelector, {

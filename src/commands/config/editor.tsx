@@ -2,6 +2,8 @@ import { Command } from "@cliffy/command";
 
 export const editorCommand = new Command()
   .description("Configure the editor")
+  .option("--local", "Set local settings.")
+  .option("--global", "Set global settings.")
   .action(async () => {
     // await runTui(
     //   React.createElement(EditorSelector, {
