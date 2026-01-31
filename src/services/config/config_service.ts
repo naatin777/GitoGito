@@ -8,7 +8,35 @@ import type { AppContext } from "./schema/app_context.ts";
 import { type Config, ConfigSchema } from "./schema/config.ts";
 import type { Credentials } from "./schema/credentials.ts";
 
-export class ConfigService {
+export interface ConfigService {
+  getGlobalConfig(): Promise<{
+    config: Partial<Config> | undefined;
+    credentials: Partial<Credentials> | undefined;
+  }>;
+
+  getProjectConfig(): Promise<Partial<Config> | undefined>;
+
+  getLocalConfig(): Promise<{
+    config: Partial<Config> | undefined;
+    credentials: Partial<Credentials> | undefined;
+  }>;
+
+  getMergedConfig(scope: ConfigScope): Promise<Partial<Config> | undefined>;
+
+  saveConfig<K extends NestedKeys<Config>>(
+    configScope: ConfigScope,
+    key: K,
+    value: PathValue<Config, K>,
+  ): Promise<void>;
+
+  saveCredentials<K extends NestedKeys<Credentials>>(
+    credentialsScope: CredentialsScope,
+    key: K,
+    value: PathValue<Credentials, K>,
+  ): Promise<void>;
+}
+
+export class ConfigServiceImpl implements ConfigService {
   constructor(
     private envService: EnvService = envService,
     private configFile: ConfigFile = configFile,
