@@ -1,8 +1,12 @@
 import { parse, stringify } from "@std/yaml";
-import { set } from "lodash";
+import _ from "lodash";
 import type { NestedKeys, PathValue } from "../../type.ts";
-import type { ConfigScope, CredentialsScope } from "../config/file.ts";
-import type { EnvService } from "./env.ts";
+import {
+  configFile,
+  type ConfigScope,
+  type CredentialsScope,
+} from "../config/file.ts";
+import { type EnvService, envService } from "./env.ts";
 import type { ConfigFile } from "./file.ts";
 import type { AppContext } from "./schema/app_context.ts";
 import { type Config, ConfigSchema } from "./schema/config.ts";
@@ -37,27 +41,33 @@ export interface ConfigService {
 }
 
 export class ConfigServiceImpl implements ConfigService {
+  private envService: EnvService;
+  private configFile: ConfigFile;
+
   constructor(
-    private envService: EnvService = envService,
-    private configFile: ConfigFile = configFile,
-  ) {}
+    _envService: EnvService = envService,
+    _configFile: ConfigFile = configFile,
+  ) {
+    this.envService = _envService;
+    this.configFile = _configFile;
+  }
 
   async getGlobalConfig(): Promise<{
     config: Partial<Config> | undefined;
     credentials: Partial<Credentials> | undefined;
   }> {
     const globalConfigText = await this.configFile.load("global");
-    const { credentials, ...globalConfig } = parse(
+    const { credentials, ...globalConfig } = (parse(
       globalConfigText,
-    ) as Partial<AppContext>;
+    ) ?? {}) as Partial<AppContext>;
     return { config: globalConfig, credentials: credentials };
   }
 
   async getProjectConfig(): Promise<Partial<Config> | undefined> {
     const projectConfigText = await this.configFile.load("project");
-    const projectConfig = parse(
+    const projectConfig = (parse(
       projectConfigText,
-    ) as Partial<Config>;
+    ) ?? {}) as Partial<Config>;
     return projectConfig;
   }
 
@@ -66,9 +76,9 @@ export class ConfigServiceImpl implements ConfigService {
     credentials: Partial<Credentials> | undefined;
   }> {
     const localConfigText = await this.configFile.load("local");
-    const { credentials, ...localConfig } = parse(
+    const { credentials, ...localConfig } = (parse(
       localConfigText,
-    ) as Partial<AppContext>;
+    ) ?? {}) as Partial<AppContext>;
     return { config: localConfig, credentials: credentials };
   }
 
@@ -108,7 +118,7 @@ export class ConfigServiceImpl implements ConfigService {
   ) {
     const configText = await this.configFile.load(configScope);
     const config = parse(configText) as Partial<Config>;
-    set(config, key, value);
+    _.set(config, key, value);
     await this.configFile.save(configScope, stringify(config));
   }
 
@@ -119,7 +129,9 @@ export class ConfigServiceImpl implements ConfigService {
   ) {
     const credentialsText = await this.configFile.load(credentialsScope);
     const credentials = parse(credentialsText) as Partial<Credentials>;
-    set(credentials, key, value);
+    _.set(credentials, key, value);
     await this.configFile.save(credentialsScope, stringify(credentials));
   }
 }
+
+export const configService = new ConfigServiceImpl();
