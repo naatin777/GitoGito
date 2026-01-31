@@ -2,8 +2,6 @@ import { Command } from "@cliffy/command";
 
 export const overviewCommand = new Command()
   .description("Configure the overview")
-  .option("--local", "Set local settings.")
-  .option("--global", "Set global settings.")
   .action(async () => {
     // runTui(
     //   React.createElement(OverviewInput, {
