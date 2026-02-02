@@ -22,7 +22,7 @@
     "@std/yaml": "jsr:@std/yaml@^1.0.10",
     "@types/lodash": "npm:@types/lodash@^4.17.23",
     "ai": "npm:ai@^5.0.118",
-    "ink": "npm:ink@^5.2.1",
+    "ink": "npm:ink@^6.0.0",
     "ink-testing-library": "npm:ink-testing-library@^4.0.0",
     "lodash": "npm:lodash@^4.17.23",
     "octokit": "npm:octokit@^5.0.5",
