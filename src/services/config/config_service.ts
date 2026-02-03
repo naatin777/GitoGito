@@ -25,7 +25,8 @@ export interface ConfigService {
     credentials: Partial<Credentials> | undefined;
   }>;
 
-  getMergedConfig(scope: ConfigScope): Promise<Partial<Config> | undefined>;
+  getMergedCredentials(): Promise<Partial<Credentials>>;
+  getMergedConfig(): Promise<Config>;
 
   saveConfig<K extends NestedKeys<Config>>(
     configScope: ConfigScope,

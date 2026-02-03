@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { configApi } from "../api/config.ts";
 import { commitReducer } from "../features/commit/commit_slice.ts";
 import { issueReducer } from "../features/issue/issue_slice.ts";
 import {
@@ -19,6 +20,7 @@ export const store = configureStore({
   reducer: {
     commit: commitReducer,
     issue: issueReducer,
+    [configApi.reducerPath]: configApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -28,7 +30,7 @@ export const store = configureStore({
           config: new ConfigServiceImpl(),
         } satisfies AppExtraArgument,
       },
-    }),
+    }).concat(configApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
