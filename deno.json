@@ -20,7 +20,6 @@
     "@std/path": "jsr:@std/path@^1.1.4",
     "@std/testing": "jsr:@std/testing@^1.0.16",
     "@std/yaml": "jsr:@std/yaml@^1.0.10",
-    "@types/lodash": "npm:@types/lodash@^4.17.23",
     "ai": "npm:ai@^5.0.118",
     "ink": "npm:ink@^5.2.1",
     "ink-testing-library": "npm:ink-testing-library@^4.0.0",
@@ -34,6 +33,6 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "types": ["npm:@types/react"]
+    "types": ["npm:@types/react", "npm:@types/lodash"]
   }
 }
