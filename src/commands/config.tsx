@@ -1,24 +1,45 @@
 import { Command } from "@cliffy/command";
-import { ConfigUI } from "../features/config/ui.tsx";
-import { runTuiWithRedux } from "../lib/runner.tsx";
-import { editorCommand } from "./config/editor.tsx";
-import { languageCommand } from "./config/language.tsx";
-import { overviewCommand } from "./config/overview.tsx";
+import { flatSchema } from "../helpers/flat_schema.ts";
+import { ConfigSchema } from "../services/config/schema/config.ts";
+
+function buildSubcommands(
+  root: { command: (name: string, cmd: Command) => unknown },
+  items: ReturnType<typeof flatSchema>,
+  depth = 0,
+) {
+  for (const item of items) {
+    if (item.parents.length !== depth) continue;
+
+    const cmd = new Command()
+      .description(`Configure ${[...item.parents, item.key].join(".")}`)
+      .action(async () => {});
+
+    if (!item.isLeaf) {
+      // 子アイテムを再帰で登録
+      const children = items.filter(
+        (child) =>
+          child.parents.length > depth &&
+          child.parents[depth] === item.key &&
+          child.parents.slice(0, depth).every((p, i) => p === item.parents[i]),
+      );
+      buildSubcommands(cmd, children, depth + 1);
+    }
+
+    root.command(item.key, cmd);
+  }
+}
 
 export const configCommand = new Command()
   .description("Configure the repository")
-  .option("--project", "Set project settings.", {
+  .globalOption("--project", "Set project settings.", {
     conflicts: ["local", "global"],
   })
-  .option("--local", "Set local settings.", {
+  .globalOption("--local", "Set local settings.", {
     conflicts: ["project", "global"],
   })
-  .option("--global", "Set global settings.", {
+  .globalOption("--global", "Set global settings.", {
     conflicts: ["project", "local"],
   })
-  .command("language", languageCommand)
-  .command("editor", editorCommand)
-  .command("overview", overviewCommand)
-  .action(async () => {
-    await runTuiWithRedux(<ConfigUI />);
-  });
+  .action(async () => {});
+
+buildSubcommands(configCommand, flatSchema(ConfigSchema));
