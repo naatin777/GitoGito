@@ -1,49 +1,64 @@
-import { Box, render, useInput } from "ink";
-import { flatSchema } from "../../helpers/flat_schema.ts";
-import { ConfigSchema } from "../../services/config/schema/config.ts";
+import { Box, useInput } from "ink";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
+import type { FlatSchemaItem } from "../../helpers/flat_schema.ts";
+import { useTerminalSize } from "../../hooks/use_terminal_size.ts";
 import { DetailPanel } from "./components/DetailPanel.tsx";
 import { TreeList } from "./components/TreeList.tsx";
+import {
+  initializeConfigTree,
+  moveDown,
+  moveUp,
+  selectConfigFilteredItems,
+  selectConfigOpenPaths,
+  selectConfigSelectedIndex,
+  toggleItem,
+} from "./config_slice.ts";
 import {
   DETAIL_PANEL_PADDING,
   HEADER_HEIGHT,
   TREE_LIST_WIDTH,
 } from "./constants.ts";
-import { useTerminalSize } from "./hooks/use_terminal_size.ts";
-import { useTreeNavigation } from "./hooks/use_tree_navigation.ts";
-import type { ConfigUIProps } from "./types.ts";
 
-const flattenConfigSchema = flatSchema(ConfigSchema);
+export interface ConfigUIProps {
+  flattenConfigSchema: FlatSchemaItem[];
+}
 
-export const ConfigUI = (_props: ConfigUIProps) => {
+export const ConfigUI = ({ flattenConfigSchema }: ConfigUIProps) => {
+  const dispatch = useAppDispatch();
   const size = useTerminalSize();
-  const {
-    selectedIndex,
-    filteredItems,
-    openPaths,
-    toggleItem,
-    moveUp,
-    moveDown,
-  } = useTreeNavigation(flattenConfigSchema);
+  const selectedIndex = useAppSelector(selectConfigSelectedIndex);
+  const filteredItems = useAppSelector(selectConfigFilteredItems);
+  const openPaths = useAppSelector(selectConfigOpenPaths);
+
+  useEffect(() => {
+    dispatch(initializeConfigTree(flattenConfigSchema));
+  }, [dispatch]);
 
   useInput((input, key) => {
     if (key.upArrow) {
-      moveUp();
+      dispatch(moveUp());
     } else if (key.downArrow) {
-      moveDown();
+      dispatch(moveDown());
     } else if (key.return || input === " ") {
-      toggleItem(selectedIndex);
+      dispatch(toggleItem(selectedIndex));
     }
   });
 
-  const visibleRows = size.rows - HEADER_HEIGHT;
-  const detailPanelWidth = size.columns - TREE_LIST_WIDTH -
+  const visibleRows = size.height - HEADER_HEIGHT;
+  const detailPanelWidth = size.width - TREE_LIST_WIDTH -
     DETAIL_PANEL_PADDING;
-  const detailPanelHeight = size.rows - HEADER_HEIGHT;
+  const detailPanelHeight = size.height - HEADER_HEIGHT;
+  const selectedItem = filteredItems[selectedIndex];
+
+  if (!selectedItem) {
+    return <Box />;
+  }
 
   return (
-    <Box flexDirection="column" height={size.rows}>
-      <Box flexDirection="row" height={size.rows}>
-        <Box flexDirection="column" width={TREE_LIST_WIDTH}>
+    <Box flexDirection="column" height={size.height}>
+      <Box flexDirection="row" height={size.height}>
+        <Box flexDirection="column" width={40}>
           <TreeList
             items={filteredItems}
             selectedIndex={selectedIndex}
@@ -54,7 +69,7 @@ export const ConfigUI = (_props: ConfigUIProps) => {
         <Box flexDirection="column" flexGrow={1}>
           <Box height={HEADER_HEIGHT} />
           <DetailPanel
-            item={filteredItems[selectedIndex]}
+            item={selectedItem}
             width={detailPanelWidth}
             height={detailPanelHeight}
           />
@@ -63,5 +78,3 @@ export const ConfigUI = (_props: ConfigUIProps) => {
     </Box>
   );
 };
-
-render(<ConfigUI />);
