@@ -1,9 +1,9 @@
-import { useEffect } from "react";
 import { useApp } from "ink";
-import type { IssueSchema } from "../../schema.ts";
+import { useEffect } from "react";
 import type z from "zod";
-import type { Issue, IssueTemplate } from "../../type.ts";
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
+import type { IssueSchema } from "../../schema.ts";
+import type { Issue, IssueTemplate } from "../../type.ts";
 import {
   createIssue,
   editIssue,
