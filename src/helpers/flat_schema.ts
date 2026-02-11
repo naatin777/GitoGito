@@ -1,6 +1,6 @@
 import z from "zod";
 
-type FlatSchemaItem = {
+export type FlatSchemaItem = {
   key: string;
   parents: string[];
   description: string | undefined;
