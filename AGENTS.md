@@ -66,16 +66,16 @@ DemmitHub follows a layered architecture with clear separation of concerns.
 
 ### Where to Put New Code
 
-- New feature → `features/[feature_name]/` with `xxx_slice.ts`, `ui.tsx`,
+- New feature -> `features/[feature_name]/` with `xxx_slice.ts`, `ui.tsx`,
   `hook.ts`, `domain/`
-- Complex UI flow → `views/[view_name]/` (only for exceptionally complex UIs)
-- Redux slice → **Always colocated with the feature/view** in
+- Complex UI flow -> `views/[view_name]/` (only for exceptionally complex UIs)
+- Redux slice -> **Always colocated with the feature/view** in
   `features/[feature_name]/` or `views/[view_name]/`
-- Pure utility function → `helpers/text/` or `helpers/collections/`
-- External API integration → `services/`
-- Framework wrapper → `lib/`
-- Shared component → `components/` (if used by 2+ features)
-- Store configuration → `app/store.ts` (register feature reducers)
+- Pure utility function -> `helpers/text/` or `helpers/collections/`
+- External API integration -> `services/`
+- Framework wrapper -> `lib/`
+- Shared component -> `components/` (if used by 2+ features)
+- Store configuration -> `app/store.ts` (register feature reducers)
 
 ## 4. Naming Conventions
 
@@ -105,7 +105,7 @@ file naming conventions.
 
 ### Examples
 
-| File Type  | ✅ Correct             | ❌ Incorrect                                   |
+| File Type  | Correct                | Incorrect                                      |
 | ---------- | ---------------------- | ---------------------------------------------- |
 | TypeScript | `user_service.ts`      | `user-service.ts`, `userService.ts`            |
 | Component  | `UserCard.tsx`         | `user_card.tsx`, `user-card.tsx`               |

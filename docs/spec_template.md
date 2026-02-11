@@ -30,4 +30,4 @@
 
 - Must use the existing `AIService`.
 - UI must use `Ink` components.
-- Follow the directory structure rules in `CLAUDE.md`.
+- Follow the directory structure rules in `AGENTS.md`.
