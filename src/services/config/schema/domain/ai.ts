@@ -6,9 +6,9 @@ export const AiConfigSchema = z.object({
     "ChatGPT",
     "Claude",
     "Google Gemini",
-  ]),
-  model: z.string(),
-});
+  ]).describe("AI provider used for generation."),
+  model: z.string().describe("Model name used by the selected AI provider."),
+}).describe("AI configuration.");
 
 export type AiConfig = z.infer<typeof AiConfigSchema>;
 
