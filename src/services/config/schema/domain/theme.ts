@@ -1,7 +1,9 @@
 import { z } from "zod";
 
 export const ThemeConfigSchema = z.object({
-  mode: z.enum(["dark", "light", "custom"]).describe("Theme mode used by the CLI."),
+  mode: z.enum(["dark", "light", "custom"]).describe(
+    "Theme mode used by the CLI.",
+  ),
 }).describe("Theme configuration.");
 
 export type ThemeConfig = z.infer<typeof ThemeConfigSchema>;

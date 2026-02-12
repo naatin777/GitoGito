@@ -12,8 +12,12 @@ export const CommitConfigSchema = z.object({
   type: z.array(
     z.object({
       value: z.string().describe("Commit type value (e.g. feat, fix)."),
-      description: z.string().describe("Human-readable explanation of the commit type."),
-      emoji: z.string().optional().describe("Optional emoji for the commit type."),
+      description: z.string().describe(
+        "Human-readable explanation of the commit type.",
+      ),
+      emoji: z.string().optional().describe(
+        "Optional emoji for the commit type.",
+      ),
     }),
   ).describe("Available commit types."),
   scope: z.array(
