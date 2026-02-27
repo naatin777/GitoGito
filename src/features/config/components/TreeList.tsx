@@ -1,4 +1,4 @@
-import { Box, Text } from "ink";
+import { TextAttributes } from "@opentui/core";
 import { TREE_LIST_WIDTH } from "../constants.ts";
 
 export interface TreeItem {
@@ -27,28 +27,28 @@ export const TreeList = (
   const visibleItems = items.slice(start, start + visibleRows);
 
   return (
-    <Box flexDirection="column" width={TREE_LIST_WIDTH}>
-      <Text bold>{`<Config>`}</Text>
+    <box flexDirection="column" width={TREE_LIST_WIDTH}>
+      <text attributes={TextAttributes.BOLD}>{`<Config>`}</text>
       {visibleItems.map((item, sliceIndex) => {
         const actualIndex = start + sliceIndex;
         const depth = item.parents.length;
         const path = [...item.parents, item.key].join(".");
         const indent = "  ".repeat(depth);
-        const icon = item.isLeaf ? "○ " : openPaths.has(path) ? "▼ " : "▶";
+        const icon = item.isLeaf ? "○ " : openPaths.has(path) ? "▼ " : "▶ ";
         const isSelected = actualIndex === selectedIndex;
 
         return (
-          <Box key={`${path}-${actualIndex}`}>
-            <Text>
+          <box key={`${path}-${actualIndex}`} flexDirection="row">
+            <text fg={isSelected ? "cyan" : undefined}>
               {indent}
               {icon}
-            </Text>
-            <Text inverse={isSelected}>
+            </text>
+            <text fg={isSelected ? "cyan" : undefined}>
               {item.key}
-            </Text>
-          </Box>
+            </text>
+          </box>
         );
       })}
-    </Box>
+    </box>
   );
 };

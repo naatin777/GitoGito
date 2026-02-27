@@ -1,4 +1,3 @@
-import { Box, Text } from "ink";
 import { AgentLoop } from "../../components/AgentLoop.tsx";
 import { Carousel } from "../../components/Carousel.tsx";
 import { Select } from "../../components/Select.tsx";
@@ -20,7 +19,7 @@ export function Issue() {
   } = useIssueFlow();
 
   return (
-    <Box flexDirection="column">
+    <box flexDirection="column">
       {state.step === "loading_templates" && (
         <Spinner handleDataLoading={loadTemplates} />
       )}
@@ -73,11 +72,11 @@ export function Issue() {
       {state.step === "edit_issue" && <Spinner handleDataLoading={editIssue} />}
       {state.step === "creating" && <Spinner handleDataLoading={createIssue} />}
       {state.step === "done" && (
-        <Box flexDirection="column">
-          <Text color="green">Issue created: {state.url}</Text>
-        </Box>
+        <box flexDirection="column">
+          <text fg="green">Issue created: {state.url}</text>
+        </box>
       )}
-      {state.step === "error" && <Text color="red">Error occurred</Text>}
-    </Box>
+      {state.step === "error" && <text fg="red">Error occurred</text>}
+    </box>
   );
 }

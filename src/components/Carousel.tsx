@@ -1,5 +1,8 @@
-import { Box, render, Text, useApp, useInput } from "ink";
+import { TextAttributes } from "@opentui/core";
+import { useKeyboard, useRenderer } from "@opentui/react";
 import { useState } from "react";
+import { isCtrlC, isEnter } from "../helpers/opentui/key.ts";
+import { renderTui } from "../lib/opentui_render.tsx";
 
 export interface CarouselChoice<T> {
   name: string;
@@ -14,25 +17,25 @@ interface CarouselProps<T> {
 }
 
 export function Carousel<T>({ message, choices, onSelect }: CarouselProps<T>) {
-  const { exit } = useApp();
+  const renderer = useRenderer();
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  useInput((input, key) => {
-    if (key.escape || (input === "c" && key.ctrl)) {
+  useKeyboard((event) => {
+    if (event.name === "escape" || isCtrlC(event)) {
       onSelect(undefined);
-      exit();
+      renderer.destroy();
       return;
     }
 
-    if (key.leftArrow) {
+    if (event.name === "left") {
       setSelectedIndex((prev) => (prev - 1 + choices.length) % choices.length);
     }
 
-    if (key.rightArrow) {
+    if (event.name === "right") {
       setSelectedIndex((prev) => (prev + 1) % choices.length);
     }
 
-    if (key.return) {
+    if (isEnter(event)) {
       onSelect(choices[selectedIndex].value);
     }
   });
@@ -40,39 +43,40 @@ export function Carousel<T>({ message, choices, onSelect }: CarouselProps<T>) {
   const current = choices[selectedIndex];
 
   return (
-    <Box flexDirection="column" paddingLeft={1} paddingRight={1}>
-      <Box>
-        <Text bold>{`? ${message} `}</Text>
-      </Box>
-      <Box>
-        <Text dimColor>
+    <box flexDirection="column" paddingLeft={1} paddingRight={1}>
+      <box>
+        <text attributes={TextAttributes.BOLD}>{`? ${message} `}</text>
+      </box>
+      <box>
+        <text attributes={TextAttributes.DIM}>
           {`← ${selectedIndex + 1}/${choices.length} →`}
-        </Text>
-        <Text dimColor>(Enter to Select)</Text>
-      </Box>
+        </text>
+        <text attributes={TextAttributes.DIM}>(Enter to Select)</text>
+      </box>
 
-      <Box
+      <box
         flexDirection="column"
-        borderStyle="round"
+        border
+        borderStyle="rounded"
         borderColor="cyan"
         paddingLeft={1}
         paddingRight={1}
       >
-        <Text bold color="cyan" wrap="truncate-end">
+        <text attributes={TextAttributes.BOLD} fg="cyan" truncate>
           {current.name}
-        </Text>
+        </text>
         {current.description && (
-          <Box marginTop={1}>
-            <Text>{current.description}</Text>
-          </Box>
+          <box marginTop={1}>
+            <text>{current.description}</text>
+          </box>
         )}
-      </Box>
-    </Box>
+      </box>
+    </box>
   );
 }
 
 if (import.meta.main) {
-  render(
+  const instance = renderTui(
     <Carousel
       message="Select an option"
       choices={[
@@ -92,4 +96,6 @@ if (import.meta.main) {
       onSelect={(val) => console.log("Selected:", val)}
     />,
   );
+
+  await instance.waitUntilExit();
 }

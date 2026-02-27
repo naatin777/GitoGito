@@ -1,11 +1,11 @@
-import { Box, render } from "ink";
 import { useState } from "react";
-import { TextInput } from "./TextInput.tsx";
-import { Spinner } from "./Spinner.tsx";
-import { IssueAgentSchema, type IssueSchema } from "../schema.ts";
-import { ISSUE_SYSTEM_MESSAGE } from "../constants/message.ts";
 import type z from "zod";
+import { ISSUE_SYSTEM_MESSAGE } from "../constants/message.ts";
+import { renderTui } from "../lib/opentui_render.tsx";
+import { IssueAgentSchema, type IssueSchema } from "../schema.ts";
 import { AIService, type UsageCallback } from "../services/ai.ts";
+import { Spinner } from "./Spinner.tsx";
+import { TextInput } from "./TextInput.tsx";
 
 export function AgentLoop({
   initialMessages,
@@ -60,7 +60,7 @@ export function AgentLoop({
   const currentQ = questions[currentQuestionIndex];
 
   return (
-    <Box flexDirection="column">
+    <box flexDirection="column">
       <TextInput
         label={`? ${currentQ} › `}
         onSubmit={(val: string) => {
@@ -81,7 +81,7 @@ export function AgentLoop({
           }
         }}
       />
-    </Box>
+    </box>
   );
 }
 if (import.meta.main) {
@@ -102,11 +102,12 @@ if (import.meta.main) {
         ]}
         onDone={(res) => {
           console.log("Done!", JSON.stringify(res, null, 2));
-          Deno.exit(0);
+          process.exit(0);
         }}
       />
     );
   };
 
-  render(<Example />);
+  const instance = renderTui(<Example />);
+  await instance.waitUntilExit();
 }

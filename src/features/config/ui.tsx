@@ -1,8 +1,8 @@
-import { Box, useInput } from "ink";
+import { useKeyboard, useTerminalDimensions } from "@opentui/react";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
 import type { FlatSchemaItem } from "../../helpers/flat_schema.ts";
-import { useTerminalSize } from "../../hooks/use_terminal_size.ts";
+import { isEnter, keyEventToInput } from "../../helpers/opentui/key.ts";
 import { DetailPanel } from "./components/DetailPanel.tsx";
 import { TreeList } from "./components/TreeList.tsx";
 import {
@@ -26,7 +26,7 @@ export interface ConfigUIProps {
 
 export const ConfigUI = ({ flattenConfigSchema }: ConfigUIProps) => {
   const dispatch = useAppDispatch();
-  const size = useTerminalSize();
+  const size = useTerminalDimensions();
   const selectedIndex = useAppSelector(selectConfigSelectedIndex);
   const filteredItems = useAppSelector(selectConfigFilteredItems);
   const openPaths = useAppSelector(selectConfigOpenPaths);
@@ -35,12 +35,14 @@ export const ConfigUI = ({ flattenConfigSchema }: ConfigUIProps) => {
     dispatch(initializeConfigTree(flattenConfigSchema));
   }, [dispatch]);
 
-  useInput((input, key) => {
-    if (key.upArrow) {
+  useKeyboard((event) => {
+    const input = keyEventToInput(event);
+
+    if (event.name === "up") {
       dispatch(moveUp());
-    } else if (key.downArrow) {
+    } else if (event.name === "down") {
       dispatch(moveDown());
-    } else if (key.return || input === " ") {
+    } else if (isEnter(event) || input === " ") {
       dispatch(toggleItem(selectedIndex));
     }
   });
@@ -52,29 +54,29 @@ export const ConfigUI = ({ flattenConfigSchema }: ConfigUIProps) => {
   const selectedItem = filteredItems[selectedIndex];
 
   if (!selectedItem) {
-    return <Box />;
+    return <box />;
   }
 
   return (
-    <Box flexDirection="column" height={size.height}>
-      <Box flexDirection="row" height={size.height}>
-        <Box flexDirection="column" width={40}>
+    <box flexDirection="column" height={size.height}>
+      <box flexDirection="row" height={size.height}>
+        <box flexDirection="column" width={40}>
           <TreeList
             items={filteredItems}
             selectedIndex={selectedIndex}
             openPaths={openPaths}
             visibleRows={visibleRows}
           />
-        </Box>
-        <Box flexDirection="column" flexGrow={1}>
-          <Box height={HEADER_HEIGHT} />
+        </box>
+        <box flexDirection="column" flexGrow={1}>
+          <box height={HEADER_HEIGHT} />
           <DetailPanel
             item={selectedItem}
             width={detailPanelWidth}
             height={detailPanelHeight}
           />
-        </Box>
-      </Box>
-    </Box>
+        </box>
+      </box>
+    </box>
   );
 };

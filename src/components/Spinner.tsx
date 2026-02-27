@@ -1,6 +1,6 @@
-import { Box, render, Text } from "ink";
 import { useEffect, useState } from "react";
 import { cycleZip } from "../helpers/collections/cycle_zip.ts";
+import { renderTui } from "../lib/opentui_render.tsx";
 
 type Frame = {
   frames: {
@@ -21,6 +21,7 @@ class FrameBuilder {
     }));
     return this;
   }
+
   addSpace() {
     this.frames = cycleZip(this.frames, [{
       frames: [{ color: undefined, text: " " }],
@@ -78,11 +79,11 @@ export function Spinner(
   }, []);
 
   return (
-    <Box paddingLeft={1} paddingRight={1}>
+    <box paddingLeft={1} paddingRight={1}>
       {frame[frameIndex].frames.map((v, i) => {
-        return <Text key={i} color={v.color}>{v.text}</Text>;
+        return <text key={i} fg={v.color}>{v.text}</text>;
       })}
-    </Box>
+    </box>
   );
 }
 
@@ -91,7 +92,7 @@ if (import.meta.main) {
     const [isOpen, setIsOpen] = useState(true);
 
     return (
-      <Box>
+      <box>
         {isOpen && (
           <Spinner
             handleDataLoading={async () => {
@@ -99,11 +100,13 @@ if (import.meta.main) {
             }}
           />
         )}
-      </Box>
+      </box>
     );
   };
 
-  render(
+  const instance = renderTui(
     <Example />,
   );
+
+  await instance.waitUntilExit();
 }
