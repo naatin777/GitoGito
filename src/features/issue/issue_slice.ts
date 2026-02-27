@@ -1,14 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { readFileSync } from "node:fs";
 import type z from "zod";
-import type { IssueSchema } from "../../schema.ts";
-import type { Issue, IssueTemplate } from "../../type.ts";
-import { getIssueTemplatePath } from "../../features/issue/domain/template_paths.ts";
 import {
   parseMarkdownIssueTemplate,
   stringifyMarkdownIssue,
 } from "../../features/issue/domain/parser.ts";
+import { getIssueTemplatePath } from "../../features/issue/domain/template_paths.ts";
+import type { IssueSchema } from "../../schema.ts";
 import { editText } from "../../services/editor.ts";
 import { createIssue as createIssueService } from "../../services/github/issue.ts";
+import type { Issue, IssueTemplate } from "../../type.ts";
 
 // Preserve existing state type
 export type IssueState =
@@ -34,7 +35,7 @@ export const loadTemplates = createAsyncThunk(
       const issueTemplatePath = await getIssueTemplatePath();
       const issueTemplates = issueTemplatePath.markdown.map((markdownPath) =>
         parseMarkdownIssueTemplate(
-          new TextDecoder().decode(Deno.readFileSync(markdownPath)),
+          readFileSync(markdownPath, "utf8"),
         )
       );
       if (issueTemplates.length === 0) {

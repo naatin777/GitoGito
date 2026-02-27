@@ -1,7 +1,11 @@
-import { assertEquals } from "@std/assert";
+import { expect, test } from "bun:test";
+
+const assertEquals = (actual: unknown, expected: unknown) => {
+  expect(actual).toEqual(expected);
+};
 import { wrapTextByWords } from "./word_wrap.ts";
 
-Deno.test("wrapTextByWords - fits in single line", () => {
+test("wrapTextByWords - fits in single line", () => {
   const result = wrapTextByWords("fix: add user authentication", 50);
 
   assertEquals(result.length, 1);
@@ -9,7 +13,7 @@ Deno.test("wrapTextByWords - fits in single line", () => {
   assertEquals(result[0].start, 0);
 });
 
-Deno.test("wrapTextByWords - wraps at word boundary", () => {
+test("wrapTextByWords - wraps at word boundary", () => {
   const result = wrapTextByWords("fix: add user authentication feature", 20);
 
   assertEquals(result.length, 3);
@@ -21,7 +25,7 @@ Deno.test("wrapTextByWords - wraps at word boundary", () => {
   assertEquals(result[2].start, 31); // 15 + "authentication " = 15 + 14 + 2 spaces trimmed
 });
 
-Deno.test("wrapTextByWords - handles long word", () => {
+test("wrapTextByWords - handles long word", () => {
   const result = wrapTextByWords("fix: verylongwordthatdoesnotfit", 10);
 
   // Should wrap before the long word
@@ -30,7 +34,7 @@ Deno.test("wrapTextByWords - handles long word", () => {
   assertEquals(result[1].text, "verylongwordthatdoesnotfit");
 });
 
-Deno.test("wrapTextByWords - preserves existing newlines", () => {
+test("wrapTextByWords - preserves existing newlines", () => {
   const result = wrapTextByWords("fix: add\nfeature", 20);
 
   assertEquals(result.length, 2);
@@ -40,7 +44,7 @@ Deno.test("wrapTextByWords - preserves existing newlines", () => {
   assertEquals(result[1].start, 9);
 });
 
-Deno.test("wrapTextByWords - handles empty string", () => {
+test("wrapTextByWords - handles empty string", () => {
   const result = wrapTextByWords("", 20);
 
   assertEquals(result.length, 1);
@@ -48,7 +52,7 @@ Deno.test("wrapTextByWords - handles empty string", () => {
   assertEquals(result[0].start, 0);
 });
 
-Deno.test("wrapTextByWords - handles maxWidth 0", () => {
+test("wrapTextByWords - handles maxWidth 0", () => {
   const result = wrapTextByWords("fix: add feature", 0);
 
   assertEquals(result.length, 1);
@@ -56,7 +60,7 @@ Deno.test("wrapTextByWords - handles maxWidth 0", () => {
   assertEquals(result[0].start, 0);
 });
 
-Deno.test("wrapTextByWords - trims trailing whitespace on wrapped line", () => {
+test("wrapTextByWords - trims trailing whitespace on wrapped line", () => {
   const result = wrapTextByWords("fix: add user   authentication", 15);
 
   // Should not include trailing spaces in first line
@@ -64,21 +68,21 @@ Deno.test("wrapTextByWords - trims trailing whitespace on wrapped line", () => {
   assertEquals(result[1].text, "authentication");
 });
 
-Deno.test("wrapTextByWords - handles multiple spaces", () => {
+test("wrapTextByWords - handles multiple spaces", () => {
   const result = wrapTextByWords("fix:  add   feature", 50);
 
   assertEquals(result.length, 1);
   assertEquals(result[0].text, "fix:  add   feature");
 });
 
-Deno.test("wrapTextByWords - handles unicode characters", () => {
+test("wrapTextByWords - handles unicode characters", () => {
   const result = wrapTextByWords("fix: 日本語のテキスト", 15);
 
   // Unicode characters should be counted correctly
   assertEquals(result.length >= 1, true);
 });
 
-Deno.test("wrapTextByWords - empty line in middle", () => {
+test("wrapTextByWords - empty line in middle", () => {
   const result = wrapTextByWords("fix: add\n\nfeature", 20);
 
   assertEquals(result.length, 3);
@@ -87,7 +91,7 @@ Deno.test("wrapTextByWords - empty line in middle", () => {
   assertEquals(result[2].text, "feature");
 });
 
-Deno.test("wrapTextByWords - multiple paragraphs with wrapping", () => {
+test("wrapTextByWords - multiple paragraphs with wrapping", () => {
   const result = wrapTextByWords(
     "fix: add user authentication\nfeat: new feature",
     20,
@@ -100,7 +104,7 @@ Deno.test("wrapTextByWords - multiple paragraphs with wrapping", () => {
   assertEquals(result[2].text, "feat: new feature");
 });
 
-Deno.test("wrapTextByWords - start positions are correct", () => {
+test("wrapTextByWords - start positions are correct", () => {
   const text = "abc def ghi";
   const result = wrapTextByWords(text, 7);
 

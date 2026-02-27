@@ -1,7 +1,11 @@
-import { assertEquals } from "@std/assert";
+import { expect, test } from "bun:test";
+
+const assertEquals = (actual: unknown, expected: unknown) => {
+  expect(actual).toEqual(expected);
+};
 import { SubjectNode } from "./subject.ts";
 
-Deno.test("SubjectNode - trigger: /^[\\s\\S]+/ matches any non-empty content", () => {
+test("SubjectNode - trigger: /^[\\s\\S]+/ matches any non-empty content", () => {
   const node = new SubjectNode();
   const trigger = node.next[0].trigger;
 
@@ -29,7 +33,7 @@ Deno.test("SubjectNode - trigger: /^[\\s\\S]+/ matches any non-empty content", (
   assertEquals(match2?.[0], "fix bug in auth");
 });
 
-Deno.test("SubjectNode - trigger: matches multiline content", () => {
+test("SubjectNode - trigger: matches multiline content", () => {
   const node = new SubjectNode();
   const trigger = node.next[0].trigger;
 
@@ -41,14 +45,14 @@ Deno.test("SubjectNode - trigger: matches multiline content", () => {
   assertEquals(match?.[0], "add feature\nwith description");
 });
 
-Deno.test("SubjectNode - trigger: validates transition target", () => {
+test("SubjectNode - trigger: validates transition target", () => {
   const node = new SubjectNode();
 
   // Should loop back to 'subject' (stays in same state)
   assertEquals(node.next[0].to, "subject");
 });
 
-Deno.test("SubjectNode - trigger: handles various content types", () => {
+test("SubjectNode - trigger: handles various content types", () => {
   const node = new SubjectNode();
   const trigger = node.next[0].trigger;
 
@@ -73,7 +77,7 @@ Deno.test("SubjectNode - trigger: handles various content types", () => {
   assertEquals(match5?.[0], "add $variable support");
 });
 
-Deno.test("SubjectNode - trigger: real-world examples", () => {
+test("SubjectNode - trigger: real-world examples", () => {
   const node = new SubjectNode();
   const trigger = node.next[0].trigger;
 
@@ -95,7 +99,7 @@ Deno.test("SubjectNode - trigger: real-world examples", () => {
   assertEquals(trigger.test("update user service (api)"), true);
 });
 
-Deno.test("SubjectNode - trigger: consumes all remaining input", () => {
+test("SubjectNode - trigger: consumes all remaining input", () => {
   const node = new SubjectNode();
   const trigger = node.next[0].trigger;
 
@@ -110,7 +114,7 @@ Deno.test("SubjectNode - trigger: consumes all remaining input", () => {
   assertEquals(match?.[0].length, remaining.length);
 });
 
-Deno.test("SubjectNode - edge cases: single character subjects", () => {
+test("SubjectNode - edge cases: single character subjects", () => {
   const node = new SubjectNode();
   const trigger = node.next[0].trigger;
 
@@ -127,7 +131,7 @@ Deno.test("SubjectNode - edge cases: single character subjects", () => {
   assertEquals(trigger.test("#"), true);
 });
 
-Deno.test("SubjectNode - edge cases: subjects with extreme lengths", () => {
+test("SubjectNode - edge cases: subjects with extreme lengths", () => {
   const node = new SubjectNode();
   const trigger = node.next[0].trigger;
 
@@ -142,7 +146,7 @@ Deno.test("SubjectNode - edge cases: subjects with extreme lengths", () => {
   assertEquals(match?.[0], longSubject);
 });
 
-Deno.test("SubjectNode - edge cases: subjects with only whitespace prefix", () => {
+test("SubjectNode - edge cases: subjects with only whitespace prefix", () => {
   const node = new SubjectNode();
   const trigger = node.next[0].trigger;
 
@@ -159,7 +163,7 @@ Deno.test("SubjectNode - edge cases: subjects with only whitespace prefix", () =
   assertEquals(match3?.[0], " \t add feature");
 });
 
-Deno.test("SubjectNode - edge cases: subjects with special formatting", () => {
+test("SubjectNode - edge cases: subjects with special formatting", () => {
   const node = new SubjectNode();
   const trigger = node.next[0].trigger;
 
@@ -180,7 +184,7 @@ Deno.test("SubjectNode - edge cases: subjects with special formatting", () => {
   assertEquals(match4?.[0], "add const x = 10;");
 });
 
-Deno.test("SubjectNode - edge cases: subjects with line breaks", () => {
+test("SubjectNode - edge cases: subjects with line breaks", () => {
   const node = new SubjectNode();
   const trigger = node.next[0].trigger;
 
@@ -197,7 +201,7 @@ Deno.test("SubjectNode - edge cases: subjects with line breaks", () => {
   assertEquals(match3?.[0], "add\r\nfeature");
 });
 
-Deno.test("SubjectNode - self-loop: always stays in subject", () => {
+test("SubjectNode - self-loop: always stays in subject", () => {
   const node = new SubjectNode();
 
   // SubjectNode should only have one transition that loops back to itself

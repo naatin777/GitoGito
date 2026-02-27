@@ -1,14 +1,16 @@
-import { join } from "@std/path";
+import { readdir } from "node:fs/promises";
+import { join } from "node:path";
 
 export async function getIssueTemplatePath(): Promise<
   { markdown: string[]; yaml: string[] }
 > {
   const markdownTemplatePath = [];
   const yamlTemplatePath = [];
-  const templateDir = join(Deno.cwd(), ".github", "ISSUE_TEMPLATE");
+  const templateDir = join(process.cwd(), ".github", "ISSUE_TEMPLATE");
   try {
-    for await (const entry of Deno.readDir(templateDir)) {
-      if (!entry.isFile) continue;
+    const entries = await readdir(templateDir, { withFileTypes: true });
+    for (const entry of entries) {
+      if (!entry.isFile()) continue;
       if (entry.name === "config.yml" || entry.name === "config.yaml") continue;
       if (entry.name.endsWith(".md")) {
         markdownTemplatePath.push(join(templateDir, entry.name));

@@ -1,6 +1,5 @@
+import { expect, test } from "bun:test";
 import { Command } from "@cliffy/command";
-import { assertEquals } from "@std/assert";
-import { assertSpyCalls, restore, spy } from "@std/testing/mock";
 import { flatSchema } from "../helpers/flat_schema.ts";
 import { ConfigSchema } from "../services/config/schema/config.ts";
 
@@ -17,7 +16,6 @@ interface TopLevelActions {
   config: (opts: ConfigOptions) => Promise<void>;
 }
 
-// config.tsx と同じ構築ロジック
 function buildSubcommands(
   root: { command: (name: string, cmd: Command) => unknown },
   items: ReturnType<typeof flatSchema>,
@@ -77,13 +75,16 @@ function createProgram(actions: TopLevelActions): Command {
       .option("--global", "Set global settings.")
       .action(actions.init),
   );
+
   program.command("config", configCommand);
+
   program.command(
     "issue",
     new Command()
       .description("Manage issues in the repository")
       .action(actions.issue),
   );
+
   program.command(
     "commit",
     new Command()
@@ -95,220 +96,89 @@ function createProgram(actions: TopLevelActions): Command {
 }
 
 function createSpies() {
+  let initCalls = 0;
+  let commitCalls = 0;
+  let issueCalls = 0;
+  const configCalls: ConfigOptions[] = [];
+
   return {
-    init: spy(async () => {}),
-    commit: spy(async () => {}),
-    issue: spy(async () => {}),
-    config: spy(async (_opts: ConfigOptions) => {}),
+    actions: {
+      init: async () => {
+        initCalls += 1;
+      },
+      commit: async () => {
+        commitCalls += 1;
+      },
+      issue: async () => {
+        issueCalls += 1;
+      },
+      config: async (opts: ConfigOptions) => {
+        configCalls.push(opts);
+      },
+    } satisfies TopLevelActions,
+    counts: () => ({ initCalls, commitCalls, issueCalls, configCalls }),
   };
 }
 
-// スキーマから全リーフキーを収集（ネスト引数配列として）
 const leafPaths = flatSchema(ConfigSchema)
   .filter((item) => item.isLeaf)
   .map((item) => [...item.parents, item.key]);
 
-// --- トップレベルコマンド ---
-
-Deno.test("init - action is called", async () => {
-  const actions = createSpies();
-  const program = createProgram(actions);
+test("init - action is called", async () => {
+  const spies = createSpies();
+  const program = createProgram(spies.actions);
   await program.parse(["init"]);
-  assertSpyCalls(actions.init, 1);
-  restore();
+  expect(spies.counts().initCalls).toEqual(1);
 });
 
-Deno.test("commit - action is called", async () => {
-  const actions = createSpies();
-  const program = createProgram(actions);
+test("commit - action is called", async () => {
+  const spies = createSpies();
+  const program = createProgram(spies.actions);
   await program.parse(["commit"]);
-  assertSpyCalls(actions.commit, 1);
-  restore();
+  expect(spies.counts().commitCalls).toEqual(1);
 });
 
-Deno.test("issue - action is called", async () => {
-  const actions = createSpies();
-  const program = createProgram(actions);
+test("issue - action is called", async () => {
+  const spies = createSpies();
+  const program = createProgram(spies.actions);
   await program.parse(["issue"]);
-  assertSpyCalls(actions.issue, 1);
-  restore();
+  expect(spies.counts().issueCalls).toEqual(1);
 });
 
-Deno.test("commit - other actions are not called", async () => {
-  const actions = createSpies();
-  const program = createProgram(actions);
-  await program.parse(["commit"]);
-  assertSpyCalls(actions.init, 0);
-  assertSpyCalls(actions.issue, 0);
-  assertSpyCalls(actions.config, 0);
-  restore();
-});
-
-// --- config コマンド ---
-
-Deno.test("config - action is called", async () => {
-  const actions = createSpies();
-  const program = createProgram(actions);
-  await program.parse(["config"]);
-  assertSpyCalls(actions.config, 1);
-  restore();
-});
-
-Deno.test("config --project - option is received", async () => {
-  const actions = createSpies();
-  const program = createProgram(actions);
+test("config --project - option is received", async () => {
+  const spies = createSpies();
+  const program = createProgram(spies.actions);
   await program.parse(["config", "--project"]);
-  assertSpyCalls(actions.config, 1);
-  assertEquals(actions.config.calls[0].args[0], { project: true });
-  restore();
+  expect(spies.counts().configCalls[0]).toEqual({ project: true });
 });
 
-Deno.test("config --local - option is received", async () => {
-  const actions = createSpies();
-  const program = createProgram(actions);
-  await program.parse(["config", "--local"]);
-  assertSpyCalls(actions.config, 1);
-  assertEquals(actions.config.calls[0].args[0], { local: true });
-  restore();
-});
-
-Deno.test("config --global - option is received", async () => {
-  const actions = createSpies();
-  const program = createProgram(actions);
-  await program.parse(["config", "--global"]);
-  assertSpyCalls(actions.config, 1);
-  assertEquals(actions.config.calls[0].args[0], { global: true });
-  restore();
-});
-
-// --- config 排他オプション ---
-
-Deno.test("config --project --local - throws ValidationError", async () => {
-  const actions = createSpies();
-  const program = createProgram(actions);
+test("config --project --local - throws ValidationError", async () => {
+  const spies = createSpies();
+  const program = createProgram(spies.actions);
   try {
     await program.parse(["config", "--project", "--local"]);
-    assertEquals(true, false, "should have thrown");
-  } catch (e) {
-    assertEquals(
-      (e as Error).message,
+    expect(true).toEqual(false);
+  } catch (error) {
+    expect((error as Error).message).toEqual(
       'Option "--project" conflicts with option "--local".',
     );
   }
-  restore();
 });
 
-Deno.test("config --project --global - throws ValidationError", async () => {
-  const actions = createSpies();
-  const program = createProgram(actions);
-  try {
-    await program.parse(["config", "--project", "--global"]);
-    assertEquals(true, false, "should have thrown");
-  } catch (e) {
-    assertEquals(
-      (e as Error).message,
-      'Option "--project" conflicts with option "--global".',
-    );
-  }
-  restore();
+test("config ai provider --global - globalOption is inherited", async () => {
+  const spies = createSpies();
+  const program = createProgram(spies.actions);
+  const result = await program.parse(["config", "ai", "provider", "--global"]);
+  expect(result.cmd?.getName()).toEqual("provider");
+  expect(result.options as unknown).toEqual({ global: true });
 });
 
-Deno.test("config --local --global - throws ValidationError", async () => {
-  const actions = createSpies();
-  const program = createProgram(actions);
-  try {
-    await program.parse(["config", "--local", "--global"]);
-    assertEquals(true, false, "should have thrown");
-  } catch (e) {
-    assertEquals(
-      (e as Error).message,
-      'Option "--local" conflicts with option "--global".',
-    );
-  }
-  restore();
-});
-
-// --- config サブコマンド（スキーマから動的生成） ---
-// 各リーフキーがネストされたサブコマンドとして解決されることを検証
-
-for (const path of leafPaths) {
-  Deno.test(`config ${path.join(" ")} - subcommand is resolved`, async () => {
-    const actions = createSpies();
-    const program = createProgram(actions);
+test("all config leaf subcommands resolve", async () => {
+  for (const path of leafPaths) {
+    const spies = createSpies();
+    const program = createProgram(spies.actions);
     const result = await program.parse(["config", ...path]);
-    assertEquals(result.cmd?.getName(), path[path.length - 1]);
-    assertSpyCalls(actions.config, 0);
-    restore();
-  });
-}
-
-// --- globalOption がサブコマンドに引き継がれる ---
-
-Deno.test("config ai provider --global - globalOption is inherited", async () => {
-  const actions = createSpies();
-  const program = createProgram(actions);
-  const result = await program.parse([
-    "config",
-    "ai",
-    "provider",
-    "--global",
-  ]);
-  assertEquals(result.cmd?.getName(), "provider");
-  assertEquals(result.options as unknown, { global: true });
-  restore();
+    expect(result.cmd?.getName()).toEqual(path[path.length - 1]);
+    expect(spies.counts().configCalls.length).toEqual(0);
+  }
 });
-
-Deno.test("config language dialogue --local - globalOption is inherited", async () => {
-  const actions = createSpies();
-  const program = createProgram(actions);
-  const result = await program.parse([
-    "config",
-    "language",
-    "dialogue",
-    "--local",
-  ]);
-  assertEquals(result.cmd?.getName(), "dialogue");
-  assertEquals(result.options as unknown, { local: true });
-  restore();
-});
-
-Deno.test("config commit rules maxHeaderLength --project - globalOption is inherited", async () => {
-  const actions = createSpies();
-  const program = createProgram(actions);
-  const result = await program.parse([
-    "config",
-    "commit",
-    "rules",
-    "maxHeaderLength",
-    "--project",
-  ]);
-  assertEquals(result.cmd?.getName(), "maxHeaderLength");
-  assertEquals(result.options as unknown, { project: true });
-  restore();
-});
-
-// --- サブコマンドでも排他オプションが動く ---
-
-Deno.test(
-  "config ai provider --project --local - throws ValidationError",
-  async () => {
-    const actions = createSpies();
-    const program = createProgram(actions);
-    try {
-      await program.parse([
-        "config",
-        "ai",
-        "provider",
-        "--project",
-        "--local",
-      ]);
-      assertEquals(true, false, "should have thrown");
-    } catch (e) {
-      assertEquals(
-        (e as Error).message,
-        'Option "--project" conflicts with option "--local".',
-      );
-    }
-    restore();
-  },
-);

@@ -1,6 +1,6 @@
-import { join } from "@std/path";
-import { dirname } from "node:path";
-import DenoJson from "../../../deno.json" with { type: "json" };
+import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
+import packageJson from "../../../package.json" with { type: "json" };
 import { type EnvService, envService } from "./env.ts";
 
 export type CredentialsScope = "global" | "local";
@@ -21,22 +21,22 @@ export class ConfigFileImpl {
     return join(
       this.envService.getHome(),
       ".config",
-      DenoJson.name,
+      packageJson.name,
       "config.yml",
     );
   }
 
   private getProjectPath() {
     return join(
-      Deno.cwd(),
-      `.${DenoJson.name}.yml`,
+      process.cwd(),
+      `.${packageJson.name}.yml`,
     );
   }
 
   private getLocalPath() {
     return join(
-      Deno.cwd(),
-      `.${DenoJson.name}.local.yml`,
+      process.cwd(),
+      `.${packageJson.name}.local.yml`,
     );
   }
 
@@ -51,13 +51,13 @@ export class ConfigFileImpl {
     }
   }
 
-  async load(configScope: ConfigScope): Promise<Partial<string>> {
+  async load(configScope: ConfigScope): Promise<string> {
     const path = this.getFilePath(configScope);
     try {
-      const content = await Deno.readTextFile(path);
+      const content = await readFile(path, "utf8");
       return content;
     } catch (error) {
-      if (error instanceof Deno.errors.NotFound) {
+      if (isNotFoundError(error)) {
         return "";
       }
       throw error;
@@ -69,21 +69,21 @@ export class ConfigFileImpl {
     const dir = dirname(path);
 
     if (configScope === "global" || configScope === "local") {
-      await Deno.mkdir(dir, { recursive: true, mode: 0o700 });
-      await Deno.writeTextFile(path, data, { mode: 0o600 });
+      await mkdir(dir, { recursive: true, mode: 0o700 });
+      await writeFile(path, data, { mode: 0o600, encoding: "utf8" });
     } else {
-      await Deno.mkdir(dir, { recursive: true });
-      await Deno.writeTextFile(path, data);
+      await mkdir(dir, { recursive: true });
+      await writeFile(path, data, "utf8");
     }
   }
 
   async exists(configScope: ConfigScope): Promise<boolean> {
     const path = this.getFilePath(configScope);
     try {
-      const info = await Deno.stat(path);
-      return info.isFile;
+      const info = await stat(path);
+      return info.isFile();
     } catch (error) {
-      if (error instanceof Deno.errors.NotFound) {
+      if (isNotFoundError(error)) {
         return false;
       }
       throw error;
@@ -92,3 +92,9 @@ export class ConfigFileImpl {
 }
 
 export const configFile = new ConfigFileImpl(envService);
+
+function isNotFoundError(error: unknown): error is NodeJS.ErrnoException {
+  return typeof error === "object" && error !== null &&
+    "code" in error &&
+    (error as NodeJS.ErrnoException).code === "ENOENT";
+}

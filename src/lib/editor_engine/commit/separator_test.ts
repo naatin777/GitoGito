@@ -1,7 +1,11 @@
-import { assertEquals } from "@std/assert";
+import { expect, test } from "bun:test";
+
+const assertEquals = (actual: unknown, expected: unknown) => {
+  expect(actual).toEqual(expected);
+};
 import { SeparatorNode } from "./separator.ts";
 
-Deno.test("SeparatorNode - trigger: /^!?:\\s*/ matches colon separator", () => {
+test("SeparatorNode - trigger: /^!?:\\s*/ matches colon separator", () => {
   const node = new SeparatorNode();
   const trigger = node.next[0].trigger;
 
@@ -29,7 +33,7 @@ Deno.test("SeparatorNode - trigger: /^!?:\\s*/ matches colon separator", () => {
   assertEquals(match3?.[0], ":");
 });
 
-Deno.test("SeparatorNode - trigger: /^!?:\\s*/ matches breaking change separator", () => {
+test("SeparatorNode - trigger: /^!?:\\s*/ matches breaking change separator", () => {
   const node = new SeparatorNode();
   const trigger = node.next[0].trigger;
 
@@ -56,14 +60,14 @@ Deno.test("SeparatorNode - trigger: /^!?:\\s*/ matches breaking change separator
   assertEquals(match3?.[0], "!:");
 });
 
-Deno.test("SeparatorNode - trigger: validates transition target", () => {
+test("SeparatorNode - trigger: validates transition target", () => {
   const node = new SeparatorNode();
 
   // Should transition to 'subject'
   assertEquals(node.next[0].to, "subject");
 });
 
-Deno.test("SeparatorNode - trigger: handles various whitespace", () => {
+test("SeparatorNode - trigger: handles various whitespace", () => {
   const node = new SeparatorNode();
   const trigger = node.next[0].trigger;
 
@@ -88,7 +92,7 @@ Deno.test("SeparatorNode - trigger: handles various whitespace", () => {
   assertEquals(match5?.[0], "!:  ");
 });
 
-Deno.test("SeparatorNode - trigger: real-world examples", () => {
+test("SeparatorNode - trigger: real-world examples", () => {
   const node = new SeparatorNode();
   const trigger = node.next[0].trigger;
 
@@ -108,7 +112,7 @@ Deno.test("SeparatorNode - trigger: real-world examples", () => {
   assertEquals(match3?.[0], ":");
 });
 
-Deno.test("SeparatorNode - edge cases: only separator allowed", () => {
+test("SeparatorNode - edge cases: only separator allowed", () => {
   const node = new SeparatorNode();
   const trigger = node.next[0].trigger;
 
@@ -124,7 +128,7 @@ Deno.test("SeparatorNode - edge cases: only separator allowed", () => {
   assertEquals(trigger.test("!:"), true);
 });
 
-Deno.test("SeparatorNode - edge cases: consecutive separators", () => {
+test("SeparatorNode - edge cases: consecutive separators", () => {
   const node = new SeparatorNode();
   const trigger = node.next[0].trigger;
 
@@ -139,7 +143,7 @@ Deno.test("SeparatorNode - edge cases: consecutive separators", () => {
   assertEquals(trigger.test("!!:"), false);
 });
 
-Deno.test("SeparatorNode - edge cases: special characters after separator", () => {
+test("SeparatorNode - edge cases: special characters after separator", () => {
   const node = new SeparatorNode();
   const trigger = node.next[0].trigger;
 

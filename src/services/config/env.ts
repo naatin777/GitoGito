@@ -8,13 +8,13 @@ export interface EnvService {
 
 export class EnvServiceImpl implements EnvService {
   getAiApiKey() {
-    return Deno.env.get("DEMMITHUB_AI_API_KEY");
+    return process.env.DEMMITHUB_AI_API_KEY;
   }
   getGitHubToken() {
-    return Deno.env.get("DEMMITHUB_GITHUB_TOKEN");
+    return process.env.DEMMITHUB_GITHUB_TOKEN;
   }
   getHome() {
-    const home = Deno.env.get("HOME") ?? Deno.env.get("USERPROFILE");
+    const home = process.env.HOME ?? process.env.USERPROFILE;
     if (!home) {
       throw new EnvError("HOME or USERPROFILE");
     }
