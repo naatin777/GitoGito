@@ -1,0 +1,12 @@
+# DemmitHub Overview
+- Purpose: AI-powered CLI/TUI for generating commit messages and GitHub issues.
+- Stack: Deno 2 + TypeScript, React + Ink, Redux Toolkit, Vercel AI SDK, simple-git, Octokit.
+- Entry: `src/main.ts` (cliffy command tree).
+- Layers:
+  - `src/lib`: framework/runtime wrappers
+  - `src/services`: external integrations (AI, Git, GitHub, config)
+  - `src/app`: Redux store + hooks
+  - `src/features`: feature slices and UI
+  - `src/helpers`: pure utilities
+  - `src/commands`: CLI entry commands
+  - `src/components`: shared UI components
