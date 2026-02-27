@@ -1,6 +1,6 @@
 ## 1. Project Overview
 
-**DemmitHub** is an AI-powered CLI tool for generating intelligent commit
+**Gitogito** is an AI-powered CLI tool for generating intelligent commit
 messages and GitHub issues.
 
 - **Stack**: Bun, TypeScript, React + OpenTUI, Redux Toolkit, Vercel AI SDK,
@@ -29,7 +29,7 @@ bun run src/main.ts config                # Open config TUI
 
 ## 3. Directory Structure
 
-DemmitHub follows a layered architecture with clear separation of concerns.
+Gitogito follows a layered architecture with clear separation of concerns.
 
 ### Core Directories
 

@@ -2,7 +2,7 @@
 
 ## Goal
 
-Migrate DemmitHub runtime from `Deno + Ink` to `Bun + OpenTUI` while keeping
+Migrate Gitogito runtime from `Deno + Ink` to `Bun + OpenTUI` while keeping
 existing CLI command structure and feature behavior.
 
 ## Scope

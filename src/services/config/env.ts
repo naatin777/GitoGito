@@ -8,10 +8,10 @@ export interface EnvService {
 
 export class EnvServiceImpl implements EnvService {
   getAiApiKey() {
-    return process.env.DEMMITHUB_AI_API_KEY;
+    return process.env.GITOGITO_AI_API_KEY;
   }
   getGitHubToken() {
-    return process.env.DEMMITHUB_GITHUB_TOKEN;
+    return process.env.GITOGITO_GITHUB_TOKEN;
   }
   getHome() {
     const home = process.env.HOME ?? process.env.USERPROFILE;

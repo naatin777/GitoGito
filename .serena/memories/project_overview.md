@@ -1,4 +1,4 @@
-# DemmitHub Overview
+# Gitogito Overview
 - Purpose: AI-powered CLI/TUI for generating commit messages and GitHub issues.
 - Stack: Bun + TypeScript, React + OpenTUI, Redux Toolkit, Vercel AI SDK, Cliffy, simple-git, Octokit.
 - Entry: `src/main.ts` (cliffy command tree).

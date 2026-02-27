@@ -59,7 +59,7 @@ function createProgram(actions: TopLevelActions): Command {
   buildSubcommands(configCommand, flatSchema(ConfigSchema));
 
   const program = new Command()
-    .name("demmithub")
+    .name("gitogito")
     .version("0.0.0")
     .throwErrors()
     .noExit()

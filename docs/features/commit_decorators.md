@@ -11,10 +11,10 @@ commit message.
 
 ### 1. WIP Prefix with CLI Flag
 
-When user runs `demmithub commit -w`, automatically add `WIP:` prefix:
+When user runs `gitogito commit -w`, automatically add `WIP:` prefix:
 
 ```bash
-$ demmithub commit -w
+$ gitogito commit -w
 
 ╭─────────────────────────────────────────────────────╮
 │ Header ❯ WIP: fix login bug| (17/50)                │
@@ -373,11 +373,11 @@ headerType: ((state, action) => {
 
 ### User Configuration File
 
-Users can define custom decorators in `.demmithub/decorators.ts`:
+Users can define custom decorators in `.gitogito/decorators.ts`:
 
 ```typescript
-// .demmithub/decorators.ts
-import { registerDecorator } from "demmithub/decorators";
+// .gitogito/decorators.ts
+import { registerDecorator } from "gitogito/decorators";
 
 // Custom decorator: add [URGENT] prefix for specific branches
 registerDecorator({

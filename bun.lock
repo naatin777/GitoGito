@@ -5,7 +5,7 @@
     "": {
       "dependencies": {
         "@cliffy/command": "npm:@jsr/cliffy__command",
-        "@octokit/plugin-rest-endpoint-methods": "^17.0.0",
+        "@octokit/openapi-types": "^27.0.0",
         "@openrouter/ai-sdk-provider": "^1.5.4",
         "@opentui/core": "^0.1.84",
         "@opentui/react": "^0.1.84",

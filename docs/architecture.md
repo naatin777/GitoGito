@@ -2,7 +2,7 @@
 
 ## 1. System Design
 
-DemmitHub follows a **Layered Architecture** adapted for a Terminal UI (TUI)
+Gitogito follows a **Layered Architecture** adapted for a Terminal UI (TUI)
 application.
 
 ### Layers
@@ -104,9 +104,9 @@ current state.
 Configuration is merged in the following order (Last one wins):
 
 1. **Default** (Hardcoded)
-2. **Global** (`~/.config/demmithub/.config.yml`)
-3. **Project** (`./.demmithub.yml`)
-4. **Local** (`./.demmithub.local.yml`)
+2. **Global** (`~/.config/gitogito/.config.yml`)
+3. **Project** (`./.gitogito.yml`)
+4. **Local** (`./.gitogito.local.yml`)
 
 ---
 
