@@ -1,5 +1,3 @@
-import { unicodeWidth } from "@std/cli";
-
 export type WrappedLine = {
   text: string;
   start: number;
@@ -156,7 +154,7 @@ function tokenizeText(text: string): Token[] {
 function calculateWidth(text: string): number {
   let width = 0;
   for (const char of text) {
-    width += unicodeWidth(char);
+    width += Bun.stringWidth(char);
   }
   return width;
 }

@@ -8,9 +8,9 @@ ci:
 config:
   - changed-files:
       - any-glob-to-any-file:
-          - deno.json
-          - deno.lock
-          - .demmithub.yml
+          - package.json
+          - bun.lock
+          - .gitogito.yml
           - .gitignore
           - src/utils/config.ts
           - src/constants/config.ts
@@ -58,7 +58,6 @@ utils:
 core:
   - changed-files:
       - any-glob-to-any-file:
-          - src/demmithub.ts
           - src/main.ts
 
 test:

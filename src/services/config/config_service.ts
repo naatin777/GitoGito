@@ -1,4 +1,4 @@
-import { parse, stringify } from "@std/yaml";
+import { YAML } from "bun";
 import _ from "lodash";
 import type { NestedKeys, PathValue } from "../../type.ts";
 import {
@@ -58,7 +58,7 @@ export class ConfigServiceImpl implements ConfigService {
     credentials: Partial<Credentials> | undefined;
   }> {
     const globalConfigText = await this.configFile.load("global");
-    const { credentials, ...globalConfig } = (parse(
+    const { credentials, ...globalConfig } = (YAML.parse(
       globalConfigText,
     ) ?? {}) as Partial<AppContext>;
     return { config: globalConfig, credentials: credentials };
@@ -66,7 +66,7 @@ export class ConfigServiceImpl implements ConfigService {
 
   async getProjectConfig(): Promise<Partial<Config> | undefined> {
     const projectConfigText = await this.configFile.load("project");
-    const projectConfig = (parse(
+    const projectConfig = (YAML.parse(
       projectConfigText,
     ) ?? {}) as Partial<Config>;
     return projectConfig;
@@ -77,7 +77,7 @@ export class ConfigServiceImpl implements ConfigService {
     credentials: Partial<Credentials> | undefined;
   }> {
     const localConfigText = await this.configFile.load("local");
-    const { credentials, ...localConfig } = (parse(
+    const { credentials, ...localConfig } = (YAML.parse(
       localConfigText,
     ) ?? {}) as Partial<AppContext>;
     return { config: localConfig, credentials: credentials };
@@ -118,9 +118,9 @@ export class ConfigServiceImpl implements ConfigService {
     value: PathValue<Config, K>,
   ) {
     const configText = await this.configFile.load(configScope);
-    const config = parse(configText) as Partial<Config>;
+    const config = (YAML.parse(configText) ?? {}) as Partial<Config>;
     _.set(config, key, value);
-    await this.configFile.save(configScope, stringify(config));
+    await this.configFile.save(configScope, YAML.stringify(config, null, 2));
   }
 
   async saveCredentials<K extends NestedKeys<Credentials>>(
@@ -129,9 +129,14 @@ export class ConfigServiceImpl implements ConfigService {
     value: PathValue<Credentials, K>,
   ) {
     const credentialsText = await this.configFile.load(credentialsScope);
-    const credentials = parse(credentialsText) as Partial<Credentials>;
+    const credentials = (YAML.parse(credentialsText) ?? {}) as Partial<
+      Credentials
+    >;
     _.set(credentials, key, value);
-    await this.configFile.save(credentialsScope, stringify(credentials));
+    await this.configFile.save(
+      credentialsScope,
+      YAML.stringify(credentials, null, 2),
+    );
   }
 }
 

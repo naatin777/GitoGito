@@ -1,4 +1,4 @@
-import { useApp } from "ink";
+import { useRenderer } from "@opentui/react";
 import { useEffect } from "react";
 import type z from "zod";
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
@@ -18,13 +18,13 @@ import {
 export function useIssueFlow() {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.issue);
-  const { exit } = useApp();
+  const renderer = useRenderer();
 
   useEffect(() => {
     if (state.step === "done" || state.step === "error") {
-      exit();
+      renderer.destroy();
     }
-  }, [state.step, exit]);
+  }, [state.step, renderer]);
 
   return {
     state,

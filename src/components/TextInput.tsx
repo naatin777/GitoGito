@@ -1,5 +1,8 @@
-import { Box, render, Text, useApp, useInput } from "ink";
+import { TextAttributes } from "@opentui/core";
+import { useKeyboard, useRenderer } from "@opentui/react";
 import { useEffect, useState } from "react";
+import { isCtrlC, isEnter, keyEventToInput } from "../helpers/opentui/key.ts";
+import { renderTui } from "../lib/opentui_render.tsx";
 
 export function TextInput(
   { label, isInline, onSubmit }: {
@@ -11,7 +14,7 @@ export function TextInput(
   const [value, setValue] = useState("");
   const [cursorPosition, setCursorPosition] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
-  const { exit } = useApp();
+  const renderer = useRenderer();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -21,30 +24,31 @@ export function TextInput(
     return () => clearInterval(timer);
   }, []);
 
-  useInput((input, key) => {
+  useKeyboard((event) => {
+    const input = keyEventToInput(event);
     setShowCursor(true);
 
-    if (key.escape || (input === "c" && key.ctrl)) {
-      exit();
+    if (event.name === "escape" || isCtrlC(event)) {
+      renderer.destroy();
       return;
     }
 
-    if (key.return) {
+    if (isEnter(event)) {
       onSubmit(value);
       return;
     }
 
-    if (key.leftArrow) {
+    if (event.name === "left") {
       setCursorPosition((p) => Math.max(0, p - 1));
       return;
     }
 
-    if (key.rightArrow) {
+    if (event.name === "right") {
       setCursorPosition((p) => Math.min(value.length, p + 1));
       return;
     }
 
-    if (key.backspace || key.delete) {
+    if (event.name === "backspace" || event.name === "delete" || event.name === "forwarddelete") {
       if (cursorPosition > 0) {
         setValue((v) =>
           v.slice(0, cursorPosition - 1) + v.slice(cursorPosition)
@@ -54,16 +58,17 @@ export function TextInput(
       return;
     }
 
-    if (key.ctrl && input === "a") {
+    if (event.ctrl && input === "a") {
       setCursorPosition(0);
       return;
     }
-    if (key.ctrl && input === "e") {
+
+    if (event.ctrl && input === "e") {
       setCursorPosition(value.length);
       return;
     }
 
-    if (!key.ctrl && !key.meta) {
+    if (!event.ctrl && !event.meta && input.length > 0) {
       setValue((v) =>
         v.slice(0, cursorPosition) + input + v.slice(cursorPosition)
       );
@@ -76,29 +81,39 @@ export function TextInput(
   const after = value.slice(cursorPosition + 1);
 
   return (
-    <Box flexDirection={isInline ? "row" : "column"}>
-      <Text bold>{label}</Text>
+    <box flexDirection={isInline ? "row" : "column"}>
+      <text attributes={TextAttributes.BOLD}>{label}</text>
       {isInline
         ? (
-          <Box flexDirection="row">
-            <Text color="green">{before}</Text>
-            <Text color="green" inverse={showCursor}>{charAtCursor}</Text>
-            <Text color="green">{after}</Text>
-          </Box>
+          <box flexDirection="row">
+            <text fg="green">{before}</text>
+            <text
+              fg="green"
+              attributes={showCursor ? TextAttributes.INVERSE : 0}
+            >
+              {charAtCursor}
+            </text>
+            <text fg="green">{after}</text>
+          </box>
         )
         : (
-          <Box>
-            <Text color="green">{before}</Text>
-            <Text color="green" inverse={showCursor}>{charAtCursor}</Text>
-            <Text color="green">{after}</Text>
-          </Box>
+          <box>
+            <text fg="green">{before}</text>
+            <text
+              fg="green"
+              attributes={showCursor ? TextAttributes.INVERSE : 0}
+            >
+              {charAtCursor}
+            </text>
+            <text fg="green">{after}</text>
+          </box>
         )}
-    </Box>
+    </box>
   );
 }
 
 if (import.meta.main) {
-  render(
+  const instance = renderTui(
     <TextInput
       label="? Enter something › "
       isInline
@@ -107,4 +122,6 @@ if (import.meta.main) {
       }}
     />,
   );
+
+  await instance.waitUntilExit();
 }

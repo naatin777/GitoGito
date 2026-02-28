@@ -1,4 +1,4 @@
-import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
+import type { components } from "@octokit/openapi-types";
 
 export type Issue = {
   title: string;
@@ -31,13 +31,12 @@ export type CommitConfig = {
   scope: Suggestion[];
 };
 
-export type IssueCreateResponse =
-  RestEndpointMethodTypes["issues"]["create"]["response"];
+export type IssueCreateResponse = components["schemas"]["issue"];
 
 export type NestedKeys<T> = {
   [K in keyof T & string]: T[K] extends object
-    ? `${K}` | `${K}.${NestedKeys<T[K]>}`
-    : `${K}`;
+  ? `${K}` | `${K}.${NestedKeys<T[K]>}`
+  : `${K}`;
 }[keyof T & string];
 
 export type PathValue<T, P extends string> = P extends

@@ -1,7 +1,11 @@
-import { assertEquals } from "@std/assert";
+import { expect, test } from "bun:test";
+
+const assertEquals = (actual: unknown, expected: unknown) => {
+  expect(actual).toEqual(expected);
+};
 import { cycleZip } from "./cycle_zip.ts";
 
-Deno.test("cycleZip - same length arrays", () => {
+test("cycleZip - same length arrays", () => {
   const arr1 = [1, 2, 3];
   const arr2 = ["a", "b", "c"];
   const result = cycleZip(arr1, arr2);
@@ -13,7 +17,7 @@ Deno.test("cycleZip - same length arrays", () => {
   ]);
 });
 
-Deno.test("cycleZip - different length arrays (2 and 3)", () => {
+test("cycleZip - different length arrays (2 and 3)", () => {
   const arr1 = [1, 2];
   const arr2 = ["a", "b", "c"];
   const result = cycleZip(arr1, arr2);
@@ -29,7 +33,7 @@ Deno.test("cycleZip - different length arrays (2 and 3)", () => {
   ]);
 });
 
-Deno.test("cycleZip - different length arrays (3 and 4)", () => {
+test("cycleZip - different length arrays (3 and 4)", () => {
   const arr1 = [1, 2, 3];
   const arr2 = ["a", "b", "c", "d"];
   const result = cycleZip(arr1, arr2);
@@ -52,7 +56,7 @@ Deno.test("cycleZip - different length arrays (3 and 4)", () => {
   ]);
 });
 
-Deno.test("cycleZip - arrays with common divisor (4 and 6)", () => {
+test("cycleZip - arrays with common divisor (4 and 6)", () => {
   const arr1 = [1, 2, 3, 4];
   const arr2 = ["a", "b", "c", "d", "e", "f"];
   const result = cycleZip(arr1, arr2);
@@ -63,7 +67,7 @@ Deno.test("cycleZip - arrays with common divisor (4 and 6)", () => {
   assertEquals(result[11], [4, "f"]);
 });
 
-Deno.test("cycleZip - first array is empty", () => {
+test("cycleZip - first array is empty", () => {
   const arr1: number[] = [];
   const arr2 = ["a", "b", "c"];
   const result = cycleZip(arr1, arr2);
@@ -71,7 +75,7 @@ Deno.test("cycleZip - first array is empty", () => {
   assertEquals(result, []);
 });
 
-Deno.test("cycleZip - second array is empty", () => {
+test("cycleZip - second array is empty", () => {
   const arr1 = [1, 2, 3];
   const arr2: string[] = [];
   const result = cycleZip(arr1, arr2);
@@ -79,7 +83,7 @@ Deno.test("cycleZip - second array is empty", () => {
   assertEquals(result, []);
 });
 
-Deno.test("cycleZip - both arrays are empty", () => {
+test("cycleZip - both arrays are empty", () => {
   const arr1: number[] = [];
   const arr2: string[] = [];
   const result = cycleZip(arr1, arr2);
@@ -87,7 +91,7 @@ Deno.test("cycleZip - both arrays are empty", () => {
   assertEquals(result, []);
 });
 
-Deno.test("cycleZip - single element arrays", () => {
+test("cycleZip - single element arrays", () => {
   const arr1 = [42];
   const arr2 = ["x"];
   const result = cycleZip(arr1, arr2);
@@ -95,7 +99,7 @@ Deno.test("cycleZip - single element arrays", () => {
   assertEquals(result, [[42, "x"]]);
 });
 
-Deno.test("cycleZip - one array has length 1", () => {
+test("cycleZip - one array has length 1", () => {
   const arr1 = [1];
   const arr2 = ["a", "b", "c"];
   const result = cycleZip(arr1, arr2);
@@ -108,7 +112,7 @@ Deno.test("cycleZip - one array has length 1", () => {
   ]);
 });
 
-Deno.test("cycleZip - works with different types", () => {
+test("cycleZip - works with different types", () => {
   const arr1 = [true, false];
   const arr2 = [10, 20, 30];
   const result = cycleZip(arr1, arr2);
@@ -124,7 +128,7 @@ Deno.test("cycleZip - works with different types", () => {
   ]);
 });
 
-Deno.test("cycleZip - coprime lengths (5 and 7)", () => {
+test("cycleZip - coprime lengths (5 and 7)", () => {
   const arr1 = [1, 2, 3, 4, 5];
   const arr2 = ["a", "b", "c", "d", "e", "f", "g"];
   const result = cycleZip(arr1, arr2);
@@ -135,7 +139,7 @@ Deno.test("cycleZip - coprime lengths (5 and 7)", () => {
   assertEquals(result[34], [5, "g"]);
 });
 
-Deno.test("cycleZip - verify cycling behavior", () => {
+test("cycleZip - verify cycling behavior", () => {
   const arr1 = [1, 2];
   const arr2 = ["a"];
   const result = cycleZip(arr1, arr2);
@@ -147,7 +151,7 @@ Deno.test("cycleZip - verify cycling behavior", () => {
   ]);
 });
 
-Deno.test("cycleZip - objects and arrays", () => {
+test("cycleZip - objects and arrays", () => {
   const arr1 = [{ id: 1 }, { id: 2 }];
   const arr2 = [[1, 2], [3, 4], [5, 6]];
   const result = cycleZip(arr1, arr2);

@@ -1,4 +1,3 @@
-import { Box, Text } from "ink";
 import type { TreeItem } from "./TreeList.tsx";
 
 interface DetailPanelProps {
@@ -11,21 +10,22 @@ export const DetailPanel = ({ item, width, height }: DetailPanelProps) => {
   const fullPath = [...item.parents, item.key].join(".");
 
   return (
-    <Box flexDirection="column" flexGrow={1} paddingLeft={2}>
-      <Box
-        borderStyle="round"
+    <box flexDirection="column" flexGrow={1} paddingLeft={2}>
+      <box
+        border
+        borderStyle="rounded"
         paddingX={1}
         width={width}
         height={height}
         flexDirection="column"
       >
-        <Text>
+        <text>
           {fullPath}
-        </Text>
-        <Text>
+        </text>
+        <text>
           {item.description}
-        </Text>
-      </Box>
-    </Box>
+        </text>
+      </box>
+    </box>
   );
 };

@@ -1,5 +1,5 @@
+import { useRenderer } from "@opentui/react";
 import { useEffect } from "react";
-import { useApp } from "ink";
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
 import {
   commitMessage,
@@ -11,13 +11,13 @@ import {
 export function useCommitFlow() {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.commit);
-  const { exit } = useApp();
+  const renderer = useRenderer();
 
   useEffect(() => {
     if (state.step === "done" || state.step === "error") {
-      exit();
+      renderer.destroy();
     }
-  }, [state.step, exit]);
+  }, [state.step, renderer]);
 
   return {
     state,

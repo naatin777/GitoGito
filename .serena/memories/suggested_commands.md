@@ -1,7 +1,6 @@
 # Suggested Commands
-- Run CLI: `deno run --allow-all src/main.ts <command>`
-- Tests: `deno test --allow-all`
-- Type check: `deno check`
-- Lint: `deno lint`
-- Format: `deno fmt`
+- Install dependencies: `bun install`
+- Run CLI: `bun run src/main.ts <command>`
+- Tests: `bun test`
+- Type check: `bun run check`
 - Repo navigation: `ls`, `find`, `rg` (preferred), `git status`, `git diff`

@@ -1,10 +1,14 @@
-import { assertEquals } from "@std/assert";
+import { expect, test } from "bun:test";
+
+const assertEquals = (actual: unknown, expected: unknown) => {
+  expect(actual).toEqual(expected);
+};
 import {
   parseMarkdownIssueTemplate,
   stringifyMarkdownIssue,
 } from "./parser.ts";
 
-Deno.test("parseMarkdownIssueTemplate", () => {
+test("parseMarkdownIssueTemplate", () => {
   const markdown = `---
 title: My Issue Template
 name: my-issue-template
@@ -22,7 +26,7 @@ This is the body of my issue template.
   assertEquals(template.body, "This is the body of my issue template.");
 });
 
-Deno.test("stringifyMarkdownIssue", () => {
+test("stringifyMarkdownIssue", () => {
   const issue = {
     title: "My Issue Template",
     name: "my-issue-template",

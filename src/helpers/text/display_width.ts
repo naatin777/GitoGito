@@ -1,5 +1,3 @@
-import { unicodeWidth } from "@std/cli";
-
 /**
  * Calculates the display width of text considering unicode characters
  * (e.g., "あ" counts as 2, emoji might count as 2, etc.)
@@ -15,7 +13,7 @@ import { unicodeWidth } from "@std/cli";
 export function getDisplayWidth(text: string): number {
   let width = 0;
   for (const char of text) {
-    width += unicodeWidth(char);
+    width += Bun.stringWidth(char);
   }
   return width;
 }
