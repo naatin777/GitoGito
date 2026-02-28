@@ -1,8 +1,12 @@
 import { Command } from "@cliffy/command";
-import { ConfigUI } from "../features/config/ui.tsx";
 import { flatSchema } from "../helpers/flat_schema.ts";
 import { runTuiWithRedux } from "../lib/runner.tsx";
 import { ConfigSchema } from "../services/config/schema/config.ts";
+import { RouterUI } from "../views/router/ui.tsx";
+
+async function openConfigTui() {
+  await runTuiWithRedux(<RouterUI initialPath="/config" />);
+}
 
 function buildSubcommands(
   root: { command: (name: string, cmd: Command) => unknown },
@@ -22,20 +26,12 @@ function buildSubcommands(
             console.log(set);
             console.log(item);
           } else {
-            await runTuiWithRedux(
-              <ConfigUI
-                flattenConfigSchema={items}
-              />,
-            );
+            await openConfigTui();
           }
         });
     } else {
       cmd.action(async () => {
-        await runTuiWithRedux(
-          <ConfigUI
-            flattenConfigSchema={items}
-          />,
-        );
+        await openConfigTui();
       });
     }
 
@@ -56,11 +52,7 @@ function buildSubcommands(
 export const configCommand = new Command()
   .description("Configure the repository")
   .action(async () => {
-    await runTuiWithRedux(
-      <ConfigUI
-        flattenConfigSchema={flatSchema(ConfigSchema)}
-      />,
-    );
+    await openConfigTui();
   });
 
 buildSubcommands(configCommand, flatSchema(ConfigSchema));
