@@ -6,20 +6,20 @@ reviews:
   profile: "chill"
   request_changes_workflow: false
   high_level_summary: true
-  poem: true
+  poem: false
   review_status: true
   collapse_walkthrough: false
 
   auto_review:
     enabled: true
-    drafts: false
+    drafts: true
     ignore_title_keywords:
       - "WIP"
       - "Draft"
       - "DO NOT MERGE"
 
   path_filters:
-    - "!deno.lock"
+    - "!bun.lock"
     - "!**/*.lock"
     - "!**/cov_profile/**"
     - "!**/testdata/**"
@@ -28,20 +28,24 @@ reviews:
   path_instructions:
     - path: "**"
       instructions: |
-        You are a Senior Deno Software Engineer.
+        You are a Senior Bun + TypeScript Software Engineer.
         Review the code based on the following criteria:
 
-        1. **Deno Best Practices**:
-           - Ensure code follows modern Deno conventions (using `deno.json`).
-           - Encourage using **JSR** (`jsr:`) imports where appropriate.
-           - Verify permissions and security handles.
+        1. **Bun Runtime Best Practices**:
+           - Ensure code aligns with Bun runtime and `package.json` scripts.
+           - Prefer Bun/Node APIs (`process`, `node:fs`, `node:path`) over Deno APIs.
+           - Check CLI/runtime behavior under Bun (arguments, exits, env handling).
 
-        2. **TypeScript & Logic**:
+        2. **OpenTUI & CLI Structure**:
+           - Review OpenTUI usage (`@opentui/react`, native primitives/hooks) for regressions.
+           - Ensure Cliffy command wiring is coherent and options/subcommands behave correctly.
+
+        3. **TypeScript & Logic**:
            - Enforce strict TypeScript typing (avoid `any`).
            - Focus on logic errors, security risks, and performance issues.
-           - Do not comment on formatting (assume `deno fmt` handles it).
+           - Do not comment on formatting (assume automated formatters handle it).
 
-        3. **Tone**:
+        4. **Tone**:
            - Keep feedback concise, constructive, and "chill".
 
 chat:

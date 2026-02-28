@@ -1,4 +1,3 @@
-import { Box, Text } from "ink";
 import { Select } from "../../components/Select.tsx";
 import { Spinner } from "../../components/Spinner.tsx";
 import { useCommitFlow } from "./hook.ts";
@@ -13,7 +12,7 @@ export function Commit() {
   } = useCommitFlow();
 
   return (
-    <Box>
+    <box>
       {state.step === "loading" && (
         <Spinner handleDataLoading={generateCommitMessages} />
       )}
@@ -32,9 +31,8 @@ export function Commit() {
         <Spinner handleDataLoading={editCommitMessage} />
       )}
       {state.step === "commit" && <Spinner handleDataLoading={commitMessage} />}
-      {state.step === "done" && <Text>Done</Text>}
-      {state.step === "error" && <Text color="red">Error: {state.message}
-      </Text>}
-    </Box>
+      {state.step === "done" && <text>Done</text>}
+      {state.step === "error" && <text fg="red">Error: {state.message}</text>}
+    </box>
   );
 }

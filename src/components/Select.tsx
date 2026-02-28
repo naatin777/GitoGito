@@ -1,6 +1,9 @@
-import { Box, render, Text, useApp, useInput } from "ink";
-import type { Choice } from "../type.ts";
+import { TextAttributes } from "@opentui/core";
+import { useKeyboard, useRenderer } from "@opentui/react";
 import { useState } from "react";
+import { isCtrlC, isEnter } from "../helpers/opentui/key.ts";
+import { renderTui } from "../lib/opentui_render.tsx";
+import type { Choice } from "../type.ts";
 
 type SelectOptions<T> = {
   message: string;
@@ -9,75 +12,74 @@ type SelectOptions<T> = {
 };
 
 export function Select<T>(options: SelectOptions<T>) {
-  const { exit } = useApp();
-
+  const renderer = useRenderer();
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  useInput((input, key) => {
-    if (key.escape || (input === "c" && key.ctrl)) {
+  useKeyboard((event) => {
+    if (event.name === "escape" || isCtrlC(event)) {
       options.onSelect(undefined);
-      exit();
+      renderer.destroy();
       return;
     }
 
-    if (key.upArrow) {
+    if (event.name === "up") {
       setSelectedIndex((prev) =>
         (prev - 1 + options.choices.length) % options.choices.length
       );
     }
 
-    if (key.downArrow) {
+    if (event.name === "down") {
       setSelectedIndex((prev) => (prev + 1) % options.choices.length);
     }
 
-    if (key.return) {
+    if (isEnter(event)) {
       options.onSelect(options.choices[selectedIndex].value);
     }
   });
 
   return (
-    <Box flexDirection="column" paddingLeft={1} paddingRight={1}>
-      <Box>
-        <Text>{`${options.message} `}</Text>
-        <Text dimColor>
+    <box flexDirection="column" paddingLeft={1} paddingRight={1}>
+      <box>
+        <text>{`${options.message} `}</text>
+        <text attributes={TextAttributes.DIM}>
           {`(${selectedIndex + 1}/${options.choices.length})`}
-        </Text>
-      </Box>
+        </text>
+      </box>
       {options.choices.map((value, index) => {
         const isSelected = selectedIndex === index;
         return (
-          <Box
+          <box
             key={value.name}
             flexDirection="column"
           >
-            <Text
-              bold
-              wrap="truncate-end"
-              color={isSelected ? "blue" : undefined}
+            <text
+              attributes={TextAttributes.BOLD}
+              truncate
+              fg={isSelected ? "blue" : undefined}
             >
               {`→ ${value.name}`}
-            </Text>
+            </text>
             {isSelected && (
-              <Box
+              <box
                 paddingLeft={1}
                 borderStyle="single"
-                borderLeftColor="gray"
-                borderTop={false}
-                borderRight={false}
-                borderBottom={false}
+                border={[
+                  "left",
+                ]}
+                borderColor="gray"
               >
-                <Text dimColor>{`${value.description}`}</Text>
-              </Box>
+                <text attributes={TextAttributes.DIM}>{`${value.description}`}</text>
+              </box>
             )}
-          </Box>
+          </box>
         );
       })}
-    </Box>
+    </box>
   );
 }
 
 if (import.meta.main) {
-  render(
+  const instance = renderTui(
     <Select
       message="Select an option"
       choices={[
@@ -88,4 +90,6 @@ if (import.meta.main) {
       onSelect={(value) => console.log("Selected:", value)}
     />,
   );
+
+  await instance.waitUntilExit();
 }

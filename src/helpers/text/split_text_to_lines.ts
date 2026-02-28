@@ -1,5 +1,3 @@
-import { unicodeWidth } from "@std/cli";
-
 export type Line = {
   text: string;
   start: number;
@@ -25,7 +23,7 @@ export const splitTextToLines = (text: string, maxWidth: number) => {
       continue;
     }
 
-    const w = unicodeWidth(char);
+    const w = Bun.stringWidth(char);
 
     if (currentLineWidth + w > maxWidth && currentLineWidth > 0) {
       lines.push({ text: currentLine, start: currentLineStartIndex });

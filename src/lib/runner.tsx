@@ -1,9 +1,9 @@
 import { Provider } from "react-redux";
 import { store } from "../app/store.ts";
-import { render } from "ink";
+import { renderTui } from "./opentui_render.tsx";
 
 export async function runTuiWithRedux(
-  component: React.ReactElement,
+  component: React.ReactNode,
 ) {
   try {
     const wrappedComponent = (
@@ -12,12 +12,12 @@ export async function runTuiWithRedux(
       </Provider>
     );
 
-    const instance = render(wrappedComponent);
+    const instance = renderTui(wrappedComponent);
 
     await instance.waitUntilExit();
   } catch (err) {
     console.error("Fatal Error in TUI Runtime:");
     console.error(err);
-    Deno.exit(1);
+    process.exit(1);
   }
 }

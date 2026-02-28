@@ -1,35 +1,74 @@
-import { parse, stringify } from "@std/yaml";
-import { set } from "lodash";
+import { YAML } from "bun";
+import _ from "lodash";
 import type { NestedKeys, PathValue } from "../../type.ts";
-import type { ConfigScope, CredentialsScope } from "../config/file.ts";
-import type { EnvService } from "./env.ts";
+import {
+  configFile,
+  type ConfigScope,
+  type CredentialsScope,
+} from "../config/file.ts";
+import { type EnvService, envService } from "./env.ts";
 import type { ConfigFile } from "./file.ts";
 import type { AppContext } from "./schema/app_context.ts";
 import { type Config, ConfigSchema } from "./schema/config.ts";
 import type { Credentials } from "./schema/credentials.ts";
 
-export class ConfigService {
+export interface ConfigService {
+  getGlobalConfig(): Promise<{
+    config: Partial<Config> | undefined;
+    credentials: Partial<Credentials> | undefined;
+  }>;
+
+  getProjectConfig(): Promise<Partial<Config> | undefined>;
+
+  getLocalConfig(): Promise<{
+    config: Partial<Config> | undefined;
+    credentials: Partial<Credentials> | undefined;
+  }>;
+
+  getMergedCredentials(): Promise<Partial<Credentials>>;
+  getMergedConfig(): Promise<Config>;
+
+  saveConfig<K extends NestedKeys<Config>>(
+    configScope: ConfigScope,
+    key: K,
+    value: PathValue<Config, K>,
+  ): Promise<void>;
+
+  saveCredentials<K extends NestedKeys<Credentials>>(
+    credentialsScope: CredentialsScope,
+    key: K,
+    value: PathValue<Credentials, K>,
+  ): Promise<void>;
+}
+
+export class ConfigServiceImpl implements ConfigService {
+  private envService: EnvService;
+  private configFile: ConfigFile;
+
   constructor(
-    private envService: EnvService = envService,
-    private configFile: ConfigFile = configFile,
-  ) {}
+    _envService: EnvService = envService,
+    _configFile: ConfigFile = configFile,
+  ) {
+    this.envService = _envService;
+    this.configFile = _configFile;
+  }
 
   async getGlobalConfig(): Promise<{
     config: Partial<Config> | undefined;
     credentials: Partial<Credentials> | undefined;
   }> {
     const globalConfigText = await this.configFile.load("global");
-    const { credentials, ...globalConfig } = parse(
+    const { credentials, ...globalConfig } = (YAML.parse(
       globalConfigText,
-    ) as Partial<AppContext>;
+    ) ?? {}) as Partial<AppContext>;
     return { config: globalConfig, credentials: credentials };
   }
 
   async getProjectConfig(): Promise<Partial<Config> | undefined> {
     const projectConfigText = await this.configFile.load("project");
-    const projectConfig = parse(
+    const projectConfig = (YAML.parse(
       projectConfigText,
-    ) as Partial<Config>;
+    ) ?? {}) as Partial<Config>;
     return projectConfig;
   }
 
@@ -38,9 +77,9 @@ export class ConfigService {
     credentials: Partial<Credentials> | undefined;
   }> {
     const localConfigText = await this.configFile.load("local");
-    const { credentials, ...localConfig } = parse(
+    const { credentials, ...localConfig } = (YAML.parse(
       localConfigText,
-    ) as Partial<AppContext>;
+    ) ?? {}) as Partial<AppContext>;
     return { config: localConfig, credentials: credentials };
   }
 
@@ -49,12 +88,13 @@ export class ConfigService {
     const { config: globalConfig } = await this.getGlobalConfig();
     const projectConfig = await this.getProjectConfig();
     const { config: localConfig } = await this.getLocalConfig();
-    return {
-      ...defaultConfig,
-      ...globalConfig,
-      ...projectConfig,
-      ...localConfig,
-    };
+    return _.merge(
+      {},
+      defaultConfig,
+      globalConfig ?? {},
+      projectConfig ?? {},
+      localConfig ?? {},
+    );
   }
 
   async getMergedCredentials(): Promise<Partial<Credentials>> {
@@ -79,9 +119,9 @@ export class ConfigService {
     value: PathValue<Config, K>,
   ) {
     const configText = await this.configFile.load(configScope);
-    const config = parse(configText) as Partial<Config>;
-    set(config, key, value);
-    await this.configFile.save(configScope, stringify(config));
+    const config = (YAML.parse(configText) ?? {}) as Partial<Config>;
+    _.set(config, key, value);
+    await this.configFile.save(configScope, YAML.stringify(config, null, 2));
   }
 
   async saveCredentials<K extends NestedKeys<Credentials>>(
@@ -90,8 +130,15 @@ export class ConfigService {
     value: PathValue<Credentials, K>,
   ) {
     const credentialsText = await this.configFile.load(credentialsScope);
-    const credentials = parse(credentialsText) as Partial<Credentials>;
-    set(credentials, key, value);
-    await this.configFile.save(credentialsScope, stringify(credentials));
+    const credentials = (YAML.parse(credentialsText) ?? {}) as Partial<
+      Credentials
+    >;
+    _.set(credentials, key, value);
+    await this.configFile.save(
+      credentialsScope,
+      YAML.stringify(credentials, null, 2),
+    );
   }
 }
+
+export const configService = new ConfigServiceImpl();

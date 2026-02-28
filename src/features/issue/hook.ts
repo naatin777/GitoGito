@@ -1,9 +1,9 @@
+import { useRenderer } from "@opentui/react";
 import { useEffect } from "react";
-import { useApp } from "ink";
-import type { IssueSchema } from "../../schema.ts";
 import type z from "zod";
-import type { Issue, IssueTemplate } from "../../type.ts";
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
+import type { IssueSchema } from "../../schema.ts";
+import type { Issue, IssueTemplate } from "../../type.ts";
 import {
   createIssue,
   editIssue,
@@ -18,13 +18,13 @@ import {
 export function useIssueFlow() {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.issue);
-  const { exit } = useApp();
+  const renderer = useRenderer();
 
   useEffect(() => {
     if (state.step === "done" || state.step === "error") {
-      exit();
+      renderer.destroy();
     }
-  }, [state.step, exit]);
+  }, [state.step, renderer]);
 
   return {
     state,

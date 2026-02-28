@@ -2,12 +2,12 @@
 
 ## Overview
 
-This document explains the organization of DemmitHub's source code and provides
+This document explains the organization of Gitogito's source code and provides
 guidelines for where to place new code.
 
 ## Architecture Alignment
 
-DemmitHub follows a 4-layer architecture:
+Gitogito follows a 4-layer architecture:
 
 1. **Infrastructure Layer** → `src/lib/`, `src/helpers/`
 2. **Service/Domain Layer** → `src/services/`, `src/features/*/domain/`
@@ -108,7 +108,7 @@ features/
 - ❌ Importing from other features (use services/ or helpers/ for shared code)
 - ❌ Generic utilities (those go in helpers/)
 
-**When to use**: Adding a new feature or command to DemmitHub.
+**When to use**: Adding a new feature or command to Gitogito.
 
 ### src/helpers/ - Pure Utilities
 

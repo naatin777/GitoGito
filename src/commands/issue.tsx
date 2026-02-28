@@ -1,9 +1,9 @@
 import { Command } from "@cliffy/command";
-import { Issue } from "../features/issue/ui.tsx";
-import { runTui } from "../lib/tui.ts";
+import { runTuiWithRedux } from "../lib/runner.tsx";
+import { RouterUI } from "../views/router/ui.tsx";
 
 export const issueCommand = new Command()
   .description("Manage issues in the repository")
   .action(async () => {
-    await runTui(<Issue />);
+    await runTuiWithRedux(<RouterUI initialPath="/issue" />);
   });

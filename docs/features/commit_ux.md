@@ -2,7 +2,7 @@
 
 ## Overview
 
-DemmitHub provides an intelligent commit message editing experience that follows
+Gitogito provides an intelligent commit message editing experience that follows
 the Conventional Commits format. The interface offers two complementary
 autocompletion modes to help users write well-formatted commit messages
 efficiently.

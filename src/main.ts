@@ -1,18 +1,27 @@
 import { Command } from "@cliffy/command";
-import DemmitHub from "../deno.json" with { type: "json" };
+import { CompletionsCommand } from "@cliffy/command/completions";
+import packageJson from "../package.json" with { type: "json" };
 import { commitCommand } from "./commands/commit.tsx";
 import { configCommand } from "./commands/config.tsx";
 import { initCommand } from "./commands/init.tsx";
 import { issueCommand } from "./commands/issue.tsx";
+import { tuiCommand } from "./commands/tui.tsx";
 
 if (import.meta.main) {
-  await new Command()
-    .name(DemmitHub.name)
-    .version(DemmitHub.version)
-    .description(DemmitHub.description)
-    .command("init", initCommand)
-    .command("config", configCommand)
-    .command("issue", issueCommand)
-    .command("commit", commitCommand)
-    .parse(Deno.args);
+  const program = new Command()
+    .name(packageJson.name)
+    .version(packageJson.version)
+    .description(packageJson.description)
+    .action(function () {
+      this.showHelp();
+    });
+
+  program.command("init", initCommand);
+  program.command("config", configCommand);
+  program.command("issue", issueCommand);
+  program.command("commit", commitCommand);
+  program.command("tui", tuiCommand);
+  program.command("completions", new CompletionsCommand());
+
+  await program.parse(process.argv.slice(2));
 }
