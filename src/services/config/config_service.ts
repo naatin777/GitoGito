@@ -88,12 +88,13 @@ export class ConfigServiceImpl implements ConfigService {
     const { config: globalConfig } = await this.getGlobalConfig();
     const projectConfig = await this.getProjectConfig();
     const { config: localConfig } = await this.getLocalConfig();
-    return {
-      ...defaultConfig,
-      ...globalConfig,
-      ...projectConfig,
-      ...localConfig,
-    };
+    return _.merge(
+      {},
+      defaultConfig,
+      globalConfig ?? {},
+      projectConfig ?? {},
+      localConfig ?? {},
+    );
   }
 
   async getMergedCredentials(): Promise<Partial<Credentials>> {
