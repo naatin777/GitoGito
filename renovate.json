@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
-  "dependencyDashboard": false,
+  "dependencyDashboard": true,
   "enabledManagers": ["npm", "github-actions"],
   "lockFileMaintenance": {
     "enabled": true
@@ -10,6 +10,41 @@
     {
       "matchManagers": ["npm"],
       "rangeStrategy": "bump"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["react", "@types/react", "react-redux", "react-router"],
+      "groupName": "react ecosystem"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["@opentui/core", "@opentui/react"],
+      "groupName": "opentui ecosystem"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["ai", "@openrouter/ai-sdk-provider", "zod"],
+      "groupName": "ai ecosystem"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["octokit", "@octokit/openapi-types"],
+      "groupName": "octokit ecosystem"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["lodash", "@types/lodash"],
+      "groupName": "lodash ecosystem"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["typescript", "bun-types"],
+      "groupName": "typescript and bun types"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchPackageNames": ["oven-sh/setup-bun"],
+      "groupName": "bun github action"
     }
   ]
 }
