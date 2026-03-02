@@ -2,42 +2,47 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "dependencyDashboard": true,
-  "enabledManagers": ["npm", "github-actions"],
+  "enabledManagers": ["bun", "npm", "github-actions"],
   "lockFileMaintenance": {
     "enabled": true
   },
   "packageRules": [
     {
-      "matchManagers": ["npm"],
+      "matchManagers": ["bun", "npm"],
       "rangeStrategy": "bump"
     },
     {
-      "matchManagers": ["npm"],
-      "matchPackageNames": ["react", "@types/react", "react-redux", "react-router"],
+      "matchManagers": ["bun", "npm"],
+      "matchPackageNames": [
+        "react",
+        "@types/react",
+        "react-redux",
+        "react-router"
+      ],
       "groupName": "react ecosystem"
     },
     {
-      "matchManagers": ["npm"],
+      "matchManagers": ["bun", "npm"],
       "matchPackageNames": ["@opentui/core", "@opentui/react"],
       "groupName": "opentui ecosystem"
     },
     {
-      "matchManagers": ["npm"],
+      "matchManagers": ["bun", "npm"],
       "matchPackageNames": ["ai", "@openrouter/ai-sdk-provider", "zod"],
       "groupName": "ai ecosystem"
     },
     {
-      "matchManagers": ["npm"],
+      "matchManagers": ["bun", "npm"],
       "matchPackageNames": ["octokit", "@octokit/openapi-types"],
       "groupName": "octokit ecosystem"
     },
     {
-      "matchManagers": ["npm"],
+      "matchManagers": ["bun", "npm"],
       "matchPackageNames": ["lodash", "@types/lodash"],
       "groupName": "lodash ecosystem"
     },
     {
-      "matchManagers": ["npm"],
+      "matchManagers": ["bun", "npm"],
       "matchPackageNames": ["typescript", "bun-types"],
       "groupName": "typescript and bun types"
     },
