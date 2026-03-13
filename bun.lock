@@ -17,7 +17,7 @@
         "react": "^19.2.4",
         "react-redux": "^9.2.0",
         "react-router": "^7.13.1",
-        "simple-git": "^3.32.3",
+        "simple-git": "^3.33.0",
         "zod": "^4.3.6",
       },
       "devDependencies": {
@@ -335,7 +335,7 @@
 
     "shell-quote": ["shell-quote@1.8.3", "", {}, "sha512-ObmnIF4hXNg1BqhnHmgbDETF8dLPCggZWBjkQfhZpbszZnYur5DUljTcCHii5LC3J5E0yeO/1LIMyH+UvHQgyw=="],
 
-    "simple-git": ["simple-git@3.32.3", "", { "dependencies": { "@kwsites/file-exists": "^1.1.1", "@kwsites/promise-deferred": "^1.1.1", "debug": "^4.4.0" } }, "sha512-56a5oxFdWlsGygOXHWrG+xjj5w9ZIt2uQbzqiIGdR/6i5iococ7WQ/bNPzWxCJdEUGUCmyMH0t9zMpRJTaKxmw=="],
+    "simple-git": ["simple-git@3.33.0", "", { "dependencies": { "@kwsites/file-exists": "^1.1.1", "@kwsites/promise-deferred": "^1.1.1", "debug": "^4.4.0" } }, "sha512-D4V/tGC2sjsoNhoMybKyGoE+v8A60hRawKQ1iFRA1zwuDgGZCBJ4ByOzZ5J8joBbi4Oam0qiPH+GhzmSBwbJng=="],
 
     "simple-xml-to-json": ["simple-xml-to-json@1.2.3", "", {}, "sha512-kWJDCr9EWtZ+/EYYM5MareWj2cRnZGF93YDNpH4jQiHB+hBIZnfPFSQiVMzZOdk+zXWqTZ/9fTeQNu2DqeiudA=="],
 
