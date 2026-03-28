@@ -2,76 +2,79 @@
 
 ## File Structure
 
-```
-~/.config/my-app/
-└── config.yml            # Global settings + global API keys
+Gitogito uses three YAML files with separate responsibilities:
+
+```text
+~/.config/gitogito/
+└── config.yml              # Global settings + optional global credentials
 
 project/
-├── .my-app.yml           # Shared settings (git-managed)
-└── .my-app.local.yml     # Individual overrides + project API keys (gitignored)
+├── .gitogito.yml           # Shared project settings (git-managed)
+└── .gitogito.local.yml     # Personal overrides + optional local credentials
 ```
 
-## Loading Priority (Low → High)
+## Loading Priority (Low -> High)
 
-1. `~/.config/my-app/config.yml`
-2. `project/.my-app.yml`
-3. `project/.my-app.local.yml`
-4. Environment variables
+Configuration is merged with a last-win strategy:
 
-Settings are merged with last-win strategy. Environment variables have highest
-priority.
+1. Hardcoded defaults from `ConfigSchema`
+2. `~/.config/gitogito/config.yml`
+3. `project/.gitogito.yml`
+4. `project/.gitogito.local.yml`
+5. Environment variables for credentials
+
+Only credentials are read from the environment today:
+
+- `GITOGITO_AI_API_KEY`
+- `GITOGITO_GITHUB_TOKEN`
 
 ## File Roles
 
-| File                  | Contents                         | Git Managed |
-| --------------------- | -------------------------------- | ----------- |
-| `config.yml`          | Global settings + API keys       | -           |
-| `.my-app.yml`         | Shared project settings          | ○           |
-| `.my-app.local.yml`   | Individual overrides + API keys  | ✗           |
-| Environment variables | For CI/CD and container contexts | -           |
+| File | Contents | Git Managed |
+| --- | --- | --- |
+| `~/.config/gitogito/config.yml` | Global config and optional shared credentials for the current machine | No |
+| `./.gitogito.yml` | Project-level config safe to share with the team | Yes |
+| `./.gitogito.local.yml` | Personal project overrides and optional machine-local credentials | No |
+| Environment variables | Highest-priority credential overrides for CI or ephemeral environments | No |
+
+## Data Model
+
+- `global` and `local` files may contain both config values and a `credentials`
+  object.
+- `project` config is limited to shareable configuration values and does not
+  store credentials.
+- Merged config is built in `src/services/config/config_service.ts`.
 
 ## Security Requirements
 
-### File Permissions
+Files that may contain credentials should be created with strict permissions:
 
-Files containing API keys must have strict permissions set during creation and
-writing.
-
-```
-~/.config/my-app/              # 700 (drwx------)
-~/.config/my-app/config.yml    # 600 (-rw-------)
-project/.my-app.local.yml      # 600 (-rw-------)
+```text
+~/.config/gitogito/              # 700 (drwx------)
+~/.config/gitogito/config.yml    # 600 (-rw-------)
+project/.gitogito.local.yml      # 600 (-rw-------)
 ```
 
-### Deno Implementation
+## Bun/Node Implementation
+
+Gitogito uses Bun with Node-compatible filesystem APIs:
 
 ```typescript
-// Create directory
-await Deno.mkdir(configDir, { recursive: true, mode: 0o700 });
+import { mkdir, writeFile } from "node:fs/promises";
+import { dirname } from "node:path";
 
-// Write file
-await Deno.writeTextFile(configPath, content, { mode: 0o600 });
-
-// Fix permissions on existing file
-await Deno.chmod(configPath, 0o600);
+await mkdir(dirname(path), { recursive: true, mode: 0o700 });
+await writeFile(path, data, { encoding: "utf8", mode: 0o600 });
 ```
 
-### Permission Check on Load (Recommended)
+For project-scoped config, the file remains git-friendly and is written without
+credential-specific permission hardening.
 
-Before reading files containing API keys, verify that permissions are
-appropriate. Warn if other users have read access.
+## Current Behavior Notes
 
-```typescript
-const stat = await Deno.stat(configPath);
-if (stat.mode && (stat.mode & 0o077) !== 0) {
-  console.warn(`Warning: ${configPath} has insecure permissions`);
-}
-```
-
-## Design Principles
-
-- Do not use `.env` files. Standardize on YAML
-- Environment variables are fallback for environments where config files cannot
-  be placed (CI/CD, containers)
-- Files containing API keys: 600, directories: 700
-- Emit permission warnings on load (AWS-style)
+- Missing config files are treated as empty config.
+- Global and local files are parsed as `AppContext` so credentials can be split
+  from normal config.
+- Project config is parsed as plain `Config`.
+- The current implementation sets secure permissions when writing global/local
+  files, but does not yet warn on insecure existing permissions while loading.
