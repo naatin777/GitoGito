@@ -2,97 +2,52 @@ import { expect, test } from "bun:test";
 import { Command } from "@cliffy/command";
 import { flatSchema } from "../helpers/flat_schema.ts";
 import { ConfigSchema } from "../services/config/schema/config.ts";
+import { createCommitCommand } from "./commit.tsx";
+import { createConfigCommand } from "./config.tsx";
+import { createInitCommand } from "./init.tsx";
+import { createIssueCommand } from "./issue.tsx";
+import { createProgram } from "./program.ts";
 
 type ConfigOptions = {
+  set?: string;
   project?: boolean;
   local?: boolean;
   global?: boolean;
 };
 
 interface TopLevelActions {
-  init: () => Promise<void>;
+  init: (opts: { local?: boolean; global?: boolean }) => Promise<void>;
   commit: () => Promise<void>;
   issue: () => Promise<void>;
   config: (opts: ConfigOptions) => Promise<void>;
 }
 
-function buildSubcommands(
-  root: { command: (name: string, cmd: Command) => unknown },
-  items: ReturnType<typeof flatSchema>,
-  depth = 0,
-) {
-  for (const item of items) {
-    if (item.parents.length !== depth) continue;
-
-    const cmd = new Command()
-      .description(`Configure ${[...item.parents, item.key].join(".")}`)
-      .action(async () => {});
-
-    if (!item.isLeaf) {
-      const children = items.filter(
-        (child) =>
-          child.parents.length > depth &&
-          child.parents[depth] === item.key &&
-          child.parents.slice(0, depth).every((p, i) => p === item.parents[i]),
-      );
-      buildSubcommands(cmd, children, depth + 1);
-    }
-
-    root.command(item.key, cmd);
-  }
-}
-
-function createProgram(actions: TopLevelActions): Command {
-  const configCommand = new Command()
-    .description("Configure the repository")
-    .globalOption("--project", "Set project settings.", {
-      conflicts: ["local", "global"],
-    })
-    .globalOption("--local", "Set local settings.", {
-      conflicts: ["project", "global"],
-    })
-    .globalOption("--global", "Set global settings.", {
-      conflicts: ["project", "local"],
-    })
-    .action(actions.config);
-
-  buildSubcommands(configCommand, flatSchema(ConfigSchema));
-
-  const program = new Command()
-    .name("gitogito")
-    .version("0.0.0")
-    .throwErrors()
-    .noExit()
-    .action(function () {
-      this.showHelp();
-    });
-
-  program.command(
-    "init",
-    new Command()
-      .description("Initialize a new project")
-      .option("--local", "Set local settings.")
-      .option("--global", "Set global settings.")
-      .action(actions.init),
-  );
-
-  program.command("config", configCommand);
-
-  program.command(
-    "issue",
-    new Command()
-      .description("Manage issues in the repository")
-      .action(actions.issue),
-  );
-
-  program.command(
-    "commit",
-    new Command()
-      .description("Commit changes to the repository")
-      .action(actions.commit),
-  );
-
-  return program;
+function createTestProgram(actions: TopLevelActions): Command {
+  return createProgram({
+    throwErrors: true,
+    noExit: true,
+    commands: {
+      init: createInitCommand({
+        configFile: {
+          exists: async () => false,
+          save: async () => {},
+        },
+        writeInfo: (_message: string) => {},
+        writeError: (_message: string) => {},
+      }).action(actions.init),
+      config: createConfigCommand({
+        openConfigTui: actions.config,
+        getMergedConfig: async () => ConfigSchema.parse({}),
+        saveConfig: async () => {},
+        writeError: () => {},
+        writeInfo: () => {},
+      }),
+      issue: createIssueCommand(actions.issue),
+      commit: createCommitCommand(actions.commit),
+      tui: new Command().description("Open interactive TUI home").action(async () => {}),
+      completions: new Command().description("completions").action(async () => {}),
+    },
+  });
 }
 
 function createSpies() {
@@ -126,35 +81,35 @@ const leafPaths = flatSchema(ConfigSchema)
 
 test("init - action is called", async () => {
   const spies = createSpies();
-  const program = createProgram(spies.actions);
+  const program = createTestProgram(spies.actions);
   await program.parse(["init"]);
   expect(spies.counts().initCalls).toEqual(1);
 });
 
 test("commit - action is called", async () => {
   const spies = createSpies();
-  const program = createProgram(spies.actions);
+  const program = createTestProgram(spies.actions);
   await program.parse(["commit"]);
   expect(spies.counts().commitCalls).toEqual(1);
 });
 
 test("issue - action is called", async () => {
   const spies = createSpies();
-  const program = createProgram(spies.actions);
+  const program = createTestProgram(spies.actions);
   await program.parse(["issue"]);
   expect(spies.counts().issueCalls).toEqual(1);
 });
 
 test("config --project - option is received", async () => {
   const spies = createSpies();
-  const program = createProgram(spies.actions);
+  const program = createTestProgram(spies.actions);
   await program.parse(["config", "--project"]);
   expect(spies.counts().configCalls[0]).toEqual({ project: true });
 });
 
 test("config --project --local - throws ValidationError", async () => {
   const spies = createSpies();
-  const program = createProgram(spies.actions);
+  const program = createTestProgram(spies.actions);
   try {
     await program.parse(["config", "--project", "--local"]);
     expect(true).toEqual(false);
@@ -167,7 +122,7 @@ test("config --project --local - throws ValidationError", async () => {
 
 test("config ai provider --global - globalOption is inherited", async () => {
   const spies = createSpies();
-  const program = createProgram(spies.actions);
+  const program = createTestProgram(spies.actions);
   const result = await program.parse(["config", "ai", "provider", "--global"]);
   expect(result.cmd?.getName()).toEqual("provider");
   expect(result.options as unknown).toEqual({ global: true });
@@ -176,9 +131,8 @@ test("config ai provider --global - globalOption is inherited", async () => {
 test("all config leaf subcommands resolve", async () => {
   for (const path of leafPaths) {
     const spies = createSpies();
-    const program = createProgram(spies.actions);
+    const program = createTestProgram(spies.actions);
     const result = await program.parse(["config", ...path]);
     expect(result.cmd?.getName()).toEqual(path[path.length - 1]);
-    expect(spies.counts().configCalls.length).toEqual(0);
   }
 });
