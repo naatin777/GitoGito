@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRenderer } from "@opentui/react";
 import type z from "zod";
 import { ISSUE_SYSTEM_MESSAGE } from "../constants/message.ts";
 import { renderTui } from "../lib/opentui_render.tsx";
@@ -85,7 +86,9 @@ export function AgentLoop({
   );
 }
 if (import.meta.main) {
-  const Example = () => {
+  const ExampleContent = () => {
+    const renderer = useRenderer();
+
     return (
       <AgentLoop
         initialMessages={[
@@ -102,11 +105,13 @@ if (import.meta.main) {
         ]}
         onDone={(res) => {
           console.log("Done!", JSON.stringify(res, null, 2));
-          process.exit(0);
+          renderer.destroy();
         }}
       />
     );
   };
+
+  const Example = () => <ExampleContent />;
 
   const instance = renderTui(<Example />);
   await instance.waitUntilExit();

@@ -1,4 +1,3 @@
-import { TextAttributes } from "@opentui/core";
 import { TREE_LIST_WIDTH } from "../constants.ts";
 
 export interface TreeItem {
@@ -28,7 +27,9 @@ export const TreeList = (
 
   return (
     <box flexDirection="column" width={TREE_LIST_WIDTH}>
-      <text attributes={TextAttributes.BOLD}>{`<Config>`}</text>
+      <text>
+        <strong>{`<Config>`}</strong>
+      </text>
       {visibleItems.map((item, sliceIndex) => {
         const actualIndex = start + sliceIndex;
         const depth = item.parents.length;

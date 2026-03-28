@@ -1,4 +1,3 @@
-import { TextAttributes } from "@opentui/core";
 import { useKeyboard, useRenderer } from "@opentui/react";
 import { useMemo } from "react";
 import {
@@ -40,15 +39,13 @@ function RouterShell() {
   return (
     <box flexDirection="column">
       <box paddingX={1}>
-        <text attributes={TextAttributes.BOLD} fg="cyan">
-          gitogito
+        <text fg="cyan">
+          <strong>gitogito</strong>
         </text>
         <text>{`  route: ${location.pathname}`}</text>
       </box>
       <box paddingX={1}>
-        <text attributes={TextAttributes.DIM}>
-          ctrl+b:home q:quit ctrl+c:quit
-        </text>
+        <text fg="gray">ctrl+b:home q:quit ctrl+c:quit</text>
       </box>
       <box marginTop={1}>
         <Outlet />
@@ -82,11 +79,13 @@ function Home() {
 
   return (
     <box flexDirection="column" paddingX={1}>
-      <text attributes={TextAttributes.BOLD}>Select Flow</text>
+      <text>
+        <strong>Select Flow</strong>
+      </text>
       <text>1 / c : Commit</text>
       <text>2 / i : Issue</text>
       <text>3 / g : Config</text>
-      <text attributes={TextAttributes.DIM}>Enter defaults to Commit</text>
+      <text fg="gray">Enter defaults to Commit</text>
     </box>
   );
 }
