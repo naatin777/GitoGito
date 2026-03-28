@@ -2,6 +2,11 @@ import { useRenderer } from "@opentui/react";
 import { useCallback, useEffect } from "react";
 import type z from "zod";
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
+import {
+  ISSUE_GENERATION_EMPTY_MESSAGE,
+  ISSUE_SELECTION_CANCELLED_MESSAGE,
+  ISSUE_TEMPLATE_CANCELLED_MESSAGE,
+} from "../../constants/message.ts";
 import type { IssueSchema } from "../../schema.ts";
 import type { Issue, IssueTemplate } from "../../type.ts";
 import {
@@ -16,12 +21,11 @@ import {
 } from "./issue_slice.ts";
 import type { IssueState } from "./issue_slice.ts";
 
-export const ISSUE_TEMPLATE_CANCELLED_MESSAGE =
-  "Issue template selection was cancelled.";
-export const ISSUE_SELECTION_CANCELLED_MESSAGE =
-  "Issue selection was cancelled.";
-export const ISSUE_GENERATION_EMPTY_MESSAGE =
-  "No issue candidates were generated.";
+export {
+  ISSUE_GENERATION_EMPTY_MESSAGE,
+  ISSUE_SELECTION_CANCELLED_MESSAGE,
+  ISSUE_TEMPLATE_CANCELLED_MESSAGE,
+};
 
 export function shouldCloseIssueFlow(step: IssueState["step"]) {
   return step === "done" || step === "error";

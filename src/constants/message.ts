@@ -59,3 +59,15 @@ export const ISSUE_SYSTEM_MESSAGE = `
   """
   {{issueTemplate.body}}
   """`;
+
+export const ISSUE_TEMPLATE_CANCELLED_MESSAGE =
+  "Issue template selection was cancelled.";
+
+export const ISSUE_SELECTION_CANCELLED_MESSAGE =
+  "Issue selection was cancelled.";
+
+export const ISSUE_GENERATION_EMPTY_MESSAGE =
+  "No issue candidates were generated.";
+
+export const SELECT_EMPTY_MESSAGE =
+  "No options available. Press Enter or Esc to go back.";

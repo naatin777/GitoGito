@@ -99,7 +99,7 @@ const commitSlice = createSlice({
   initialState,
   reducers: {
     selectMessage: (_state, action) => {
-      return { step: "edit", selectedMessage: action.payload } as CommitState;
+      return { step: "edit", selectedMessage: action.payload };
     },
     reset: () => initialState,
   },
@@ -107,36 +107,36 @@ const commitSlice = createSlice({
     builder
       // Generate messages
       .addCase(generateCommitMessages.fulfilled, (_state, action) => {
-        return { step: "select", messages: action.payload } as CommitState;
+        return { step: "select", messages: action.payload };
       })
       .addCase(generateCommitMessages.rejected, (_state, action) => {
         return {
           step: "error",
           message: String(action.payload || "Unknown error"),
-        } as CommitState;
+        };
       })
       // Edit message
       .addCase(editCommitMessage.fulfilled, (_state, action) => {
         return {
           step: "commit",
           commitMessage: action.payload,
-        } as CommitState;
+        };
       })
       .addCase(editCommitMessage.rejected, (_state, action) => {
         return {
           step: "error",
           message: String(action.payload || "Unknown error"),
-        } as CommitState;
+        };
       })
       // Commit
       .addCase(commitMessage.fulfilled, () => {
-        return { step: "done" } as CommitState;
+        return { step: "done" };
       })
       .addCase(commitMessage.rejected, (_state, action) => {
         return {
           step: "error",
           message: String(action.payload || "Unknown error"),
-        } as CommitState;
+        };
       });
   },
 });

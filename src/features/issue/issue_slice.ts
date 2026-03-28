@@ -115,7 +115,7 @@ const issueSlice = createSlice({
       return {
         step: "input_overview",
         template: action.payload,
-      } as IssueState;
+      };
     },
     submitOverview: (state, action) => {
       if (state.step === "input_overview") {
@@ -123,21 +123,21 @@ const issueSlice = createSlice({
           step: "generating",
           template: state.template,
           overview: action.payload,
-        } as IssueState;
+        };
       }
       return state;
     },
     setGeneratedIssues: (_state, action) => {
-      return { step: "select_issue", issues: action.payload } as IssueState;
+      return { step: "select_issue", issues: action.payload };
     },
     selectIssue: (_state, action) => {
       return {
         step: "edit_issue",
         selectedIssue: action.payload,
-      } as IssueState;
+      };
     },
     setError: (_state, action: PayloadAction<string>) => {
-      return { step: "error", message: action.payload } as IssueState;
+      return { step: "error", message: action.payload };
     },
     reset: () => initialState,
   },
@@ -147,31 +147,31 @@ const issueSlice = createSlice({
         return {
           step: "select_template",
           templates: action.payload,
-        } as IssueState;
+        };
       })
       .addCase(loadTemplates.rejected, (_state, action) => {
         return {
           step: "error",
           message: action.payload ?? "Failed to load issue templates.",
-        } as IssueState;
+        };
       })
       .addCase(editIssue.fulfilled, (_state, action) => {
-        return { step: "creating", finalIssue: action.payload } as IssueState;
+        return { step: "creating", finalIssue: action.payload };
       })
       .addCase(editIssue.rejected, (_state, action) => {
         return {
           step: "error",
           message: action.payload ?? "Failed to edit the issue draft.",
-        } as IssueState;
+        };
       })
       .addCase(createIssue.fulfilled, (_state, action) => {
-        return { step: "done", url: action.payload } as IssueState;
+        return { step: "done", url: action.payload };
       })
       .addCase(createIssue.rejected, (_state, action) => {
         return {
           step: "error",
           message: action.payload ?? "Failed to create the issue.",
-        } as IssueState;
+        };
       });
   },
 });

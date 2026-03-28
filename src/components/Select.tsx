@@ -1,18 +1,18 @@
 import { TextAttributes } from "@opentui/core";
 import { useKeyboard, useRenderer } from "@opentui/react";
 import { useState } from "react";
+import { SELECT_EMPTY_MESSAGE } from "../constants/message.ts";
 import { isCtrlC, isEnter } from "../helpers/opentui/key.ts";
 import { renderTui } from "../lib/opentui_render.tsx";
 import type { Choice } from "../type.ts";
+
+export { SELECT_EMPTY_MESSAGE };
 
 type SelectOptions<T> = {
   message: string;
   choices: Choice<T>[];
   onSelect: (value?: T) => void;
 };
-
-export const SELECT_EMPTY_MESSAGE =
-  "No options available. Press Enter or Esc to go back.";
 
 export function getSelectPositionLabel(
   selectedIndex: number,
