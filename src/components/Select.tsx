@@ -11,6 +11,16 @@ type SelectOptions<T> = {
   onSelect: (value?: T) => void;
 };
 
+export const SELECT_EMPTY_MESSAGE =
+  "No options available. Press Enter or Esc to go back.";
+
+export function getSelectPositionLabel(
+  selectedIndex: number,
+  choiceCount: number,
+) {
+  return `(${choiceCount > 0 ? selectedIndex + 1 : 0}/${choiceCount})`;
+}
+
 export function Select<T>(options: SelectOptions<T>) {
   const renderer = useRenderer();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -51,7 +61,7 @@ export function Select<T>(options: SelectOptions<T>) {
       <box>
         <text>{`${options.message} `}</text>
         <text attributes={TextAttributes.DIM}>
-          {`(${hasChoices ? selectedIndex + 1 : 0}/${options.choices.length})`}
+          {getSelectPositionLabel(selectedIndex, options.choices.length)}
         </text>
       </box>
       {hasChoices
@@ -86,7 +96,7 @@ export function Select<T>(options: SelectOptions<T>) {
         })
         : (
           <text attributes={TextAttributes.DIM}>
-            No options available. Press Enter or Esc to go back.
+            {SELECT_EMPTY_MESSAGE}
           </text>
         )}
     </box>

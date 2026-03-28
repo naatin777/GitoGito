@@ -16,6 +16,16 @@ interface CarouselProps<T> {
   onSelect: (value: T | undefined) => void;
 }
 
+export const CAROUSEL_EMPTY_MESSAGE =
+  "No options available. Press Enter or Esc to go back.";
+
+export function getCarouselPositionLabel(
+  selectedIndex: number,
+  choiceCount: number,
+) {
+  return `← ${choiceCount > 0 ? selectedIndex + 1 : 0}/${choiceCount} →`;
+}
+
 export function Carousel<T>({ message, choices, onSelect }: CarouselProps<T>) {
   const renderer = useRenderer();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -56,7 +66,7 @@ export function Carousel<T>({ message, choices, onSelect }: CarouselProps<T>) {
       </box>
       <box>
         <text attributes={TextAttributes.DIM}>
-          {`← ${hasChoices ? selectedIndex + 1 : 0}/${choices.length} →`}
+          {getCarouselPositionLabel(selectedIndex, choices.length)}
         </text>
         <text attributes={TextAttributes.DIM}>(Enter to Select)</text>
       </box>
@@ -83,7 +93,7 @@ export function Carousel<T>({ message, choices, onSelect }: CarouselProps<T>) {
         )
         : (
           <text attributes={TextAttributes.DIM}>
-            No options available. Press Enter or Esc to go back.
+            {CAROUSEL_EMPTY_MESSAGE}
           </text>
         )}
     </box>
