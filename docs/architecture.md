@@ -8,7 +8,7 @@ application.
 ### Layers
 
 1. **Presentation Layer (`src/features/*/ui.tsx`)**
-   - Built with **React** and **Ink**.
+   - Built with **React** and **OpenTUI**.
    - Responsible only for rendering and capturing user input.
    - **Rule**: No complex logic here. Delegate to Hooks.
 
@@ -61,8 +61,8 @@ and domain code should still be colocated with the view.
 
 ### The Command Pattern
 
-All CLI commands are built using **Cliffy** (`@cliffy/command`), a mature CLI
-framework for Deno.
+All CLI commands are built using **Cliffy** (`@cliffy/command`) and executed
+under **Bun**.
 
 - Commands are defined declaratively using Cliffy's Command API.
 - Built-in support for argument parsing, flag validation, and help text
@@ -104,7 +104,7 @@ current state.
 Configuration is merged in the following order (Last one wins):
 
 1. **Default** (Hardcoded)
-2. **Global** (`~/.config/gitogito/.config.yml`)
+2. **Global** (`~/.config/gitogito/config.yml`)
 3. **Project** (`./.gitogito.yml`)
 4. **Local** (`./.gitogito.local.yml`)
 
@@ -113,6 +113,7 @@ Configuration is merged in the following order (Last one wins):
 ## 5. Development Guidelines
 
 - **Type Safety**: Strictly define return types for all public methods.
-- **Testing**: Colocate tests with implementation (`*_test.ts`). Use
-  `@std/testing`.
-- **Deno**: Use JSR imports where possible. Avoid `npm:` unless necessary.
+- **Testing**: Colocate tests with implementation (`*_test.ts`) and run them
+  with `bun test`.
+- **Runtime**: Prefer Bun/Node-compatible APIs (`node:fs`, `node:path`,
+  `process`) over Deno-specific APIs.
