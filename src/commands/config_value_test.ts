@@ -4,7 +4,7 @@ import {
   normalizeConfigValue,
   parseCliConfigValue,
   resolveConfigScope,
-} from "./config_value_parser.ts";
+} from "./config_value.ts";
 
 test("resolveConfigScope - defaults to project", () => {
   expect(resolveConfigScope({})).toBe("project");

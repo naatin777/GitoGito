@@ -8,7 +8,7 @@ import {
   normalizeConfigValue,
   parseCliConfigValue,
   resolveConfigScope,
-} from "./config_value_parser.ts";
+} from "./config_value.ts";
 
 export type ConfigCommandOptions = {
   set?: string;
