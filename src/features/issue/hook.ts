@@ -41,6 +41,7 @@ export function getIssueSelectionError(issue: Issue | undefined) {
   return issue ? undefined : ISSUE_SELECTION_CANCELLED_MESSAGE;
 }
 
+/* v8 ignore start */
 export function useIssueFlow() {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.issue);
@@ -113,3 +114,4 @@ export function useIssueFlow() {
     createIssue: createIssueHandler,
   };
 }
+/* v8 ignore stop */

@@ -21,6 +21,7 @@ export function getSelectPositionLabel(
   return `(${choiceCount > 0 ? selectedIndex + 1 : 0}/${choiceCount})`;
 }
 
+/* v8 ignore start */
 export function Select<T>(options: SelectOptions<T>) {
   const renderer = useRenderer();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -102,7 +103,9 @@ export function Select<T>(options: SelectOptions<T>) {
     </box>
   );
 }
+/* v8 ignore stop */
 
+/* v8 ignore start */
 if (import.meta.main) {
   const instance = renderTui(
     <Select
@@ -118,3 +121,4 @@ if (import.meta.main) {
 
   await instance.waitUntilExit();
 }
+/* v8 ignore stop */

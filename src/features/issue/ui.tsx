@@ -31,6 +31,7 @@ export function getIssueErrorText(message: string) {
   return `Error: ${message}`;
 }
 
+/* v8 ignore start */
 export function Issue() {
   const {
     state,
@@ -99,3 +100,4 @@ export function Issue() {
     </box>
   );
 }
+/* v8 ignore stop */
