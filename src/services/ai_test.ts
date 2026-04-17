@@ -58,10 +58,37 @@ test("AIService.create - loads an OpenRouter model and credentials", async () =>
   expect(service.getModelId()).toBe("openai/gpt-4o");
 });
 
+test("AIService.create - treats CodexCLI as an OpenRouter-backed provider", async () => {
+  const service = await AIService.create(
+    mockConfigSource({ default: { provider: "CodexCLI", model: "openai/gpt-4o" } }),
+    mockCredentialSource({ openRouterApiKey: "test-key" }),
+  );
+  expect(service.getModelId()).toBe("openai/gpt-4o");
+});
+
+test("AIService.create - treats ClaudeCodeWithOllama as an Ollama-backed provider", async () => {
+  const service = await AIService.create(
+    mockConfigSource({ default: { provider: "ClaudeCodeWithOllama", model: "qwen3.5:9b" } }),
+    mockCredentialSource(),
+  );
+  expect(service.getModelId()).toBe("qwen3.5:9b");
+});
+
 test("AIService.create - rejects OpenRouter when the API key is missing", async () => {
   await expect(
     AIService.create(
       mockConfigSource({ default: { provider: "OpenRouter", model: "openai/gpt-4o" } }),
+      mockCredentialSource(),
+    ),
+  ).rejects.toThrow(
+    "Missing OpenRouter API key. Set credentials.openRouterApiKey or GITOGITO_OPEN_ROUTER_API_KEY.",
+  );
+});
+
+test("AIService.create - rejects CodexCLI when the OpenRouter API key is missing", async () => {
+  await expect(
+    AIService.create(
+      mockConfigSource({ default: { provider: "CodexCLI", model: "openai/gpt-4o" } }),
       mockCredentialSource(),
     ),
   ).rejects.toThrow(

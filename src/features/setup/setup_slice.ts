@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { createAppAsyncThunk } from "../../app/hooks.ts";
+import { fromPromiseWithMessage } from "../../helpers/error/neverthrow.ts";
 import type { AiModel } from "../../services/config/schema/fields/ai_schema.ts";
 import { DEFAULT_AI_MODEL } from "../../services/config/schema/fields/ai_schema.ts";
 import type { ThemeConfig } from "../../services/config/schema/fields/theme_schema.ts";
@@ -31,11 +32,15 @@ const initialState: SetupState = {
   error: null,
 };
 
-export const saveSetup = createAppAsyncThunk(
+type SetupThunkConfig = {
+  rejectValue: string;
+};
+
+export const saveSetup = createAppAsyncThunk<void, SetupData, SetupThunkConfig>(
   "setup/save",
   async (data: SetupData, { extra, rejectWithValue }) => {
     const { config, credentials } = extra;
-    try {
+    return fromPromiseWithMessage((async () => {
       await config.saveConfig("global", "ai.default.provider", data.provider);
       await config.saveConfig("global", "ai.default.model", data.model);
       await config.saveConfig("global", "language.dialogue", data.language);
@@ -50,9 +55,7 @@ export const saveSetup = createAppAsyncThunk(
       if (data.githubToken) {
         await credentials.saveCredentials("global", "githubToken", data.githubToken);
       }
-    } catch (err) {
-      return rejectWithValue(String(err));
-    }
+    })()).match(() => undefined, rejectWithValue);
   },
 );
 
@@ -95,7 +98,7 @@ const setupSlice = createSlice({
       })
       .addCase(saveSetup.rejected, (state, action) => {
         state.status = "error";
-        state.error = action.payload as string;
+        state.error = action.payload ?? "Failed to save setup.";
       });
   },
 });

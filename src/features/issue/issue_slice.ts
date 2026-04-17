@@ -1,6 +1,14 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import {
+  errAsync,
+  okAsync,
+} from "neverthrow";
 import type z from "zod";
 import { createAppAsyncThunk } from "../../app/hooks.ts";
+import {
+  fromPromiseWithMessage,
+  fromThrowableWithMessage,
+} from "../../helpers/error/neverthrow.ts";
 import {
   parseMarkdownIssueTemplate,
   stringifyMarkdownIssue,
@@ -31,22 +39,7 @@ type IssueThunkConfig = {
   rejectValue: string;
 };
 
-function toErrorMessage(error: unknown): string {
-  if (error instanceof Error) {
-    return error.message;
-  }
-  if (typeof error === "string") {
-    return error;
-  }
-  if (typeof error === "object" && error !== null) {
-    try {
-      return JSON.stringify(error);
-    } catch {
-      return "Unknown error";
-    }
-  }
-  return String(error);
-}
+const parseIssueTemplate = fromThrowableWithMessage(parseMarkdownIssueTemplate);
 
 // Async thunks
 export const loadTemplates = createAppAsyncThunk<
@@ -56,53 +49,46 @@ export const loadTemplates = createAppAsyncThunk<
 >(
   "issue/loadTemplates",
   async (_, { rejectWithValue }) => {
-    try {
-      const issueTemplatePath = await getIssueTemplatePath();
-      const issueTemplates = await Promise.all(
-        issueTemplatePath.markdown.map(async (markdownPath) =>
-          parseMarkdownIssueTemplate(await Bun.file(markdownPath).text())
-        ),
-      );
-      if (issueTemplates.length === 0) {
-        return rejectWithValue("No templates found");
-      }
-      return issueTemplates;
-    } catch (error) {
-      return rejectWithValue(toErrorMessage(error));
-    }
+    return fromPromiseWithMessage(getIssueTemplatePath())
+      .andThen((issueTemplatePath) =>
+        fromPromiseWithMessage(
+          Promise.all(
+            issueTemplatePath.markdown.map(async (markdownPath) =>
+              parseMarkdownIssueTemplate(await Bun.file(markdownPath).text())
+            ),
+          ),
+        )
+      )
+      .andThen((issueTemplates) =>
+        issueTemplates.length === 0
+          ? errAsync("No templates found")
+          : okAsync(issueTemplates)
+      )
+      .match((issueTemplates) => issueTemplates, rejectWithValue);
   },
 );
 
 export const editIssue = createAppAsyncThunk<Issue, Issue, IssueThunkConfig>(
   "issue/edit",
   async (selectedIssue: Issue, { rejectWithValue }) => {
-    try {
-      const markdown = stringifyMarkdownIssue(selectedIssue);
-      const editedMarkdown = await editText(markdown);
-      const editedIssueTemplate = parseMarkdownIssueTemplate(editedMarkdown);
+    const markdown = stringifyMarkdownIssue(selectedIssue);
 
-      return {
+    return fromPromiseWithMessage(editText(markdown))
+      .andThen((editedMarkdown) => parseIssueTemplate(editedMarkdown))
+      .map((editedIssueTemplate) => ({
         title: editedIssueTemplate.title,
         body: editedIssueTemplate.body,
-      };
-    } catch (error) {
-      return rejectWithValue(toErrorMessage(error));
-    }
+      }))
+      .match((issue) => issue, rejectWithValue);
   },
 );
 
 export const createIssue = createAppAsyncThunk<string, Issue, IssueThunkConfig>(
   "issue/create",
   async (finalIssue: Issue, { rejectWithValue }) => {
-    try {
-      const response = await createIssueService(
-        finalIssue.title,
-        finalIssue.body,
-      );
-      return response.url;
-    } catch (error) {
-      return rejectWithValue(toErrorMessage(error));
-    }
+    return fromPromiseWithMessage(createIssueService(finalIssue.title, finalIssue.body))
+      .map((response) => response.url)
+      .match((url) => url, rejectWithValue);
   },
 );
 

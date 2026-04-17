@@ -15,6 +15,7 @@ import type { Credentials } from "./credential/credentials_schema.ts";
 import { type CredentialService, credentialService } from "./credential/credential_service.ts";
 
 export type AiTask = keyof Omit<AiConfig, "default">;
+type RuntimeAiProvider = "Ollama" | "OpenRouter" | "Gemini";
 
 export interface TokenUsage {
   inputTokens: number;
@@ -49,13 +50,14 @@ export class AIService {
     const mergedCredentials = await credentialSource.getMergedCredentials();
     const aiConfig = AiConfigSchema.parse(mergedConfig.ai);
     const { provider, model } = (task && aiConfig[task]) ?? aiConfig.default;
+    const runtimeProvider = normalizeAiProvider(provider);
 
-    if (provider === "OpenRouter" && !mergedCredentials.openRouterApiKey) {
+    if (runtimeProvider === "OpenRouter" && !mergedCredentials.openRouterApiKey) {
       throw new Error(
         "Missing OpenRouter API key. Set credentials.openRouterApiKey or GITOGITO_OPEN_ROUTER_API_KEY.",
       );
     }
-    if (provider === "Gemini" && !mergedCredentials.geminiApiKey) {
+    if (runtimeProvider === "Gemini" && !mergedCredentials.geminiApiKey) {
       throw new Error(
         "Missing Gemini API key. Set credentials.geminiApiKey or GITOGITO_GEMINI_API_KEY.",
       );
@@ -69,7 +71,9 @@ export class AIService {
       return this.modelCache;
     }
 
-    switch (this.provider) {
+    const runtimeProvider = normalizeAiProvider(this.provider);
+
+    switch (runtimeProvider) {
       case "Ollama":
         this.modelCache = ollama(this.model);
         break;
@@ -86,10 +90,6 @@ export class AIService {
         });
         this.modelCache = google(this.model);
         break;
-      }
-      default: {
-        const provider: never = this.provider;
-        throw new Error(`Unsupported AI provider: ${provider}`);
       }
     }
 
@@ -151,6 +151,21 @@ export class AIService {
     }
 
     return result.elementStream;
+  }
+}
+
+function normalizeAiProvider(provider: AiModel["provider"]): RuntimeAiProvider {
+  switch (provider) {
+    case "Ollama":
+    case "CodexCLIWithOllama":
+    case "ClaudeCodeWithOllama":
+      return "Ollama";
+    case "OpenRouter":
+    case "CodexCLI":
+    case "ClaudeCode":
+      return "OpenRouter";
+    case "Gemini":
+      return "Gemini";
   }
 }
 

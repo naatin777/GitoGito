@@ -1,8 +1,8 @@
 import { expect, test } from "bun:test";
 import { testRender } from "@opentui/react/test-utils";
 import { act } from "react";
-import { ThemeModeProvider } from "./ThemeModeProvider.tsx";
-import { useThemeMode } from "./use_theme_mode.ts";
+import { ThemeModeProvider } from "./use_theme_mode.tsx";
+import { useThemeMode } from "./use_theme_mode.tsx";
 
 function ThemeModeProbe() {
   const themeMode = useThemeMode();

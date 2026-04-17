@@ -1,14 +1,28 @@
 import { useNavigate } from "react-router";
 import { useAppSelector } from "../../app/hooks.ts";
+import type { AiModel } from "../../services/config/schema/fields/ai_schema.ts";
+
+function keyStepPathForProvider(provider: AiModel["provider"]): string | null {
+  switch (provider) {
+    case "OpenRouter":
+    case "CodexCLI":
+    case "ClaudeCode":
+      return "/setup/open-router-key";
+    case "Gemini":
+      return "/setup/gemini-key";
+    case "Ollama":
+    case "CodexCLIWithOllama":
+    case "ClaudeCodeWithOllama":
+      return null;
+  }
+}
 
 export function useSetupNavigation() {
   const navigate = useNavigate();
   const provider = useAppSelector((state) => state.setup.provider);
 
   function keyStepPath(): string | null {
-    if (provider === "OpenRouter") return "/setup/open-router-key";
-    if (provider === "Gemini") return "/setup/gemini-key";
-    return null;
+    return keyStepPathForProvider(provider);
   }
 
   return {

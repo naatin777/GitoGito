@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { createAppAsyncThunk } from "../../app/hooks.ts";
+import { fromPromiseWithMessage } from "../../helpers/error/neverthrow.ts";
 import type { ConfigScope } from "../../services/config/config_file.ts";
 import { ConfigSchema, type Config } from "../../services/config/schema/config_schema.ts";
 import type { GlobalConfig } from "../../services/config/schema/global_config_schema.ts";
@@ -21,24 +22,43 @@ const initialState: ConfigState = {
   projectConfig: {},
 };
 
-export const setConfig = createAppAsyncThunk(
-  "Config/setGlobalConfig",
-  async ({ scope, key, value }: {
+type SetConfigPayload = {
+  mergedConfig: Config;
+  globalConfig?: Partial<GlobalConfig>;
+  localConfig?: Partial<LocalConfig>;
+  projectConfig?: Partial<ProjectConfig>;
+};
+
+type SetConfigThunkConfig = {
+  rejectValue: string;
+};
+
+export const setConfig = createAppAsyncThunk<
+  SetConfigPayload,
+  {
     scope: ConfigScope;
     key: NestedKeys<Config>;
-    value: PathValue<Config, NestedKeys<Config>>
-  }, { extra }) => {
-    await extra.config.saveConfig(scope, key, value);
-    const mergedConfig = await extra.config.getMergedConfig();
-    switch (scope) {
-      case "global":
-        return { globalConfig: await extra.config.getGlobalConfig(), mergedConfig };
-      case "local":
-        return { localConfig: await extra.config.getLocalConfig(), mergedConfig };
-      case "project":
-        return { projectConfig: await extra.config.getProjectConfig(), mergedConfig };
-    }
-  });
+    value: PathValue<Config, NestedKeys<Config>>;
+  },
+  SetConfigThunkConfig
+>(
+  "Config/setGlobalConfig",
+  async ({ scope, key, value }, { extra, rejectWithValue }) => {
+    return fromPromiseWithMessage((async () => {
+      await extra.config.saveConfig(scope, key, value);
+      const mergedConfig = await extra.config.getMergedConfig();
+
+      switch (scope) {
+        case "global":
+          return { globalConfig: await extra.config.getGlobalConfig(), mergedConfig };
+        case "local":
+          return { localConfig: await extra.config.getLocalConfig(), mergedConfig };
+        case "project":
+          return { projectConfig: await extra.config.getProjectConfig(), mergedConfig };
+      }
+    })()).match((result) => result, rejectWithValue);
+  },
+);
 
 const configSlice = createSlice({
   name: "Config",
