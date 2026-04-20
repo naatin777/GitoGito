@@ -45,7 +45,6 @@ Cross-cutting concepts in `./references/<concept>/` have `REFERENCE.md` as the e
    - Layout/positioning -> `layout/REFERENCE.md`
    - Keyboard/input handling -> `keyboard/REFERENCE.md`
    - Animations -> `animation/REFERENCE.md`
-   - 3D / framebuffer / syntax / zero-copy streams -> `advanced/REFERENCE.md`
    - Troubleshooting -> `gotchas.md` + `testing/REFERENCE.md`
 
 ### Example Paths
@@ -56,7 +55,6 @@ Cross-cutting concepts in `./references/<concept>/` have `REFERENCE.md` as the e
 ./references/solid/configuration.md    # Solid project setup
 ./references/components/inputs.md      # Input, Textarea, Select docs
 ./references/core/gotchas.md           # Core debugging tips
-./references/advanced/REFERENCE.md     # 3D, framebuffer, syntax, streams, timeline
 ```
 
 ### Runtime Notes
@@ -102,9 +100,6 @@ User input?
 ├─ Multi-line text editor -> components/inputs.md (textarea)
 ├─ Select from a list (vertical) -> components/inputs.md (select)
 ├─ Tab-based selection (horizontal) -> components/inputs.md (tab-select)
-├─ Color/highlight parts of input text -> components/input-styling.md (extmarks)
-├─ Ghost text / inline completion (Copilot-style) -> components/input-styling.md (virtual extmarks)
-├─ Styled placeholder text -> components/input-styling.md (StyledText placeholder)
 └─ Custom keyboard shortcuts -> keyboard/REFERENCE.md
 ```
 
@@ -127,19 +122,6 @@ Animations?
 ├─ Easing functions -> animation/REFERENCE.md
 ├─ Property transitions -> animation/REFERENCE.md
 └─ Looping animations -> animation/REFERENCE.md
-```
-
-### "I need advanced or low-level APIs"
-
-```
-Advanced APIs?
-├─ Timeline hook in React -> react/api.md (`useTimeline`) + advanced/animation_timeline.md
-├─ Core timeline engine details -> advanced/animation_timeline.md
-├─ SyntaxStyle / token themes -> advanced/syntax_highlighting.md
-├─ Low-level pixel or cell drawing -> advanced/framebuffer.md
-├─ Zero-copy native spans / streaming -> advanced/native_span_feed.md
-├─ Three.js / WebGPU terminal rendering -> advanced/3d.md
-└─ React wrapper for a core-only renderable -> react/REFERENCE.md + advanced/REFERENCE.md
 ```
 
 ### "I need to handle input"
@@ -200,7 +182,6 @@ For component naming differences and text modifiers, see `components/REFERENCE.m
 | Components | `./references/components/REFERENCE.md` | Component reference by category |
 | Keyboard | `./references/keyboard/REFERENCE.md` | Keyboard input handling |
 | Animation | `./references/animation/REFERENCE.md` | Timeline-based animations |
-| Advanced APIs | `./references/advanced/REFERENCE.md` | 3D, framebuffer, syntax, zero-copy streams |
 | Testing | `./references/testing/REFERENCE.md` | Test renderer and snapshots |
 
 ### Component Categories
@@ -209,7 +190,6 @@ For component naming differences and text modifiers, see `components/REFERENCE.m
 | Text & Display | `./references/components/text-display.md` | text, ascii-font, styled text |
 | Containers | `./references/components/containers.md` | box, scrollbox, borders |
 | Inputs | `./references/components/inputs.md` | input, textarea, select, tab-select |
-| Input Styling | `./references/components/input-styling.md` | extmarks, ghost text, styled placeholder |
 | Code & Diff | `./references/components/code-diff.md` | code, line-number, diff, markdown, text-table |
 
 ## Resources
