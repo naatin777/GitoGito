@@ -1,9 +1,12 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { errAsync, okAsync } from "neverthrow";
 import type z from "zod";
+import { createAppAsyncThunk } from "../../app/hooks.ts";
 import { COMMIT_SYSTEM_MESSAGE } from "../../constants/message.ts";
+import { fromPromiseWithMessage } from "../../helpers/error/neverthrow.ts";
 import { CommitSchema } from "../../schema.ts";
-import { AIService } from "../../services/ai.ts";
-import { editText } from "../../services/editor.ts";
+import { AIService } from "../../services/ai/ai_service.ts";
+import { editText } from "../../services/editor/edit_text.ts";
 import { GitService } from "../../services/git/git_service.ts";
 
 // State type preserved from current reducer
@@ -20,76 +23,78 @@ export type CommitState =
 
 const initialState: CommitState = { step: "loading" } as CommitState;
 
+type CommitThunkConfig = {
+  rejectValue: string;
+};
+
 // Async thunks for side effects
-export const generateCommitMessages = createAsyncThunk(
+export const generateCommitMessages = createAppAsyncThunk<
+  z.infer<typeof CommitSchema>,
+  void,
+  CommitThunkConfig
+>(
   "commit/generate",
-  async (_, { rejectWithValue, dispatch: _dispatch }) => {
-    try {
-      const gitService = new GitService();
-      const diff = await gitService.diff.getGitDiffStaged();
-      if (!diff) return rejectWithValue("No diff found");
+  async (_, { rejectWithValue, extra }) => {
+    const gitService = new GitService();
 
-      const aiService = await AIService.create();
-
-      // Initialize context usage tracking
-
-      const result = await aiService.generateStructuredOutput(
-        [
-          { role: "system", content: COMMIT_SYSTEM_MESSAGE },
-          { role: "user", content: diff },
-        ],
-        COMMIT_SYSTEM_MESSAGE,
-        CommitSchema,
-        (_usage) => {
-        },
-      );
-
-      if (!result) return rejectWithValue("AI generation failed");
-      return result;
-    } catch (error) {
-      return rejectWithValue(
-        error instanceof Error ? error.message : String(error),
-      );
-    }
+    return fromPromiseWithMessage(gitService.diff.getGitDiffStaged())
+      .andThen((diff) => diff ? okAsync(diff) : errAsync("No diff found"))
+      .andThen((diff) =>
+        fromPromiseWithMessage(
+          AIService.create(extra.config, extra.credentials),
+        )
+          .andThen((aiService) =>
+            fromPromiseWithMessage(
+              aiService.generateStructuredOutput(
+                [
+                  { role: "system", content: COMMIT_SYSTEM_MESSAGE },
+                  { role: "user", content: diff },
+                ],
+                COMMIT_SYSTEM_MESSAGE,
+                CommitSchema,
+                (_usage) => {
+                },
+              ),
+            )
+          )
+      )
+      .andThen((result) =>
+        result ? okAsync(result) : errAsync("AI generation failed")
+      )
+      .match((result) => result, rejectWithValue);
   },
 );
 
-export const editCommitMessage = createAsyncThunk(
+export const editCommitMessage = createAppAsyncThunk<
+  string,
+  z.infer<typeof CommitSchema>["commit_message"][number],
+  CommitThunkConfig
+>(
   "commit/edit",
   async (
     selectedMessage: z.infer<typeof CommitSchema>["commit_message"][number],
     { rejectWithValue },
   ) => {
-    try {
-      const combinedMessage = [
-        selectedMessage.header,
-        selectedMessage.body,
-        selectedMessage.footer,
-      ].filter(Boolean).join("\n\n");
+    const combinedMessage = [
+      selectedMessage.header,
+      selectedMessage.body,
+      selectedMessage.footer,
+    ].filter(Boolean).join("\n\n");
 
-      const edited = await editText(combinedMessage);
-      if (!edited.trim()) return rejectWithValue("Empty message");
-      return edited;
-    } catch (error) {
-      return rejectWithValue(
-        error instanceof Error ? error.message : String(error),
-      );
-    }
+    return fromPromiseWithMessage(editText(combinedMessage))
+      .andThen((edited) => edited.trim() ? okAsync(edited) : errAsync("Empty message"))
+      .match((edited) => edited, rejectWithValue);
   },
 );
 
-export const commitMessage = createAsyncThunk(
+export const commitMessage = createAppAsyncThunk<boolean, string, CommitThunkConfig>(
   "commit/commit",
   async (message: string, { rejectWithValue }) => {
-    try {
-      const gitService = new GitService();
-      await gitService.commit.commitWithMessages([message]);
-      return true;
-    } catch (error) {
-      return rejectWithValue(
-        error instanceof Error ? error.message : String(error),
-      );
-    }
+    const gitService = new GitService();
+
+    return fromPromiseWithMessage(
+      gitService.commit.commitWithMessages([message]).then(() => true),
+    ).match((result) => result, rejectWithValue);
   },
 );
 

@@ -63,4 +63,5 @@ core:
 test:
   - changed-files:
       - any-glob-to-any-file:
-          - "**/*_test.ts"
+          - "**/*.test.ts"
+          - "**/*.test.tsx"

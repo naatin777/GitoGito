@@ -1,8 +1,11 @@
 import { TextAttributes } from "@opentui/core";
 import { useKeyboard, useRenderer } from "@opentui/react";
 import { useState } from "react";
+import { useThemeColors } from "../features/config/use_theme_colors.ts";
+import { useThemeMode } from "../contexts/theme_mode_context.tsx";
 import { isCtrlC, isEnter } from "../helpers/opentui/key.ts";
-import { renderTui } from "../lib/opentui_render.tsx";
+import { Box, Text } from "./ThemedComponents.tsx";
+// import { renderTui } from "../lib/opentui_render.tsx";
 
 export interface CarouselChoice<T> {
   name: string;
@@ -35,10 +38,13 @@ export function getSafeCarouselIndex(
 
 /* v8 ignore start */
 export function Carousel<T>({ message, choices, onSelect }: CarouselProps<T>) {
+  const themeColors = useThemeColors();
   const renderer = useRenderer();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const hasChoices = choices.length > 0;
   const safeSelectedIndex = getSafeCarouselIndex(selectedIndex, choices.length);
+  const themeMode = useThemeMode();
+
 
   useKeyboard((event) => {
     if (event.name === "escape" || isCtrlC(event)) {
@@ -69,70 +75,70 @@ export function Carousel<T>({ message, choices, onSelect }: CarouselProps<T>) {
   });
 
   return (
-    <box flexDirection="column" paddingLeft={1} paddingRight={1}>
-      <box>
-        <text attributes={TextAttributes.BOLD}>{`? ${message} `}</text>
-      </box>
-      <box>
-        <text attributes={TextAttributes.DIM}>
+    <Box flexDirection="column" paddingLeft={1} paddingRight={1}>
+      <Box>
+        <Text attributes={TextAttributes.BOLD}>{`? ${message} `}</Text>
+      </Box>
+      <Box>
+        <Text attributes={TextAttributes.DIM}>
           {getCarouselPositionLabel(safeSelectedIndex, choices.length)}
-        </text>
-        <text attributes={TextAttributes.DIM}>(Enter to Select)</text>
-      </box>
+        </Text>
+        <Text attributes={TextAttributes.DIM}>(Enter to Select)</Text>
+      </Box>
 
       {hasChoices
         ? (
-          <box
+          <Box
             flexDirection="column"
             border
             borderStyle="rounded"
-            borderColor="cyan"
+            borderColor={themeColors.primary}
             paddingLeft={1}
             paddingRight={1}
           >
-            <text attributes={TextAttributes.BOLD} fg="cyan" truncate>
+            <Text attributes={TextAttributes.BOLD} fg={themeColors.primary} truncate>
               {choices[safeSelectedIndex].name}
-            </text>
+            </Text>
             {choices[safeSelectedIndex].description && (
-              <box marginTop={1}>
-                <text>{choices[safeSelectedIndex].description}</text>
-              </box>
+              <Box marginTop={1}>
+                <Text>{choices[safeSelectedIndex].description}</Text>
+              </Box>
             )}
-          </box>
+          </Box>
         )
         : (
-          <text attributes={TextAttributes.DIM}>
+          <Text attributes={TextAttributes.DIM}>
             {CAROUSEL_EMPTY_MESSAGE}
-          </text>
+          </Text>
         )}
-    </box>
+    </Box>
   );
 }
 /* v8 ignore stop */
 
-/* v8 ignore start */
-if (import.meta.main) {
-  const instance = renderTui(
-    <Carousel
-      message="Select an option"
-      choices={[
-        {
-          name: "Option 1",
-          value: "1",
-          description: "This is the first option",
-        },
-        {
-          name: "Option 2",
-          value: "2",
-          description:
-            "This is the second option with a longer description that might wrap around if the terminal is small. This is the second option with a longer description that might wrap around if the terminal is small. This is the second option with a longer description that might wrap around if the terminal is small.",
-        },
-        { name: "Option 3", value: "3", description: "Short desc" },
-      ]}
-      onSelect={(val) => console.log("Selected:", val)}
-    />,
-  );
+// /* v8 ignore start */
+// if (import.meta.main) {
+//   const instance = renderTui(
+//     <Carousel
+//       message="Select an option"
+//       choices={[
+//         {
+//           name: "Option 1",
+//           value: "1",
+//           description: "This is the first option",
+//         },
+//         {
+//           name: "Option 2",
+//           value: "2",
+//           description:
+//             "This is the second option with a longer description that might wrap around if the terminal is small. This is the second option with a longer description that might wrap around if the terminal is small. This is the second option with a longer description that might wrap around if the terminal is small.",
+//         },
+//         { name: "Option 3", value: "3", description: "Short desc" },
+//       ]}
+//       onSelect={(val) => console.log("Selected:", val)}
+//     />,
+//   );
 
-  await instance.waitUntilExit();
-}
-/* v8 ignore stop */
+//   await instance.waitUntilExit();
+// }
+// /* v8 ignore stop */

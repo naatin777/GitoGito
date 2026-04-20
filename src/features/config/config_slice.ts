@@ -1,121 +1,85 @@
-import {
-  createSelector,
-  createSlice,
-  type PayloadAction,
-} from "@reduxjs/toolkit";
-import type { FlatSchemaItem } from "../../helpers/flat_schema.ts";
-import type { RootState } from "../../app/store.ts";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createAppAsyncThunk } from "../../app/hooks.ts";
+import { fromPromiseWithMessage } from "../../helpers/error/neverthrow.ts";
+import type { ConfigScope } from "../../services/config/config_file.ts";
+import { ConfigSchema, type Config } from "../../services/config/schema/config_schema.ts";
+import type { GlobalConfig } from "../../services/config/schema/global_config_schema.ts";
+import type { LocalConfig } from "../../services/config/schema/local_config_schema.ts";
+import type { ProjectConfig } from "../../services/config/schema/project_config_schema.ts";
+import type { NestedKeys, PathValue } from "../../type.ts";
 
-interface ConfigState {
-  items: FlatSchemaItem[];
-  everOpenedPaths: string[];
-  closedPaths: string[];
-  selectedIndex: number;
-}
-
-const initialState: ConfigState = {
-  items: [],
-  everOpenedPaths: [],
-  closedPaths: [],
-  selectedIndex: 0,
+type ConfigState = {
+  mergedConfig: Config;
+  globalConfig: Partial<GlobalConfig>;
+  localConfig: Partial<LocalConfig>;
+  projectConfig: Partial<ProjectConfig>;
 };
 
-const pathFromItem = (item: FlatSchemaItem) =>
-  [...item.parents, item.key].join(".");
+const initialState: ConfigState = {
+  mergedConfig: ConfigSchema.parse({}),
+  globalConfig: {},
+  localConfig: {},
+  projectConfig: {},
+};
+
+type SetConfigPayload = {
+  mergedConfig: Config;
+  globalConfig?: Partial<GlobalConfig>;
+  localConfig?: Partial<LocalConfig>;
+  projectConfig?: Partial<ProjectConfig>;
+};
+
+type SetConfigThunkConfig = {
+  rejectValue: string;
+};
+
+export const setConfig = createAppAsyncThunk<
+  SetConfigPayload,
+  {
+    scope: ConfigScope;
+    key: NestedKeys<Config>;
+    value: PathValue<Config, NestedKeys<Config>>;
+  },
+  SetConfigThunkConfig
+>(
+  "Config/setGlobalConfig",
+  async ({ scope, key, value }, { extra, rejectWithValue }) => {
+    return fromPromiseWithMessage((async () => {
+      await extra.config.saveConfig(scope, key, value);
+      const mergedConfig = await extra.config.getMergedConfig();
+
+      switch (scope) {
+        case "global":
+          return { globalConfig: await extra.config.getGlobalConfig(), mergedConfig };
+        case "local":
+          return { localConfig: await extra.config.getLocalConfig(), mergedConfig };
+        case "project":
+          return { projectConfig: await extra.config.getProjectConfig(), mergedConfig };
+      }
+    })()).match((result) => result, rejectWithValue);
+  },
+);
 
 const configSlice = createSlice({
-  name: "config",
+  name: "Config",
   initialState,
   reducers: {
-    initializeConfigTree: (state, action: PayloadAction<FlatSchemaItem[]>) => {
-      state.items = action.payload;
-      state.everOpenedPaths = [];
-      state.closedPaths = [];
-      state.selectedIndex = 0;
+    setMergedConfig: (state, action: PayloadAction<Config>) => {
+      state.mergedConfig = action.payload;
     },
-    toggleItem: (state, action: PayloadAction<number>) => {
-      const filteredItems = selectFilteredItemsFromState(state);
-      const item = filteredItems[action.payload];
-      if (!item) return;
-
-      const path = pathFromItem(item);
-      const isCurrentlyOpen = state.everOpenedPaths.includes(path) &&
-        !state.closedPaths.includes(path);
-
-      if (isCurrentlyOpen) {
-        if (!state.closedPaths.includes(path)) {
-          state.closedPaths.push(path);
-        }
-        return;
-      }
-
-      state.closedPaths = state.closedPaths.filter((p) => p !== path);
-      if (!state.everOpenedPaths.includes(path)) {
-        state.everOpenedPaths.push(path);
-      }
-    },
-    moveUp: (state) => {
-      state.selectedIndex = Math.max(state.selectedIndex - 1, 0);
-    },
-    moveDown: (state) => {
-      const filteredItems = selectFilteredItemsFromState(state);
-      if (filteredItems.length === 0) {
-        state.selectedIndex = 0;
-        return;
-      }
-      state.selectedIndex = Math.min(
-        filteredItems.length - 1,
-        state.selectedIndex + 1,
-      );
-    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(setConfig.fulfilled, (state, action) => {
+        if (action.payload.globalConfig) state.globalConfig = action.payload.globalConfig;
+        if (action.payload.localConfig) state.localConfig = action.payload.localConfig;
+        if (action.payload.projectConfig) state.projectConfig = action.payload.projectConfig;
+        state.mergedConfig = action.payload.mergedConfig;
+      })
+      .addCase(setConfig.rejected, (_state, _action) => {})
+      .addCase(setConfig.pending, (_state, _action) => {});
   },
 });
 
-const selectConfigState = (state: RootState) => state.config;
-
-const selectOpenPathsFromState = (state: ConfigState): string[] => {
-  return state.everOpenedPaths.filter((path) => {
-    if (state.closedPaths.includes(path)) return false;
-    const parts = path.split(".");
-    for (let i = 1; i < parts.length; i++) {
-      const parentPath = parts.slice(0, i).join(".");
-      if (state.closedPaths.includes(parentPath)) return false;
-    }
-    return true;
-  });
-};
-
-const selectFilteredItemsFromState = (state: ConfigState): FlatSchemaItem[] => {
-  const openPaths = selectOpenPathsFromState(state);
-  return state.items.flatMap((item) => {
-    const parentPath = item.parents.join(".");
-    if (!parentPath) return [item];
-
-    const path = `${parentPath}.${item.key}`;
-    return openPaths.some((openPath) =>
-        path.startsWith(openPath) &&
-        openPath.split(".").length === item.parents.length
-      )
-      ? [item]
-      : [];
-  });
-};
-
-export const selectConfigSelectedIndex = createSelector(
-  [selectConfigState],
-  (state) => state.selectedIndex,
-);
-
-export const selectConfigOpenPaths = createSelector(
-  [selectConfigState],
-  (state) => new Set(selectOpenPathsFromState(state)),
-);
-
-export const selectConfigFilteredItems = createSelector(
-  [selectConfigState],
-  (state) => selectFilteredItemsFromState(state),
-);
-
-export const { initializeConfigTree, moveDown, moveUp, toggleItem } =
-  configSlice.actions;
+export const { setMergedConfig } = configSlice.actions;
 export const configReducer = configSlice.reducer;

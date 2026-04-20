@@ -1,0 +1,21 @@
+---
+description: Always on baseline; AGENTS.md is source of truth
+alwaysApply: true
+---
+
+# Gitogito — core
+
+## Source of truth
+
+- [`AGENTS.md`](../../AGENTS.md)
+- [How to read this repo](../../AGENTS.md#how-to-read-this-repo)
+- [Rule ownership model](../../AGENTS.md#rule-ownership-model)
+
+## Workflow
+
+- Before substantive edits: concrete plan (files touched, one line each), tradeoffs, and explicit user confirmation when `AGENTS.md` requires it.
+- While implementing: run `bun run check` and `bun test` after each logical chunk; fix failures before continuing.
+
+## Runtime
+
+- **Bun** and Node/Bun-compatible APIs (`node:fs`, `node:path`, `process`). No Deno-only patterns.

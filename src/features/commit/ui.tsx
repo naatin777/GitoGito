@@ -1,8 +1,11 @@
 import { Select } from "../../components/Select.tsx";
 import { Spinner } from "../../components/Spinner.tsx";
+import { Box, Text } from "../../components/ThemedComponents.tsx";
+import { useThemeColors } from "../config/use_theme_colors.ts";
 import { useCommitFlow } from "./hook.ts";
 
-export function Commit() {
+export function CommitUI() {
+  const themeColors = useThemeColors();
   const {
     state,
     generateCommitMessages,
@@ -12,7 +15,7 @@ export function Commit() {
   } = useCommitFlow();
 
   return (
-    <box>
+    <Box>
       {state.step === "loading" && (
         <Spinner handleDataLoading={generateCommitMessages} />
       )}
@@ -31,8 +34,8 @@ export function Commit() {
         <Spinner handleDataLoading={editCommitMessage} />
       )}
       {state.step === "commit" && <Spinner handleDataLoading={commitMessage} />}
-      {state.step === "done" && <text>Done</text>}
-      {state.step === "error" && <text fg="red">Error: {state.message}</text>}
-    </box>
+      {state.step === "done" && <Text>Done</Text>}
+      {state.step === "error" && <Text fg={themeColors.error}>Error: {state.message}</Text>}
+    </Box>
   );
 }

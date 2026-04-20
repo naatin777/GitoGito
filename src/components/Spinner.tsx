@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { cycleZip } from "../helpers/collections/cycle_zip.ts";
-import { renderTui } from "../lib/opentui_render.tsx";
+// import { renderTui } from "../lib/opentui_render.tsx";
 
 type Frame = {
   frames: {
@@ -87,26 +87,26 @@ export function Spinner(
   );
 }
 
-if (import.meta.main) {
-  const Example = () => {
-    const [isOpen, setIsOpen] = useState(true);
+// if (import.meta.main) {
+//   const Example = () => {
+//     const [isOpen, setIsOpen] = useState(true);
 
-    return (
-      <box>
-        {isOpen && (
-          <Spinner
-            handleDataLoading={async () => {
-              await setTimeout(() => setIsOpen(false), 10000);
-            }}
-          />
-        )}
-      </box>
-    );
-  };
+//     return (
+//       <box>
+//         {isOpen && (
+//           <Spinner
+//             handleDataLoading={async () => {
+//               await setTimeout(() => setIsOpen(false), 10000);
+//             }}
+//           />
+//         )}
+//       </box>
+//     );
+//   };
 
-  const instance = renderTui(
-    <Example />,
-  );
+//   const instance = renderTui(
+//     <Example />,
+//   );
 
-  await instance.waitUntilExit();
-}
+//   await instance.waitUntilExit();
+// }

@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useRenderer } from "@opentui/react";
 import type z from "zod";
-import { ISSUE_SYSTEM_MESSAGE } from "../constants/message.ts";
-import { renderTui } from "../lib/opentui_render.tsx";
+import { useAppDependencies } from "../contexts/app_dependencies_context.tsx";
+// import { renderTui } from "../lib/opentui_render.tsx";
 import { IssueAgentSchema, type IssueSchema } from "../schema.ts";
-import { AIService, type UsageCallback } from "../services/ai.ts";
+import { AIService } from "../services/ai/ai_service.ts";
+import type { UsageCallback } from "../services/ai/types.ts";
+import { Box } from "./ThemedComponents.tsx";
 import { Spinner } from "./Spinner.tsx";
 import { TextInput } from "./TextInput.tsx";
 
@@ -21,10 +22,14 @@ export function AgentLoop({
   const [status, setStatus] = useState<"thinking" | "answering">("thinking");
   const [questions, setQuestions] = useState<string[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const dependencies = useAppDependencies();
 
   const performStep = async () => {
     try {
-      const aiService = await AIService.create();
+      const aiService = await AIService.create(
+        dependencies.config,
+        dependencies.credentials,
+      );
       const completion = await aiService.generateStructuredOutput(
         history,
         "issueAgent",
@@ -61,7 +66,7 @@ export function AgentLoop({
   const currentQ = questions[currentQuestionIndex];
 
   return (
-    <box flexDirection="column">
+    <Box flexDirection="column">
       <TextInput
         label={`? ${currentQ} › `}
         onSubmit={(val: string) => {
@@ -82,37 +87,37 @@ export function AgentLoop({
           }
         }}
       />
-    </box>
+    </Box>
   );
 }
-if (import.meta.main) {
-  const ExampleContent = () => {
-    const renderer = useRenderer();
+// if (import.meta.main) {
+//   const ExampleContent = () => {
+//     const renderer = useRenderer();
 
-    return (
-      <AgentLoop
-        initialMessages={[
-          {
-            role: "system" as const,
-            content: ISSUE_SYSTEM_MESSAGE
-              .replace(/{{issueTemplate.title}}/g, "Bug Report")
-              .replace(/{{issueTemplate.body}}/g, "Describe the bug here."),
-          },
-          {
-            role: "user" as const,
-            content: "I want to create a new UI for the issue system.",
-          },
-        ]}
-        onDone={(res) => {
-          console.log("Done!", JSON.stringify(res, null, 2));
-          renderer.destroy();
-        }}
-      />
-    );
-  };
+//     return (
+//       <AgentLoop
+//         initialMessages={[
+//           {
+//             role: "system" as const,
+//             content: ISSUE_SYSTEM_MESSAGE
+//               .replace(/{{issueTemplate.title}}/g, "Bug Report")
+//               .replace(/{{issueTemplate.body}}/g, "Describe the bug here."),
+//           },
+//           {
+//             role: "user" as const,
+//             content: "I want to create a new UI for the issue system.",
+//           },
+//         ]}
+//         onDone={(res) => {
+//           console.log("Done!", JSON.stringify(res, null, 2));
+//           renderer.destroy();
+//         }}
+//       />
+//     );
+//   };
 
-  const Example = () => <ExampleContent />;
+//   const Example = () => <ExampleContent />;
 
-  const instance = renderTui(<Example />);
-  await instance.waitUntilExit();
-}
+//   const instance = renderTui(<Example />);
+//   await instance.waitUntilExit();
+// }

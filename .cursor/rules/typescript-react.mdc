@@ -1,0 +1,20 @@
+---
+description: TS/TSX reminder; canonical rules live in AGENTS.md
+globs: "**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# TypeScript / React (OpenTUI)
+
+## Canonical detail
+
+Read **[AGENTS.md](../../AGENTS.md)** first, then apply:
+
+- [§4 Directory Structure](../../AGENTS.md#4-directory-structure)
+- [§5 Naming Conventions](../../AGENTS.md#5-naming-conventions)
+- [§10 UI Component Rules](../../AGENTS.md#10-ui-component-rules) (ThemedComponents, `useThemeColors`, `createAppAsyncThunk`)
+
+## Guardrails
+
+- No ad-hoc color strings in UI.
+- Use `createAppAsyncThunk` from `src/app/hooks.ts`, not `createAsyncThunk`.

@@ -3,7 +3,9 @@ import { Carousel } from "../../components/Carousel.tsx";
 import { Select } from "../../components/Select.tsx";
 import { Spinner } from "../../components/Spinner.tsx";
 import { TextInput } from "../../components/TextInput.tsx";
+import { Box, Text } from "../../components/ThemedComponents.tsx";
 import { ISSUE_SYSTEM_MESSAGE } from "../../constants/message.ts";
+import { useThemeColors } from "../config/use_theme_colors.ts";
 import type { Issue as IssueEntity, IssueTemplate } from "../../type.ts";
 import { useIssueFlow } from "./hook.ts";
 
@@ -32,7 +34,8 @@ export function getIssueErrorText(message: string) {
 }
 
 /* v8 ignore start */
-export function Issue() {
+export function IssueUI() {
+  const themeColors = useThemeColors();
   const {
     state,
     loadTemplates,
@@ -45,7 +48,7 @@ export function Issue() {
   } = useIssueFlow();
 
   return (
-    <box flexDirection="column">
+    <Box flexDirection="column">
       {state.step === "loading_templates" && (
         <Spinner handleDataLoading={loadTemplates} />
       )}
@@ -90,14 +93,14 @@ export function Issue() {
       {state.step === "edit_issue" && <Spinner handleDataLoading={editIssue} />}
       {state.step === "creating" && <Spinner handleDataLoading={createIssue} />}
       {state.step === "done" && (
-        <box flexDirection="column">
-          <text fg="green">{getIssueCreatedText(state.url)}</text>
-        </box>
+        <Box flexDirection="column">
+          <Text fg={themeColors.success}>{getIssueCreatedText(state.url)}</Text>
+        </Box>
       )}
       {state.step === "error" && (
-        <text fg="red">{getIssueErrorText(state.message)}</text>
+        <Text fg={themeColors.error}>{getIssueErrorText(state.message)}</Text>
       )}
-    </box>
+    </Box>
   );
 }
 /* v8 ignore stop */

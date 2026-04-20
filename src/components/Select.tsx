@@ -3,7 +3,9 @@ import { useKeyboard, useRenderer } from "@opentui/react";
 import { useState } from "react";
 import { SELECT_EMPTY_MESSAGE } from "../constants/message.ts";
 import { isCtrlC, isEnter } from "../helpers/opentui/key.ts";
-import { renderTui } from "../lib/opentui_render.tsx";
+// import { renderTui } from "../lib/opentui_render.tsx";
+import { useThemeColors } from "../features/config/use_theme_colors.ts";
+import { Box, Text } from "./ThemedComponents.tsx";
 import type { Choice } from "../type.ts";
 
 export { SELECT_EMPTY_MESSAGE };
@@ -12,6 +14,8 @@ type SelectOptions<T> = {
   message: string;
   choices: Choice<T>[];
   onSelect: (value?: T) => void;
+  onBack?: () => void;
+  initialIndex?: number;
 };
 
 export function getSelectPositionLabel(
@@ -28,6 +32,7 @@ export function getSafeSelectIndex(selectedIndex: number, choiceCount: number) {
 /* v8 ignore start */
 export function Select<T>(options: SelectOptions<T>) {
   const renderer = useRenderer();
+  const themeColors = useThemeColors();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const hasChoices = options.choices.length > 0;
   const safeSelectedIndex = getSafeSelectIndex(
@@ -36,9 +41,19 @@ export function Select<T>(options: SelectOptions<T>) {
   );
 
   useKeyboard((event) => {
-    if (event.name === "escape" || isCtrlC(event)) {
+    if (isCtrlC(event)) {
       options.onSelect(undefined);
       renderer.destroy();
+      return;
+    }
+
+    if (event.name === "escape") {
+      if (options.onBack) {
+        options.onBack();
+      } else {
+        options.onSelect(undefined);
+        renderer.destroy();
+      }
       return;
     }
 
@@ -66,30 +81,30 @@ export function Select<T>(options: SelectOptions<T>) {
   });
 
   return (
-    <box flexDirection="column" paddingLeft={1} paddingRight={1}>
-      <box>
-        <text>{`${options.message} `}</text>
-        <text attributes={TextAttributes.DIM}>
+    <Box flexDirection="column" paddingLeft={1} paddingRight={1}>
+      <Box>
+        <Text>{`${options.message} `}</Text>
+        <Text attributes={TextAttributes.DIM}>
           {getSelectPositionLabel(safeSelectedIndex, options.choices.length)}
-        </text>
-      </box>
+        </Text>
+      </Box>
       {hasChoices
         ? options.choices.map((value, index) => {
           const isSelected = safeSelectedIndex === index;
           return (
-            <box
+            <Box
               key={value.name}
               flexDirection="column"
             >
-              <text
+              <Text
                 attributes={TextAttributes.BOLD}
                 truncate
-                fg={isSelected ? "blue" : undefined}
+                fg={isSelected ? themeColors.primary : undefined}
               >
                 {`→ ${value.name}`}
-              </text>
+              </Text>
               {isSelected && (
-                <box
+                <Box
                   paddingLeft={1}
                   borderStyle="single"
                   border={[
@@ -97,36 +112,36 @@ export function Select<T>(options: SelectOptions<T>) {
                   ]}
                   borderColor="gray"
                 >
-                  <text attributes={TextAttributes.DIM}>{`${value.description}`}</text>
-                </box>
+                  <Text attributes={TextAttributes.DIM}>{`${value.description}`}</Text>
+                </Box>
               )}
-            </box>
+            </Box>
           );
         })
         : (
-          <text attributes={TextAttributes.DIM}>
+          <Text attributes={TextAttributes.DIM}>
             {SELECT_EMPTY_MESSAGE}
-          </text>
+          </Text>
         )}
-    </box>
+    </Box>
   );
 }
 /* v8 ignore stop */
 
-/* v8 ignore start */
-if (import.meta.main) {
-  const instance = renderTui(
-    <Select
-      message="Select an option"
-      choices={[
-        { name: "Option 1", value: "option1", description: "Description 1" },
-        { name: "Option 2", value: "option2", description: "Description 2" },
-        { name: "Option 3", value: "option3", description: "Description 3" },
-      ]}
-      onSelect={(value) => console.log("Selected:", value)}
-    />,
-  );
+// /* v8 ignore start */
+// if (import.meta.main) {
+//   const instance = renderTui(
+//     <Select
+//       message="Select an option"
+//       choices={[
+//         { name: "Option 1", value: "option1", description: "Description 1" },
+//         { name: "Option 2", value: "option2", description: "Description 2" },
+//         { name: "Option 3", value: "option3", description: "Description 3" },
+//       ]}
+//       onSelect={(value) => console.log("Selected:", value)}
+//     />,
+//   );
 
-  await instance.waitUntilExit();
-}
-/* v8 ignore stop */
+//   await instance.waitUntilExit();
+// }
+// /* v8 ignore stop */

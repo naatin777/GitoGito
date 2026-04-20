@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "hooks": {
+    "afterFileEdit": [
+      {
+        "command": "bun run typecheck",
+        "matcher": "src/**/*.ts src/**/*.tsx"
+      }
+    ],
+    "stop": [
+      {
+        "command": "bun run test"
+      }
+    ],
+    "beforeShellExecution": [
+      {
+        "type": "prompt",
+        "prompt": "Is this command destructive or irreversible? Commands like rm, git push, git reset, git rebase are high risk. Block if so.",
+        "matcher": "rm|git push|git reset|git rebase"
+      }
+    ]
+  }
+}

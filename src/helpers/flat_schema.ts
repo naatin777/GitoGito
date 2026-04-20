@@ -1,11 +1,19 @@
 import z from "zod";
 
-export type FlatSchemaItem = {
+export interface FlatSchemaItem {
   key: string;
   parents: string[];
   description: string | undefined;
   isLeaf: boolean;
-};
+}
+
+export function fullPath(item: FlatSchemaItem): string {
+  return [...item.parents, item.key].join(".");
+}
+
+export function urlPath(item: FlatSchemaItem): string {
+  return [...item.parents, item.key].join("/");
+}
 
 export function flatSchema(
   schema: z.ZodDefault<z.ZodObject> | z.ZodObject,
@@ -16,18 +24,17 @@ export function flatSchema(
     : schema.shape;
 
   return Object.entries(shape).flatMap(([key, field]) => {
-    const f = field as z.ZodTypeAny;
-    const item = {
-      key: key,
-      parents: parents,
-      description: f.description,
-      isLeaf: !(f instanceof z.ZodDefault || f instanceof z.ZodObject),
+    const item: FlatSchemaItem = {
+      key,
+      parents,
+      description: field.description,
+      isLeaf: !(field instanceof z.ZodDefault || field instanceof z.ZodObject),
     };
 
-    if (f instanceof z.ZodDefault || f instanceof z.ZodObject) {
+    if (field instanceof z.ZodDefault || field instanceof z.ZodObject) {
       return [
         item,
-        ...flatSchema(f as z.ZodDefault<z.ZodObject> | z.ZodObject, [
+        ...flatSchema(field as z.ZodDefault<z.ZodObject> | z.ZodObject, [
           ...parents,
           key,
         ]),

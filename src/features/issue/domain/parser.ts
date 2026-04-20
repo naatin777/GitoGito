@@ -1,4 +1,4 @@
-import { YAML } from "bun";
+import { parse, stringify } from "yaml";
 import type { Issue, IssueTemplate } from "../../../type.ts";
 
 export function parseMarkdownIssueTemplate(
@@ -18,12 +18,11 @@ export function parseMarkdownIssueTemplate(
 export function stringifyMarkdownIssue(
   issue: Issue,
 ): string {
-  const yamlBlock = YAML.stringify(
+  const yamlBlock = stringify(
     {
       title: issue.title,
     },
-    null,
-    2,
+    { indent: 2 },
   ).trimEnd();
   return `---
 ${yamlBlock}
@@ -58,7 +57,7 @@ function parseFrontMatter(markdown: string): {
 
   const yamlText = lines.slice(1, endIndex).join("\n");
   const body = lines.slice(endIndex + 1).join("\n");
-  const parsed = YAML.parse(yamlText);
+  const parsed = parse(yamlText);
   const attributes = (parsed ?? {}) as Record<string, unknown>;
 
   return { attributes, body };

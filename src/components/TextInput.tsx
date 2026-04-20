@@ -1,8 +1,10 @@
 import { TextAttributes } from "@opentui/core";
 import { useKeyboard, useRenderer } from "@opentui/react";
 import { useEffect, useState } from "react";
+import { Box, Text } from "./ThemedComponents.tsx";
+import { useThemeColors } from "../features/config/use_theme_colors.ts";
 import { isCtrlC, isEnter, keyEventToInput } from "../helpers/opentui/key.ts";
-import { renderTui } from "../lib/opentui_render.tsx";
+// import { renderTui } from "../lib/opentui_render.tsx";
 
 export function TextInput(
   { label, isInline, onSubmit }: {
@@ -11,6 +13,7 @@ export function TextInput(
     onSubmit: (val: string) => void;
   },
 ) {
+  const themeColors = useThemeColors();
   const [value, setValue] = useState("");
   const [cursorPosition, setCursorPosition] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
@@ -81,47 +84,47 @@ export function TextInput(
   const after = value.slice(cursorPosition + 1);
 
   return (
-    <box flexDirection={isInline ? "row" : "column"}>
-      <text attributes={TextAttributes.BOLD}>{label}</text>
+    <Box flexDirection={isInline ? "row" : "column"}>
+      <Text attributes={TextAttributes.BOLD}>{label}</Text>
       {isInline
         ? (
-          <box flexDirection="row">
-            <text fg="green">{before}</text>
+          <Box flexDirection="row">
+            <text fg={themeColors.primary}>{before}</text>
             <text
-              fg="green"
+              fg={themeColors.primary}
               attributes={showCursor ? TextAttributes.INVERSE : 0}
             >
               {charAtCursor}
             </text>
-            <text fg="green">{after}</text>
-          </box>
+            <text fg={themeColors.primary}>{after}</text>
+          </Box>
         )
         : (
-          <box>
-            <text fg="green">{before}</text>
+          <Box>
+            <text fg={themeColors.primary}>{before}</text>
             <text
-              fg="green"
+              fg={themeColors.primary}
               attributes={showCursor ? TextAttributes.INVERSE : 0}
             >
               {charAtCursor}
             </text>
-            <text fg="green">{after}</text>
-          </box>
+            <text fg={themeColors.primary}>{after}</text>
+          </Box>
         )}
-    </box>
+    </Box>
   );
 }
 
-if (import.meta.main) {
-  const instance = renderTui(
-    <TextInput
-      label="? Enter something › "
-      isInline
-      onSubmit={(val) => {
-        console.log("Submitted:", val);
-      }}
-    />,
-  );
+// if (import.meta.main) {
+//   const instance = renderTui(
+//     <TextInput
+//       label="? Enter something › "
+//       isInline
+//       onSubmit={(val) => {
+//         console.log("Submitted:", val);
+//       }}
+//     />,
+//   );
 
-  await instance.waitUntilExit();
-}
+//   await instance.waitUntilExit();
+// }

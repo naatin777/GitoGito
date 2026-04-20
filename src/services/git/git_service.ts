@@ -1,30 +1,28 @@
-import { type SimpleGit, simpleGit } from "simple-git";
 import {
   type GitCommitRepository,
   GitCommitRepositoryCliImpl,
-} from "./commit_repository.ts";
+} from "../../repositories/git/commit_repository.ts";
 import {
   type GitDiffRepository,
   GitDiffRepositoryCliImpl,
-} from "./diff_repository.ts";
+} from "../../repositories/git/diff_repository.ts";
 import {
   type GitRemoteRepository,
   GitRemoteRepositoryCliImpl,
-} from "./remote_repository.ts";
+} from "../../repositories/git/remote_repository.ts";
 import {
   type GitRevParseRepository,
   GitRevParseRepositoryCliImpl,
-} from "./rev_parse_repository.ts";
+} from "../../repositories/git/rev_parse_repository.ts";
 import {
   type GitStatusRepository,
   GitStatusRepositoryCliImpl,
-} from "./status_repository.ts";
+} from "../../repositories/git/status_repository.ts";
 
 /**
  * GitService aggregates all git repository operations
  */
 export class GitService {
-  private readonly git: SimpleGit;
   public readonly diff: GitDiffRepository;
   public readonly commit: GitCommitRepository;
   public readonly rev_parse: GitRevParseRepository;
@@ -32,7 +30,6 @@ export class GitService {
   public readonly remote: GitRemoteRepository;
 
   constructor(
-    git: SimpleGit = simpleGit(),
     repos: {
       diff: GitDiffRepository;
       commit: GitCommitRepository;
@@ -40,14 +37,13 @@ export class GitService {
       status: GitStatusRepository;
       remote: GitRemoteRepository;
     } = {
-      diff: new GitDiffRepositoryCliImpl(git),
-      commit: new GitCommitRepositoryCliImpl(git),
-      rev_parse: new GitRevParseRepositoryCliImpl(git),
-      status: new GitStatusRepositoryCliImpl(git),
-      remote: new GitRemoteRepositoryCliImpl(git),
+      diff: new GitDiffRepositoryCliImpl(),
+      commit: new GitCommitRepositoryCliImpl(),
+      rev_parse: new GitRevParseRepositoryCliImpl(),
+      status: new GitStatusRepositoryCliImpl(),
+      remote: new GitRemoteRepositoryCliImpl(),
     },
   ) {
-    this.git = git;
     this.diff = repos.diff;
     this.commit = repos.commit;
     this.rev_parse = repos.rev_parse;

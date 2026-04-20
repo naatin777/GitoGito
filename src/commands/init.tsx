@@ -1,58 +1,15 @@
 import { Command } from "@cliffy/command";
-import { configFile, type ConfigFile, type ConfigScope } from "../services/config/file.ts";
-
-export type InitCommandOptions = {
-  local?: boolean;
-  global?: boolean;
-};
-
-type InitCommandDependencies = {
-  configFile: Pick<ConfigFile, "exists" | "save">;
-  writeInfo: (message: string) => void;
-  writeError: (message: string) => void;
-};
-
-function resolveInitScope(options: InitCommandOptions): ConfigScope {
-  if (options.global) {
-    return "global";
-  }
-
-  if (options.local) {
-    return "local";
-  }
-
-  return "project";
-}
+import { createAppDependencies } from "../app/app_extra.ts";
+import type { AppDependencies } from "../app/store.ts";
+import { AppRouter } from "../app/router.tsx";
+import { runTuiWithRedux } from "../lib/runner.tsx";
 
 export function createInitCommand(
-  dependencies: Partial<InitCommandDependencies> = {},
+  dependencies: AppDependencies = createAppDependencies(),
 ) {
-  const {
-    configFile: commandConfigFile = configFile,
-    writeInfo = console.log,
-    writeError = console.error,
-  } = dependencies;
-
   return new Command()
     .description("Initialize a new project")
-    .option("--local", "Set local settings.", {
-      conflicts: ["global"],
-    })
-    .option("--global", "Set global settings.", {
-      conflicts: ["local"],
-    })
-    .action(async (options: InitCommandOptions) => {
-      const scope = resolveInitScope(options);
-
-      if (await commandConfigFile.exists(scope)) {
-        writeError(`${scope} config already exists.`);
-        process.exitCode = 1;
-        return;
-      }
-
-      await commandConfigFile.save(scope, "{}\n");
-      writeInfo(`Initialized ${scope} config.`);
+    .action(async () => {
+      await runTuiWithRedux(<AppRouter initialPath="/init" />, { dependencies });
     });
 }
-
-export const initCommand = createInitCommand();

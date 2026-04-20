@@ -1,4 +1,7 @@
 language: en
 editor: zed --wait
 provider: OpenRouter
-model: "tngtech/deepseek-r1t2-chimera:free"
+model: tngtech/deepseek-r1t2-chimera:free
+color:
+  text: "#000000"
+  backgroundColor: "#000000"

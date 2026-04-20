@@ -1,15 +1,15 @@
 import { Command } from "@cliffy/command";
+import { createAppDependencies } from "../app/app_extra.ts";
+import type { AppDependencies } from "../app/store.ts";
+import { AppRouter } from "../app/router.tsx";
 import { runTuiWithRedux } from "../lib/runner.tsx";
-import { RouterUI } from "../views/router/ui.tsx";
 
-export async function openCommitTui() {
-  await runTuiWithRedux(<RouterUI initialPath="/commit" />);
-}
-
-export function createCommitCommand(action: () => Promise<void> = openCommitTui) {
+export function createCommitCommand(
+  dependencies: AppDependencies = createAppDependencies(),
+) {
   return new Command()
     .description("Commit changes to the repository")
-    .action(action);
+    .action(async () => {
+      await runTuiWithRedux(<AppRouter initialPath="/commit" />, { dependencies });
+    });
 }
-
-export const commitCommand = createCommitCommand();

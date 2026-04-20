@@ -1,0 +1,19 @@
+---
+description: Config YAML reminder; canonical rules live in AGENTS.md
+globs:
+  - "**/*gitogito*.yml"
+  - "src/services/config/**/*.ts"
+alwaysApply: false
+---
+
+# Config YAML and config code
+
+## Canonical detail
+
+- [§6 Configuration File Specification](../../AGENTS.md#6-configuration-file-specification)
+- [§11 Other](../../AGENTS.md#11-other)
+
+## Guardrails
+
+- Use the `yaml` npm package, not `Bun.YAML`.
+- For comment-preserving edits use `parseDocument()`, `doc.setIn()`, `doc.toString()`.
