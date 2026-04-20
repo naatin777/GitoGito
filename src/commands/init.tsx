@@ -1,12 +1,15 @@
 import { Command } from "@cliffy/command";
+import { createAppDependencies } from "../app/app_extra.ts";
+import type { AppDependencies } from "../app/store.ts";
 import { AppRouter } from "../app/router.tsx";
 import { runTuiWithRedux } from "../lib/runner.tsx";
-import type { Config } from "../services/config/schema/config_schema.ts";
 
-export function createInitCommand(_config?: Config) {
+export function createInitCommand(
+  dependencies: AppDependencies = createAppDependencies(),
+) {
   return new Command()
     .description("Initialize a new project")
     .action(async () => {
-      await runTuiWithRedux(<AppRouter initialPath="/init" />);
+      await runTuiWithRedux(<AppRouter initialPath="/init" />, { dependencies });
     });
 }

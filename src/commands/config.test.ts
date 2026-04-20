@@ -1,5 +1,6 @@
 import { Command } from "@cliffy/command";
 import { expect, mock, test } from "bun:test";
+import type { AppDependencies } from "../app/store.ts";
 import type { ConfigScope } from "../services/config/config_file.ts";
 import type { ConfigService } from "../services/config/config_service.ts";
 import type { Config } from "../services/config/schema/config_schema.ts";
@@ -38,13 +39,24 @@ function buildTestCommand(saveConfig = makeSaveConfig()) {
     getLocalConfig: mock(() => Promise.resolve({} as Partial<LocalConfig>)),
   };
 
+  const mockDependencies: AppDependencies = {
+    config: mockConfigService,
+    credentials: {
+      getGlobalCredentials: mock(() => Promise.resolve({})),
+      getLocalCredentials: mock(() => Promise.resolve({})),
+      getMergedCredentials: mock(() => Promise.resolve({})),
+      saveCredentials: mock(() => Promise.resolve()),
+    },
+    gitRemoteRepository: { getOwnerAndRepo: mock(() => Promise.resolve({ owner: "o", repo: "r" })) },
+  };
+
   const root = new Command()
     .throwErrors()
     .globalOption("--project", "Project scope.", { conflicts: ["local", "global"] })
     .globalOption("--local", "Local scope.", { conflicts: ["project", "global"] })
     .globalOption("--global", "Global scope.", { conflicts: ["project", "local"] });
 
-  buildSubcommands(root, flatSchema(ConfigSchema), mockConfigService);
+  buildSubcommands(root, flatSchema(ConfigSchema), mockDependencies);
 
   return { root, mockConfigService };
 }

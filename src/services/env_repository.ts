@@ -9,13 +9,13 @@ export const ENV_KEYS = {
   NO_COLOR: { key: "NO_COLOR", description: "Disable color output when set (any value)." },
 } as const;
 
-export interface EnvService {
+export interface EnvRepository {
   getCredentials(): Partial<Credentials>;
   getNoColor(): boolean;
   getHome(): string;
 }
 
-export class EnvServiceImpl implements EnvService {
+export class EnvRepositoryProcessImpl implements EnvRepository {
   getCredentials(): Partial<Credentials> {
     return _.omitBy({
       openRouterApiKey: process.env[ENV_KEYS.OPEN_ROUTER_API_KEY.key],
@@ -35,4 +35,4 @@ export class EnvServiceImpl implements EnvService {
   }
 }
 
-export const envService = new EnvServiceImpl();
+export const envRepository = new EnvRepositoryProcessImpl();

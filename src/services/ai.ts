@@ -8,11 +8,16 @@ import {
 } from "ai";
 import { ollama } from "ollama-ai-provider-v2";
 import { z } from "zod";
-import type { ConfigService } from "./config/config_service.ts";
-import { configService } from "./config/config_service.ts";
+import {
+  ConfigServiceImpl,
+  type ConfigService,
+} from "./config/config_service.ts";
 import { type AiConfig, AiConfigSchema, type AiModel } from "./config/schema/fields/ai_schema.ts";
 import type { Credentials } from "./credential/credentials_schema.ts";
-import { type CredentialService, credentialService } from "./credential/credential_service.ts";
+import {
+  CredentialServiceImpl,
+  type CredentialService,
+} from "./credential/credential_service.ts";
 
 export type AiTask = keyof Omit<AiConfig, "default">;
 type RuntimeAiProvider = "Ollama" | "OpenRouter" | "Gemini";
@@ -42,8 +47,11 @@ export class AIService {
   }
 
   static async create(
-    configSource: Pick<ConfigService, "getMergedConfig"> = configService,
-    credentialSource: Pick<CredentialService, "getMergedCredentials"> = credentialService,
+    configSource: Pick<ConfigService, "getMergedConfig"> = new ConfigServiceImpl(),
+    credentialSource: Pick<
+      CredentialService,
+      "getMergedCredentials"
+    > = new CredentialServiceImpl(),
     task?: AiTask,
   ) {
     const mergedConfig = await configSource.getMergedConfig();

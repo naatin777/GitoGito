@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 import packageJson from "../package.json" with { type: "json" };
 import { createMainCommand } from "./main.ts";
-import { EnvServiceImpl } from "./services/env_service.ts";
+import { EnvRepositoryProcessImpl } from "./services/env_repository.ts";
 
 test("createMainCommand sets the name from package.json", () => {
   const cmd = createMainCommand();
@@ -24,7 +24,7 @@ test("createMainCommand registers init, config, issue, commit, completions subco
 });
 
 test("createMainCommand passes noColor to help settings", () => {
-  const env = new EnvServiceImpl();
+  const env = new EnvRepositoryProcessImpl();
   env.getNoColor = () => true;
   const noColorCmd = createMainCommand(env);
   env.getNoColor = () => false;

@@ -34,13 +34,15 @@ export const generateCommitMessages = createAppAsyncThunk<
   CommitThunkConfig
 >(
   "commit/generate",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, extra }) => {
     const gitService = new GitService();
 
     return fromPromiseWithMessage(gitService.diff.getGitDiffStaged())
       .andThen((diff) => diff ? okAsync(diff) : errAsync("No diff found"))
       .andThen((diff) =>
-        fromPromiseWithMessage(AIService.create())
+        fromPromiseWithMessage(
+          AIService.create(extra.config, extra.credentials),
+        )
           .andThen((aiService) =>
             fromPromiseWithMessage(
               aiService.generateStructuredOutput(

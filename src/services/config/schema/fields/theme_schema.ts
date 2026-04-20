@@ -86,6 +86,6 @@ export const ThemeConfigSchema = z.object({
 export type ThemeConfig = z.infer<typeof ThemeConfigSchema>;
 
 export const DEFAULT_THEME_CONFIG: ThemeConfig = {
-  mode: "SolidDark",
+  mode: "GenericLight",
   color: DEFAULT_COLOR_CONFIG,
 } as const;

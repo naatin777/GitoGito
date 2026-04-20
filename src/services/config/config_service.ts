@@ -63,5 +63,3 @@ export class ConfigServiceImpl implements ConfigService {
     await this.configFile.save(configScope, doc.toString());
   }
 }
-
-export const configService = new ConfigServiceImpl();

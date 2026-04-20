@@ -1,15 +1,20 @@
 import { Command } from "@cliffy/command";
 import { CompletionsCommand } from "@cliffy/command/completions";
+import { UpgradeCommand } from "@cliffy/command/upgrade";
+import { NpmProvider } from "@cliffy/command/upgrade/provider/npm";
 import packageJson from "../package.json" with { type: "json" };
+import { createAppDependencies } from "./app/app_extra.ts";
+import type { AppDependencies } from "./app/store.ts";
 import { createCommitCommand } from "./commands/commit.tsx";
 import { createConfigCommand } from "./commands/config.tsx";
 import { createInitCommand } from "./commands/init.tsx";
 import { createIssueCommand } from "./commands/issue.tsx";
-import { configService } from "./services/config/config_service.ts";
-import { ENV_KEYS, envService, type EnvService } from "./services/env_service.ts";
-import type { Config } from "./services/config/schema/config_schema.ts";
+import { ENV_KEYS, envRepository, type EnvRepository } from "./services/env_repository.ts";
 
-export function createMainCommand(env: EnvService = envService, config?: Config) {
+export function createMainCommand(
+  env: EnvRepository = envRepository,
+  dependencies: AppDependencies = createAppDependencies(),
+) {
   return new Command()
     .name(packageJson.name)
     .version(packageJson.version)
@@ -24,14 +29,15 @@ export function createMainCommand(env: EnvService = envService, config?: Config)
     .action(function () {
       this.showHelp();
     })
-    .command("init", createInitCommand(config))
-    .command("config", createConfigCommand(config))
-    .command("issue", createIssueCommand(config))
-    .command("commit", createCommitCommand(config))
-    .command("completions", new CompletionsCommand());
+    .command("init", createInitCommand(dependencies))
+    .command("config", createConfigCommand(dependencies))
+    .command("issue", createIssueCommand(dependencies))
+    .command("commit", createCommitCommand(dependencies))
+    .command("completions", new CompletionsCommand())
+    .command("upgrade", new UpgradeCommand({ provider: [new NpmProvider()] }),);
 }
 
 if (import.meta.main) {
-  const config = await configService.getMergedConfig();
-  await createMainCommand(envService, config).parse(Bun.argv.slice(2));
+  const dependencies = createAppDependencies();
+  await createMainCommand(envRepository, dependencies).parse(Bun.argv.slice(2));
 }

@@ -27,7 +27,7 @@ export function ThemeModeProvider({ children }: { children: ReactNode }) {
   }, [renderer]);
 
   return (
-    <ThemeModeContext.Provider value={themeMode} >
+    <ThemeModeContext.Provider value={themeMode}>
       {children}
     </ThemeModeContext.Provider>
   );

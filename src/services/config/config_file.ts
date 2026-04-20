@@ -1,7 +1,7 @@
 import { chmod, mkdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import packageJson from "../../../package.json" with { type: "json" };
-import { type EnvService, envService } from "../env_service.ts";
+import { type EnvRepository, envRepository } from "../env_repository.ts";
 
 export type ConfigScope = "global" | "project" | "local";
 
@@ -13,12 +13,12 @@ export interface ConfigFile {
 
 export class ConfigFileImpl {
   constructor(
-    private envService: EnvService = envService,
+    private envRepository: EnvRepository = envRepository,
   ) { }
 
   private getGlobalPath() {
     return join(
-      this.envService.getHome(),
+      this.envRepository.getHome(),
       ".config",
       packageJson.name,
       "config.yml",
@@ -83,7 +83,7 @@ export class ConfigFileImpl {
   }
 }
 
-export const configFile = new ConfigFileImpl(envService);
+export const configFile = new ConfigFileImpl(envRepository);
 
 function isNotFoundError(error: unknown): error is NodeJS.ErrnoException {
   return typeof error === "object" && error !== null &&

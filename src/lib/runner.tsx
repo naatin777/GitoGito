@@ -1,16 +1,16 @@
 import { createCliRenderer } from "@opentui/core";
 import { createRoot } from "@opentui/react";
 import { Provider } from "react-redux";
-import { createAppStore } from "../app/store.ts";
-import { ThemeModeProvider } from "../hooks/use_theme_mode.tsx";
-import { ConfigServiceImpl } from "../services/config/config_service.ts";
-import { CredentialServiceImpl } from "../services/credential/credential_service.ts";
-import { GitRemoteRepositoryCliImpl } from "../services/git/remote_repository.ts";
+import { createAppStore, type AppDependencies } from "../app/store.ts";
+import { AppDependenciesProvider } from "../contexts/app_dependencies_context.tsx";
+import { ThemeModeProvider } from "../contexts/theme_mode_context.tsx";
 
 export async function runTui(
   component: React.ReactNode,
 ) {
-  const renderer = await createCliRenderer({})
+  const renderer = await createCliRenderer({
+    backgroundColor: "#FF00FF",
+  })
   createRoot(renderer).render(
     <ThemeModeProvider>
       {component}
@@ -19,26 +19,25 @@ export async function runTui(
 }
 
 
+export type RunTuiWithReduxOptions = {
+  dependencies: AppDependencies;
+};
+
 export async function runTuiWithRedux(
   component: React.ReactNode,
+  { dependencies }: RunTuiWithReduxOptions,
 ) {
-  const configService = new ConfigServiceImpl();
-  const credentialService = new CredentialServiceImpl();
-  const config = await configService.getMergedConfig();
+  const resolvedConfig = await dependencies.config.getMergedConfig();
   const store = createAppStore({
     config: {
-      mergedConfig: config,
+      mergedConfig: resolvedConfig,
     },
-    extraArgument: {
-      config: configService,
-      credentials: credentialService,
-      git: new GitRemoteRepositoryCliImpl(),
-    },
+    dependencies,
   });
 
   await runTui(
     <Provider store={store}>
-      {component}
-    </Provider>
-  )
+      <AppDependenciesProvider value={dependencies}>{component}</AppDependenciesProvider>
+    </Provider>,
+  );
 }

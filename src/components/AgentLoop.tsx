@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type z from "zod";
+import { useAppDependencies } from "../contexts/app_dependencies_context.tsx";
 // import { renderTui } from "../lib/opentui_render.tsx";
 import { IssueAgentSchema, type IssueSchema } from "../schema.ts";
 import { AIService, type UsageCallback } from "../services/ai.ts";
@@ -20,10 +21,14 @@ export function AgentLoop({
   const [status, setStatus] = useState<"thinking" | "answering">("thinking");
   const [questions, setQuestions] = useState<string[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const dependencies = useAppDependencies();
 
   const performStep = async () => {
     try {
-      const aiService = await AIService.create();
+      const aiService = await AIService.create(
+        dependencies.config,
+        dependencies.credentials,
+      );
       const completion = await aiService.generateStructuredOutput(
         history,
         "issueAgent",

@@ -1,7 +1,7 @@
 import { chmod, mkdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import packageJson from "../../../package.json" with { type: "json" };
-import { type EnvService, envService as defaultEnvService } from "../env_service.ts";
+import { type EnvRepository, envRepository as defaultEnvRepository } from "../env_repository.ts";
 
 export type CredentialsScope = "global" | "local";
 
@@ -12,11 +12,11 @@ export interface CredentialFile {
 }
 
 export class CredentialFileImpl implements CredentialFile {
-  constructor(private envService: EnvService = defaultEnvService) { }
+  constructor(private envRepository: EnvRepository = defaultEnvRepository) { }
 
   private getGlobalPath(): string {
     return join(
-      this.envService.getHome(),
+      this.envRepository.getHome(),
       ".config",
       packageJson.name,
       "credentials.yml",

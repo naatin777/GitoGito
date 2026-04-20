@@ -4,12 +4,13 @@ import type { AppDependencies } from "../app/store.ts";
 import { AppRouter } from "../app/router.tsx";
 import { runTuiWithRedux } from "../lib/runner.tsx";
 
-export function createCommitCommand(
+
+export function createDoctorCommand(
   dependencies: AppDependencies = createAppDependencies(),
 ) {
   return new Command()
-    .description("Commit changes to the repository")
+    .description("Check the health of the project")
     .action(async () => {
-      await runTuiWithRedux(<AppRouter initialPath="/commit" />, { dependencies });
+      await runTuiWithRedux(<AppRouter initialPath="/doctor" />, { dependencies });
     });
 }

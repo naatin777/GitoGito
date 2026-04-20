@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import type { EnvService } from "../env_service.ts";
+import type { EnvRepository } from "../env_repository.ts";
 import type { CredentialFile, CredentialsScope } from "./credential_file.ts";
 import { CredentialServiceImpl } from "./credential_service.ts";
 
@@ -24,13 +24,13 @@ class CredentialFileMock implements CredentialFile {
   }
 }
 
-const envMock: EnvService = {
+const envMock: EnvRepository = {
   getCredentials: () => ({}),
   getHome: () => "/tmp",
   getNoColor: () => false,
 };
 
-const envMockWithCredentials: EnvService = {
+const envMockWithCredentials: EnvRepository = {
   getCredentials: () => ({ openRouterApiKey: "env-openrouter-key", githubToken: "env-github-token" }),
   getHome: () => "/tmp",
   getNoColor: () => false,

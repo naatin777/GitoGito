@@ -3,7 +3,7 @@ import { useKeyboard } from "@opentui/react";
 import { useState } from "react";
 import { useOutletContext } from "react-router";
 import { Box, Text } from "../../components/ThemedComponents.tsx";
-import { useThemeMode } from "../../hooks/use_theme_mode.tsx";
+import { useThemeMode } from "../../contexts/theme_mode_context.tsx";
 import { ThemeConfigSchema } from "../../services/config/schema/fields/theme_schema";
 import { resolveThemeColors } from "../config/use_theme_colors.ts";
 import type { InitOutletContext } from "./layout.tsx";

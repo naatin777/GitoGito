@@ -1,9 +1,10 @@
 import { Command } from "@cliffy/command";
+import { createAppDependencies } from "../app/app_extra.ts";
+import type { AppDependencies } from "../app/store.ts";
 import { AppRouter } from "../app/router.tsx";
 import { flatSchema, fullPath, urlPath } from "../helpers/flat_schema.ts";
 import { runTuiWithRedux } from "../lib/runner.tsx";
 import type { ConfigScope } from "../services/config/config_file.ts";
-import { ConfigServiceImpl, type ConfigService } from "../services/config/config_service.ts";
 import { ConfigSchema, type Config } from "../services/config/schema/config_schema.ts";
 import type { NestedKeys } from "../type.ts";
 
@@ -26,7 +27,7 @@ function resolveScope(options: ConfigCommandOptions): ConfigScope {
 export function buildSubcommands(
   root: Command<void, void, void, [], ConfigCommandOptions>,
   items: ReturnType<typeof flatSchema>,
-  configService: ConfigService,
+  dependencies: AppDependencies,
   depth = 0,
 ) {
   for (const item of items) {
@@ -42,16 +43,25 @@ export function buildSubcommands(
         .action(async (options: ConfigSetCommandOptions) => {
           const scope = resolveScope(options);
           if (options.set) {
-            await configService.saveConfig(scope, itemFullPath as NestedKeys<Config>, options.set);
+            await dependencies.config.saveConfig(
+              scope,
+              itemFullPath as NestedKeys<Config>,
+              options.set,
+            );
           } else {
-            const scope = resolveScope(options);
-            await runTuiWithRedux(<AppRouter initialPath={`/config/${itemUrlPath}`} params={{ scope }} />);
+            await runTuiWithRedux(
+              <AppRouter initialPath={`/config/${itemUrlPath}`} params={{ scope }} />,
+              { dependencies },
+            );
           }
         });
     } else {
       cmd.action(async (options: ConfigCommandOptions) => {
         const scope = resolveScope(options);
-        await runTuiWithRedux(<AppRouter initialPath={`/config/${itemUrlPath}`} params={{ scope }} />);
+        await runTuiWithRedux(
+          <AppRouter initialPath={`/config/${itemUrlPath}`} params={{ scope }} />,
+          { dependencies },
+        );
       });
     }
 
@@ -65,14 +75,16 @@ export function buildSubcommands(
           // Whether the ancestor path matches the current item.parents
           child.parents.slice(0, depth).every((p, i) => p === item.parents[i]),
       );
-      buildSubcommands(cmd, children, configService, depth + 1);
+      buildSubcommands(cmd, children, dependencies, depth + 1);
     }
 
     root.command(item.key, cmd);
   }
 }
 
-export function createConfigCommand(_config?: Config) {
+export function createConfigCommand(
+  dependencies: AppDependencies = createAppDependencies(),
+) {
   const command = new Command()
     .description("Configure the repository")
     .globalOption("--project", "Set project settings.", {
@@ -86,10 +98,10 @@ export function createConfigCommand(_config?: Config) {
     })
     .action(async (options: ConfigCommandOptions) => {
       const scope = resolveScope(options);
-      await runTuiWithRedux(<AppRouter initialPath="/config" params={{ scope }} />);
+      await runTuiWithRedux(<AppRouter initialPath="/config" params={{ scope }} />, { dependencies });
     });
 
-  buildSubcommands(command, flatSchema(ConfigSchema), new ConfigServiceImpl());
+  buildSubcommands(command, flatSchema(ConfigSchema), dependencies);
 
   return command;
 }

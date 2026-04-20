@@ -4,7 +4,6 @@ import { configUiReducer } from "../features/config/config_page_slice.ts";
 import { configReducer } from "../features/config/config_slice.ts";
 import { issueReducer } from "../features/issue/issue_slice.ts";
 import { notificationsReducer } from "../features/notifications/notifications_slice.ts";
-import { setupReducer } from "../features/setup/setup_slice.ts";
 import {
   type ConfigService,
   ConfigServiceImpl,
@@ -22,10 +21,10 @@ import {
   GitRemoteRepositoryCliImpl,
 } from "../services/git/remote_repository.ts";
 
-export interface AppExtraArgument {
+export interface AppDependencies {
   config: ConfigService;
   credentials: CredentialService;
-  git: GitRemoteRepository;
+  gitRemoteRepository: GitRemoteRepository;
 }
 
 const reducer = {
@@ -33,7 +32,6 @@ const reducer = {
   config: configReducer,
   issue: issueReducer,
   configUi: configUiReducer,
-  setup: setupReducer,
   notifications: notificationsReducer,
 };
 
@@ -44,8 +42,8 @@ export function createAppStore({
     globalConfig = {} as Partial<GlobalConfig>,
     projectConfig = {} as Partial<ProjectConfig>,
   } = {},
-  extraArgument = {
-    git: new GitRemoteRepositoryCliImpl(),
+  dependencies = {
+    gitRemoteRepository: new GitRemoteRepositoryCliImpl(),
     config: new ConfigServiceImpl(),
     credentials: new CredentialServiceImpl(),
   }
@@ -56,7 +54,7 @@ export function createAppStore({
     globalConfig?: Partial<GlobalConfig>;
     projectConfig?: Partial<ProjectConfig>;
   };
-  extraArgument?: AppExtraArgument;
+  dependencies?: AppDependencies;
 } = {}) {
   return configureStore({
     reducer,
@@ -66,7 +64,7 @@ export function createAppStore({
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         thunk: {
-          extraArgument,
+          extraArgument: dependencies,
         },
       }),
   });

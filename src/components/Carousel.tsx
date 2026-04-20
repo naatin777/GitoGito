@@ -2,8 +2,8 @@ import { TextAttributes } from "@opentui/core";
 import { useKeyboard, useRenderer } from "@opentui/react";
 import { useState } from "react";
 import { useThemeColors } from "../features/config/use_theme_colors.ts";
+import { useThemeMode } from "../contexts/theme_mode_context.tsx";
 import { isCtrlC, isEnter } from "../helpers/opentui/key.ts";
-import { useThemeMode } from "../hooks/use_theme_mode.tsx";
 import { Box, Text } from "./ThemedComponents.tsx";
 // import { renderTui } from "../lib/opentui_render.tsx";
 

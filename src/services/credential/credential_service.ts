@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { parse, parseDocument } from "yaml";
 import type { NestedKeys, PathValue } from "../../type.ts";
-import { envService as defaultEnvService, type EnvService } from "../env_service.ts";
+import { envRepository as defaultEnvRepository, type EnvRepository } from "../env_repository.ts";
 import {
   credentialFile as defaultCredentialFile,
   type CredentialFile,
@@ -22,7 +22,7 @@ export interface CredentialService {
 
 export class CredentialServiceImpl implements CredentialService {
   constructor(
-    private envService: EnvService = defaultEnvService,
+    private envRepository: EnvRepository = defaultEnvRepository,
     private credentialFile: CredentialFile = defaultCredentialFile,
   ) { }
 
@@ -39,7 +39,7 @@ export class CredentialServiceImpl implements CredentialService {
   async getMergedCredentials(): Promise<Partial<Credentials>> {
     const global = await this.getGlobalCredentials();
     const local = await this.getLocalCredentials();
-    const env = this.envService.getCredentials();
+    const env = this.envRepository.getCredentials();
     return _.merge({}, global, local, env);
   }
 

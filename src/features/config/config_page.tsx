@@ -4,6 +4,7 @@ import { useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
 import { SplitPane } from "../../components/SplitPane.tsx";
 import { Box, Text } from "../../components/ThemedComponents.tsx";
+import { useThemeMode } from "../../contexts/theme_mode_context.tsx";
 import type { FlatSchemaItem } from "../../helpers/flat_schema.ts";
 import { fullPath as getFullPath } from "../../helpers/flat_schema.ts";
 import { isEnter, keyEventToInput } from "../../helpers/opentui/key.ts";
@@ -33,6 +34,8 @@ export const ConfigPage = ({ flattenConfigSchema }: ConfigPageProps) => {
   const filteredItems = useAppSelector(selectConfigFilteredItems);
   const openPaths = useAppSelector(selectConfigOpenPaths);
   const selectedItem = useAppSelector(selectConfigSelectedItem);
+
+  const theme = useThemeMode()
 
   useEffect(() => {
     dispatch(initializeConfigTree(flattenConfigSchema));
@@ -73,7 +76,7 @@ export const ConfigPage = ({ flattenConfigSchema }: ConfigPageProps) => {
   return (
     <Box flexDirection="column" height={size.height}>
       <Text attributes={TextAttributes.BOLD}>
-        {`<Config>`}
+        {`<Config> ${theme ?? ""}`}
       </Text>
       <SplitPane direction="horizontal">
         <TreeList

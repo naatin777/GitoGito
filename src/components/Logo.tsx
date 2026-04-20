@@ -1,5 +1,6 @@
 import { TextAttributes } from "@opentui/core";
-import { runTuiWithRedux } from "../lib/runner";
+import { createAppDependencies } from "../app/app_extra.ts";
+import { runTuiWithRedux } from "../lib/runner.tsx";
 import { Box, Text } from "./ThemedComponents";
 
 const yellow = "#FFFF00";
@@ -129,6 +130,12 @@ export function Logo() {
 
 /* v8 ignore start */
 if (import.meta.main) {
-  await runTuiWithRedux(<Box width="100%" height="100%" justifyContent="center" alignItems="center"><Logo /></Box>);
+  const dependencies = createAppDependencies();
+  await runTuiWithRedux(
+    <Box width="100%" height="100%" justifyContent="center" alignItems="center">
+      <Logo />
+    </Box>,
+    { dependencies },
+  );
 }
 /* v8 ignore stop */
