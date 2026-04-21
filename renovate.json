@@ -28,7 +28,13 @@
     },
     {
       "matchManagers": ["bun", "npm"],
-      "matchPackageNames": ["ai", "@openrouter/ai-sdk-provider", "zod"],
+      "matchPackageNames": [
+        "ai",
+        "@ai-sdk/google",
+        "@openrouter/ai-sdk-provider",
+        "ollama-ai-provider-v2",
+        "zod"
+      ],
       "groupName": "ai ecosystem"
     },
     {
@@ -43,8 +49,13 @@
     },
     {
       "matchManagers": ["bun", "npm"],
-      "matchPackageNames": ["typescript", "bun-types"],
-      "groupName": "typescript and bun types"
+      "matchPackageNames": ["bun", "bun-types"],
+      "groupName": "bun runtime and types"
+    },
+    {
+      "matchManagers": ["bun", "npm"],
+      "matchPackageNames": ["typescript"],
+      "groupName": "typescript"
     },
     {
       "matchManagers": ["github-actions"],
