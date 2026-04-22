@@ -1,7 +1,7 @@
 import { beforeEach, expect, mock, test } from "bun:test";
 
 mock.module("../lib/runner.tsx", () => ({
-  runTuiWithRedux: mock(() => Promise.resolve()),
+  runFullScreenTui: mock(() => Promise.resolve()),
 }));
 mock.module("../app/router.tsx", () => ({
   AppRouter: () => null,

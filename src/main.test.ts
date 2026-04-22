@@ -20,7 +20,7 @@ test("createMainCommand registers init, config, issue, commit, completions subco
   expect(names).toContain("config");
   expect(names).toContain("issue");
   expect(names).toContain("commit");
-  expect(names).not.toContain("completions");
+  expect(names).toContain("completions");
 });
 
 test("createMainCommand passes noColor to help settings", () => {

@@ -19,16 +19,42 @@ export function flatSchema(schema: z.ZodDefault<z.ZodObject> | z.ZodObject, pare
   const shape = schema instanceof z.ZodDefault ? schema.unwrap().shape : schema.shape;
 
   return Object.entries(shape).flatMap(([key, field]) => {
+    const objectField = extractObjectSchema(field);
+
     const item: FlatSchemaItem = {
       key,
       parents,
       description: field.description,
-      isLeaf: !(field instanceof z.ZodDefault || field instanceof z.ZodObject),
+      isLeaf: objectField === null,
     };
 
-    if (field instanceof z.ZodDefault || field instanceof z.ZodObject) {
-      return [item, ...flatSchema(field as z.ZodDefault<z.ZodObject> | z.ZodObject, [...parents, key])];
+    if (objectField) {
+      return [item, ...flatSchema(objectField, [...parents, key])];
     }
     return [item];
   });
+}
+
+function extractObjectSchema(field: unknown): z.ZodObject | null {
+  let current: unknown = field;
+
+  for (let i = 0; i < 8; i++) {
+    if (current instanceof z.ZodObject) {
+      return current;
+    }
+
+    if (
+      current instanceof z.ZodDefault ||
+      current instanceof z.ZodOptional ||
+      current instanceof z.ZodNullable ||
+      current instanceof z.ZodCatch
+    ) {
+      current = current.unwrap();
+      continue;
+    }
+
+    return null;
+  }
+
+  return null;
 }

@@ -10,7 +10,7 @@ import type { ProjectConfig } from "../services/config/schema/project_config_sch
 import type { NestedKeys, PathValue } from "../type.ts";
 
 mock.module("../lib/runner.tsx", () => ({
-  runTuiWithRedux: mock(() => Promise.resolve()),
+  runFullScreenTui: mock(() => Promise.resolve()),
 }));
 mock.module("../app/router.tsx", () => ({
   AppRouter: () => null,
@@ -78,7 +78,7 @@ test("--set でサブコマンドの saveConfig が呼ばれる", async () => {
 
   expect(saveConfig).toHaveBeenCalledTimes(1);
   expect(saveConfig.mock.calls[0][0]).toBe("project");
-  expect(saveConfig.mock.calls[0][1]).toBe("ai.default");
+  expect(String(saveConfig.mock.calls[0][1])).toBe("ai.default.provider");
   expect(saveConfig.mock.calls[0][2]).toBe("openai");
 });
 
