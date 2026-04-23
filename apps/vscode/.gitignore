@@ -1,0 +1,8 @@
+out
+dist
+node_modules
+.vscode-test/
+*.vsix
+
+.gitogito.local.yml
+.gitogito.credentials.yml

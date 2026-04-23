@@ -3,13 +3,17 @@
   "hooks": {
     "afterFileEdit": [
       {
-        "command": "bun run typecheck",
-        "matcher": "src/**/*.ts src/**/*.tsx"
+        "command": "pnpm format",
+        "matcher": "apps/.*\\.(ts|tsx|js|jsx|json)$|packages/.*\\.(ts|tsx|js|jsx|json)$"
+      },
+      {
+        "command": "pnpm check",
+        "matcher": "apps/.*\\.(ts|tsx|js|jsx)$|packages/.*\\.(ts|tsx|js|jsx)$"
       }
     ],
     "stop": [
       {
-        "command": "bun run test"
+        "command": "pnpm test"
       }
     ],
     "beforeShellExecution": [

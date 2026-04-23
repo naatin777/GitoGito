@@ -1,0 +1,24 @@
+{
+  "name": "@gitogito/shared",
+  "displayName": "gitogito",
+  "description": "Shared utilities for the gitogito project.",
+  "version": "0.0.1",
+  "license": "MIT",
+  "private": true,
+  "main": "src/index.ts",
+  "scripts": {
+    "format": "biome format --write src",
+    "lint": "biome check src",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "zod": "catalog:",
+    "yaml": "catalog:",
+    "neverthrow": "catalog:"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.5",
+    "vitest": "^4.1.5"
+  }
+}

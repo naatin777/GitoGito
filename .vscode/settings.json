@@ -15,5 +15,12 @@
   },
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
-  }
+  },
+  "files.exclude": {
+    "apps/vscode/out": false
+  },
+  "search.exclude": {
+    "apps/vscode/out": true
+  },
+  "typescript.tsc.autoDetect": "off"
 }

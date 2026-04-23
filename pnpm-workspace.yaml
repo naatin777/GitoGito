@@ -1,0 +1,11 @@
+packages:
+  - apps/*
+  - packages/*
+
+ignoredBuiltDependencies:
+  - lefthook
+
+catalog:
+  "zod": "^4.3.6"
+  "yaml": "^2.8.3"
+  "neverthrow": "^8.2.0"

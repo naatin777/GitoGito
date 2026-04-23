@@ -9,10 +9,3 @@
 
 .gitogito.local.yml
 .gitogito.credentials.yml
-
-out/
-dist/
-
-.turbo/
-.coverage/
-.pnpm-store/

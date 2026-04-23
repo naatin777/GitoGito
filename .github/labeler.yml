@@ -4,61 +4,42 @@ ci:
           - .github/**/*
           - codecov.yml
           - .coderabbit.yml
+          - lefthook.yml
 
 config:
   - changed-files:
       - any-glob-to-any-file:
           - package.json
-          - bun.lock
-          - .gitogito.yml
+          - pnpm-lock.yaml
+          - pnpm-workspace.yaml
+          - turbo.json
+          - tsconfig.base.json
+          - biome.json
+          - renovate.json
           - .gitignore
-          - src/utils/config.ts
-          - src/constants/config.ts
+          - .npmrc
 
-commands:
+tui:
   - changed-files:
       - any-glob-to-any-file:
-          - src/commands/**/*
-          - src/lib/command.ts
+          - apps/tui/**/*
 
-components:
+vscode:
   - changed-files:
       - any-glob-to-any-file:
-          - src/components/**/*
+          - apps/vscode/**/*
 
-constants:
+shared:
   - changed-files:
       - any-glob-to-any-file:
-          - src/constants/**/*
+          - packages/shared/**/*
 
-services:
+workspace:
   - changed-files:
       - any-glob-to-any-file:
-          - src/services/**/*
-
-issue:
-  - changed-files:
-      - any-glob-to-any-file:
-          - src/features/issue/**/*
-          - src/services/github/issue.ts
-
-commit:
-  - changed-files:
-      - any-glob-to-any-file:
-          - src/features/commit/**/*
-          - src/services/git/**/*
-
-utils:
-  - changed-files:
-      - any-glob-to-any-file:
-          - src/utils/**/*
-          - src/type.ts
-          - src/schema.ts
-
-core:
-  - changed-files:
-      - any-glob-to-any-file:
-          - src/main.ts
+          - apps/**/*
+          - packages/**/*
+          - .changeset/**/*
 
 test:
   - changed-files:

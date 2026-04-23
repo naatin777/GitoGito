@@ -1,7 +1,7 @@
 comment:
-  layout: "header, diff, changes"
+  layout: "header, diff, flags, files"
   require_changes: false
-  after_n_builds: 1
+  after_n_builds: 2
 
 coverage:
   status:
@@ -13,3 +13,17 @@ coverage:
       default:
         target: 80%
         threshold: 0%
+
+flags:
+  tui:
+    paths:
+      - apps/tui/
+    carryforward: true
+  vscode:
+    paths:
+      - apps/vscode/
+    carryforward: true
+  shared:
+    paths:
+      - packages/shared/
+    carryforward: true

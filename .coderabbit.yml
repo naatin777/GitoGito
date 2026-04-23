@@ -4,15 +4,15 @@ early_access: false
 
 reviews:
   profile: "chill"
-  request_changes_workflow: false
+  request_changes_workflow: true
   high_level_summary: true
   poem: false
   review_status: true
-  collapse_walkthrough: false
+  collapse_walkthrough: true
 
   auto_review:
     enabled: true
-    drafts: true
+    drafts: false
     ignore_title_keywords:
       - "WIP"
       - "Draft"
@@ -21,32 +21,29 @@ reviews:
   path_filters:
     - "!bun.lock"
     - "!**/*.lock"
+    - "!**/out/**"
+    - "!**/dist/**"
     - "!**/cov_profile/**"
-    - "!**/testdata/**"
-    - "!**/*.generated.ts"
 
   path_instructions:
-    - path: "**"
+    - path: "apps/tui/**"
       instructions: |
         You are a Senior Bun + TypeScript Software Engineer.
-        Review the code based on the following criteria:
-
-        1. **Bun Runtime Best Practices**:
-           - Ensure code aligns with Bun runtime and `package.json` scripts.
-           - Prefer Bun/Node APIs (`process`, `node:fs`, `node:path`) over Deno APIs.
-           - Check CLI/runtime behavior under Bun (arguments, exits, env handling).
-
-        2. **OpenTUI & CLI Structure**:
-           - Review OpenTUI usage (`@opentui/react`, native primitives/hooks) for regressions.
-           - Ensure Cliffy command wiring is coherent and options/subcommands behave correctly.
-
-        3. **TypeScript & Logic**:
-           - Enforce strict TypeScript typing (avoid `any`).
-           - Focus on logic errors, security risks, and performance issues.
-           - Do not comment on formatting (assume automated formatters handle it).
-
-        4. **Tone**:
-           - Keep feedback concise, constructive, and "chill".
+        - Review the code based on Bun runtime best practices.
+        - Ensure OpenTUI usage (@opentui/react) and Cliffy command wiring are correct.
+        - Focus on CLI-specific behavior (stdin/stdout, terminal handling).
+    - path: "apps/vscode/**"
+      instructions: |
+        You are a Senior VS Code Extension Developer.
+        - Review the code based on VS Code API best practices.
+        - Ensure proper use of `vscode.ExtensionContext`, disposables, and command registrations.
+        - Be mindful of Node.js (CommonJS/ESM) compatibility within the VS Code environment.
+    - path: "**"
+      instructions: |
+        Review the code for logic errors, security risks, and performance.
+        - Enforce strict TypeScript typing (avoid `any`).
+        - Do not comment on formatting (assume Biome handles it).
+        - Keep feedback concise, constructive, and "chill".
 
 chat:
   auto_reply: true

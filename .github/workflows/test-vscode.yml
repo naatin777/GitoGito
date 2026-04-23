@@ -1,4 +1,4 @@
-name: Core Test & Coverage
+name: VSCode Extension Test
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  core:
+  vscode:
     runs-on: ubuntu-latest
     steps:
       - name: Git Checkout
@@ -31,25 +31,25 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Typecheck
-        run: pnpm check
+      - name: Typecheck VSCode package
+        run: pnpm --filter @gitogito/vscode check
 
-      - name: Run TUI tests
-        run: pnpm --filter @gitogito/tui test
+      - name: Build VSCode package
+        run: pnpm --filter @gitogito/vscode build
 
-      - name: Run shared package tests
-        run: pnpm --filter @gitogito/shared test
+      - name: Install Xvfb
+        run: sudo apt-get update && sudo apt-get install -y xvfb
 
-      - name: Run TUI coverage
-        run: pnpm --filter @gitogito/tui test:coverage
+      - name: Run VSCode tests
+        run: xvfb-run -a pnpm --filter @gitogito/vscode test
 
-      - name: Run shared coverage
-        run: pnpm --filter @gitogito/shared test:coverage
+      - name: Run VSCode coverage
+        run: xvfb-run -a pnpm --filter @gitogito/vscode test:coverage
 
-      - name: Upload coverage to Codecov
+      - name: Upload VSCode coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
-          files: ./apps/tui/.coverage/lcov.info,./packages/shared/.coverage/lcov.info
+          files: ./apps/vscode/.coverage/lcov.info
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: ${{ github.repository }}

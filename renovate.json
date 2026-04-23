@@ -1,18 +1,44 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
+  "extends": [
+    "config:recommended"
+  ],
   "dependencyDashboard": true,
-  "enabledManagers": ["bun", "npm", "github-actions"],
+  "enabledManagers": [
+    "bun",
+    "npm",
+    "github-actions"
+  ],
   "lockFileMaintenance": {
     "enabled": true
   },
   "packageRules": [
     {
-      "matchManagers": ["bun", "npm"],
+      "matchManagers": [
+        "bun",
+        "npm"
+      ],
       "rangeStrategy": "bump"
     },
     {
-      "matchManagers": ["bun", "npm"],
+      "matchManagers": [
+        "bun",
+        "npm"
+      ],
+      "matchPackageNames": [
+        "typescript",
+        "@biomejs/biome",
+        "turbo",
+        "lefthook",
+        "bun-types"
+      ],
+      "groupName": "workspace tooling"
+    },
+    {
+      "matchManagers": [
+        "bun",
+        "npm"
+      ],
       "matchPackageNames": [
         "react",
         "@types/react",
@@ -22,44 +48,70 @@
       "groupName": "react ecosystem"
     },
     {
-      "matchManagers": ["bun", "npm"],
-      "matchPackageNames": ["@opentui/core", "@opentui/react"],
+      "matchManagers": [
+        "bun",
+        "npm"
+      ],
+      "matchPackageNames": [
+        "@opentui/core",
+        "@opentui/react"
+      ],
       "groupName": "opentui ecosystem"
     },
     {
-      "matchManagers": ["bun", "npm"],
+      "matchManagers": [
+        "bun",
+        "npm"
+      ],
       "matchPackageNames": [
         "ai",
         "@ai-sdk/google",
         "@openrouter/ai-sdk-provider",
-        "ollama-ai-provider-v2",
-        "zod"
+        "ollama-ai-provider-v2"
       ],
       "groupName": "ai ecosystem"
     },
     {
-      "matchManagers": ["bun", "npm"],
-      "matchPackageNames": ["octokit", "@octokit/openapi-types"],
+      "matchManagers": [
+        "bun",
+        "npm"
+      ],
+      "matchPackageNames": [
+        "octokit",
+        "@octokit/openapi-types"
+      ],
       "groupName": "octokit ecosystem"
     },
     {
-      "matchManagers": ["bun", "npm"],
-      "matchPackageNames": ["lodash", "@types/lodash"],
+      "matchManagers": [
+        "bun",
+        "npm"
+      ],
+      "matchPackageNames": [
+        "lodash",
+        "@types/lodash"
+      ],
       "groupName": "lodash ecosystem"
     },
     {
-      "matchManagers": ["bun", "npm"],
-      "matchPackageNames": ["bun", "bun-types"],
-      "groupName": "bun runtime and types"
+      "matchManagers": [
+        "bun",
+        "npm"
+      ],
+      "matchPackageNames": [
+        "zod",
+        "yaml",
+        "neverthrow"
+      ],
+      "groupName": "shared schema and utils"
     },
     {
-      "matchManagers": ["bun", "npm"],
-      "matchPackageNames": ["typescript"],
-      "groupName": "typescript"
-    },
-    {
-      "matchManagers": ["github-actions"],
-      "matchPackageNames": ["oven-sh/setup-bun"],
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "oven-sh/setup-bun"
+      ],
       "groupName": "bun github action"
     }
   ]
