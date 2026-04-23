@@ -1,5 +1,5 @@
-blank_issues_enabled: false
+blank_issues_enabled: true
 contact_links:
   - name: 💬 GitHub Discussions
-    url: https://github.com/naatin777/GitoGito/discussions
+    url: https://github.com/naatin777/gitogito/discussions
     about: Please ask questions or discuss ideas here instead of opening an issue.
