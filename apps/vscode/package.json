@@ -5,9 +5,8 @@
   "version": "0.0.1",
   "license": "MIT",
   "private": true,
-  "type": "module",
   "engines": {
-    "vscode": "^1.116.0"
+    "vscode": "^1.110.0"
   },
   "categories": [
     "Other"
@@ -39,7 +38,7 @@
     "neverthrow": "catalog:"
   },
   "devDependencies": {
-    "@types/vscode": "^1.116.0",
+    "@types/vscode": "^1.110.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
     "@vscode/test-cli": "^0.0.12",

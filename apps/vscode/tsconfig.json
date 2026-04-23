@@ -4,11 +4,20 @@
     "module": "Node16",
     "moduleResolution": "Node16",
     "target": "ES2022",
-    "lib": ["ES2022"],
+    "verbatimModuleSyntax": false,
+    "lib": [
+      "ES2022"
+    ],
     "sourceMap": true,
     "rootDir": "src",
     "outDir": "out",
-    "types": ["vscode", "node", "mocha"]
+    "types": [
+      "vscode",
+      "node",
+      "mocha"
+    ]
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*"
+  ]
 }
