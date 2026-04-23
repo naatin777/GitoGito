@@ -23,3 +23,7 @@ flags:
     paths:
       - apps/vscode/
     carryforward: true
+  shared:
+    paths:
+      - packages/shared/
+    carryforward: true

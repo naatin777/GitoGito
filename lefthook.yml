@@ -2,9 +2,9 @@ pre-commit:
   parallel: true
   commands:
     biome:
-      glob: "apps/**/src/**/*.{ts,tsx,js,jsx,json}"
+      glob: "{apps,packages}/**/src/**/*.{ts,tsx,js,jsx,json}"
       stage_fixed: true
       run: pnpm exec biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
-    
+
     check:
-      run: pnpm turbo check
+      run: pnpm turbo run check
