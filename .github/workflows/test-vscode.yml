@@ -47,7 +47,7 @@ jobs:
         run: xvfb-run -a pnpm --filter @gitogito/vscode test:coverage
 
       - name: Upload VSCode coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           files: ./apps/vscode/.coverage/lcov.info
           fail_ci_if_error: true
