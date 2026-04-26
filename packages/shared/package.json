@@ -10,6 +10,7 @@
     "format": "biome format --write src",
     "lint": "biome check src",
     "test": "vitest run",
+    "test:watch": "vitest run --watch",
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
