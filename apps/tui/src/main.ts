@@ -3,7 +3,6 @@ import { Command } from "@cliffy/command";
 import { CompletionsCommand } from "@cliffy/command/completions";
 import { UpgradeCommand } from "@cliffy/command/upgrade";
 import { NpmProvider } from "@cliffy/command/upgrade/provider/npm";
-import { add } from "@gitogito/shared";
 import packageJson from "../package.json" with { type: "json" };
 
 export function createAppCommand() {
@@ -36,4 +35,3 @@ export function createAppCommand() {
 if (import.meta.main) {
   await createAppCommand().parse(Bun.argv.slice(2));
 }
-add(1, 2);
