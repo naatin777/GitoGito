@@ -1,29 +1,31 @@
 {
-    "name": "gitogito",
-    "private": true,
-    "packageManager": "pnpm@10.28.2",
-    "scripts": {
-        "prepare": "lefthook install",
-        "dev:tui": "turbo run dev --filter @gitogito/tui",
-        "dev:vscode": "turbo run dev --filter @gitogito/vscode",
-        "build": "turbo run build",
-        "test": "turbo run test",
-        "test:tui": "turbo run test --filter @gitogito/tui",
-        "test:vscode": "turbo run test --filter @gitogito/vscode",
-        "test:coverage": "turbo run test:coverage",
-        "test:coverage:tui": "turbo run test:coverage --filter @gitogito/tui",
-        "test:coverage:vscode": "turbo run test:coverage --filter @gitogito/vscode",
-        "check": "turbo run check",
-        "lint": "biome check .",
-        "format": "biome format --write .",
-        "change": "changeset",
-        "release:version": "changeset version && pnpm install"
-    },
-    "devDependencies": {
-        "@biomejs/biome": "^2.4.12",
-        "@changesets/cli": "^2.31.0",
-        "lefthook": "^2.1.6",
-        "turbo": "^2.9.6",
-        "typescript": "^5.9.3"
-    }
+  "name": "gitogito",
+  "private": true,
+  "packageManager": "pnpm@10.33.2",
+  "scripts": {
+    "prepare": "lefthook install",
+    "dev:tui": "turbo run dev --filter @gitogito/tui --log-prefix=none --",
+    "dev:vscode": "turbo run dev --filter @gitogito/vscode --log-prefix=none --",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "test:tui": "turbo run test --filter @gitogito/tui --log-prefix=none",
+    "test:vscode": "turbo run test --filter @gitogito/vscode --log-prefix=none",
+    "test:shared": "turbo run test --filter @gitogito/shared --log-prefix=none",
+    "test:coverage": "turbo run test:coverage",
+    "test:coverage:tui": "turbo run test:coverage --filter @gitogito/tui --log-prefix=none",
+    "test:coverage:vscode": "turbo run test:coverage --filter @gitogito/vscode --log-prefix=none",
+    "test:coverage:shared": "turbo run test:coverage --filter @gitogito/shared --log-prefix=none",
+    "check": "turbo run check",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "change": "changeset",
+    "release:version": "changeset version && pnpm install"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.13",
+    "@changesets/cli": "^2.31.0",
+    "lefthook": "^2.1.6",
+    "turbo": "^2.9.6",
+    "typescript": "^5.9.3"
+  }
 }

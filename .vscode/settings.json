@@ -22,5 +22,7 @@
   "search.exclude": {
     "apps/vscode/out": true
   },
-  "typescript.tsc.autoDetect": "off"
+  "typescript.tsc.autoDetect": "off",
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true
 }
