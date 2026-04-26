@@ -99,6 +99,18 @@
         "npm"
       ],
       "matchPackageNames": [
+        "i18next",
+        "i18next-fs-backend",
+        "react-i18next"
+      ],
+      "groupName": "i18next ecosystem"
+    },
+    {
+      "matchManagers": [
+        "bun",
+        "npm"
+      ],
+      "matchPackageNames": [
         "zod",
         "yaml",
         "neverthrow"
