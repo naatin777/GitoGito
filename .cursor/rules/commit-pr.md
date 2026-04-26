@@ -43,13 +43,21 @@ Use [Conventional Commits](https://www.conventionalcommits.org/).
 
 ## Pull requests
 
-**Title:** follow the same Conventional Commits style as commit subjects.
+**Title:** same style as [Conventional Commits](#conventional-commits) commit subjects (type, optional scope, short imperative subject). **Do not** append the issue number in the title (e.g. avoid `chore: foo (#123)`). Keep the title about the change only.
 
-**Body (Markdown):** include at least:
+**Body (Markdown):** include at least the sections below. **Link the tracking issue in the body**, not the title—e.g. `Related to #123`, `Fixes #123`, or `Closes #123` when the PR should auto-close the issue. One line in **Why** or a short **Related issues** block is enough.
 
 ```markdown
 ## What
 ## Why
 ## How to test
 ## Risks / impact
+```
+
+Optional but recommended when an issue exists:
+
+```markdown
+## Related issues
+
+- #123 — short reason this PR addresses it
 ```
