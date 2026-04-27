@@ -31,7 +31,7 @@
     "diff": "^9.0.0",
     "i18next": "^26.0.8",
     "i18next-fs-backend": "^2.6.5",
-    "isomorphic-git": "^1.37.5",
+    "isomorphic-git": "^1.37.6",
     "lodash": "^4.18.1",
     "neverthrow": "catalog:",
     "octokit": "^5.0.5",
