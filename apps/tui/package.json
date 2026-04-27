@@ -37,7 +37,7 @@
     "octokit": "^5.0.5",
     "ollama-ai-provider-v2": "^3.5.0",
     "react": "^19.2.5",
-    "react-i18next": "^17.0.4",
+    "react-i18next": "^17.0.6",
     "react-redux": "^9.2.0",
     "react-router": "^7.14.2",
     "simple-git": "^3.36.0",
