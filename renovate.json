@@ -88,10 +88,9 @@
         "npm"
       ],
       "matchPackageNames": [
-        "lodash",
-        "@types/lodash"
+        "es-toolkit"
       ],
-      "groupName": "lodash ecosystem"
+      "groupName": "es-toolkit"
     },
     {
       "matchManagers": [
