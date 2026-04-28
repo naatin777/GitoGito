@@ -11,7 +11,7 @@
     "dev:tui": "turbo run dev --filter @gitogito/tui --log-prefix=none --",
     "dev:vscode": "turbo run dev --filter @gitogito/vscode --log-prefix=none --",
     "build": "turbo run build",
-    "test": "turbo run test",
+    "test": "turbo run test --concurrency=1",
     "test:tui": "turbo run test --filter @gitogito/tui --log-prefix=none",
     "test:vscode": "turbo run test --filter @gitogito/vscode --log-prefix=none",
     "test:shared": "turbo run test --filter @gitogito/shared --log-prefix=none",
@@ -23,11 +23,14 @@
     "lint": "biome check .",
     "format": "biome format --write .",
     "change": "changeset",
+    "dep:graph": "depcruise packages apps --output-type dot | dot -T svg > dep-graph.svg",
+    "dep:check": "depcruise packages apps --config .dependency-cruiser.js",
     "release:version": "changeset version && pnpm install"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.13",
     "@changesets/cli": "^2.31.0",
+    "dependency-cruiser": "^17.3.10",
     "lefthook": "^2.1.6",
     "turbo": "^2.9.6",
     "typescript": "^5.9.3"

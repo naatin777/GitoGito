@@ -18,6 +18,9 @@
     "stop": [
       {
         "command": "pnpm test"
+      },
+      {
+        "command": "pnpm dep:check"
       }
     ],
     "beforeShellExecution": [
