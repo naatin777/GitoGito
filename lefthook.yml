@@ -7,3 +7,6 @@ pre-commit:
 
     check:
       run: pnpm turbo run check
+
+    gitleaks:
+      run: gitleaks protect --staged --verbose
