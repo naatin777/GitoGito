@@ -5,7 +5,11 @@
   "version": "0.0.1",
   "license": "MIT",
   "private": true,
-  "main": "src/index.ts",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./utils/zod": "./src/utils/zod.ts"
+  },
   "scripts": {
     "format": "biome format --write src",
     "lint": "biome check src",
