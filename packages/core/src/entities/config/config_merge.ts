@@ -1,9 +1,9 @@
 import { merge } from "es-toolkit/object";
-import type { Config } from "../schema/config_schema.js";
-import { ConfigSchema, DEFAULT_CONFIG } from "../schema/config_schema.js";
-import type { GlobalConfig } from "../schema/global_config_schema.js";
-import type { LocalConfig } from "../schema/local_config_schema.js";
-import type { ProjectConfig } from "../schema/project_config_schema.js";
+import type { Config } from "./schema/config_schema.js";
+import { ConfigSchema, DEFAULT_CONFIG } from "./schema/config_schema.js";
+import type { GlobalConfig } from "./schema/global_config_schema.js";
+import type { LocalConfig } from "./schema/local_config_schema.js";
+import type { ProjectConfig } from "./schema/project_config_schema.js";
 
 /**
  * Merge order (later wins on deep paths): **defaults → global → project → local**.

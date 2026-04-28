@@ -1,4 +1,4 @@
-import type { RuntimeEnv } from "../src/config/runtime_env.js";
+import type { RuntimeEnv } from "../src/entities/config/runtime_env.js";
 
 /** Test double for controlled cwd / home / XDG; not a production code path. */
 export class MemoryRuntimeEnv implements RuntimeEnv {
