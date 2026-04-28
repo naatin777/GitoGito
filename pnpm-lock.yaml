@@ -53,6 +53,9 @@ importers:
       '@commitlint/core':
         specifier: ^20.5.2
         version: 20.5.2(@types/node@25.6.0)(conventional-commits-parser@6.4.0)(typescript@5.9.3)
+      '@gitogito/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@gitogito/shared':
         specifier: workspace:*
         version: link:../../packages/shared
