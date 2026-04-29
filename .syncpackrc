@@ -1,0 +1,27 @@
+{
+  "source": [
+    "package.json",
+    "apps/tui/package.json",
+    "apps/vscode/package.json",
+    "packages/core/package.json",
+    "packages/shared/package.json"
+  ],
+  "indent": "  ",
+  "sortAz": [
+    "dependencies",
+    "devDependencies",
+    "peerDependencies"
+  ],
+  "sortFirst": [
+    "name",
+    "version",
+    "private",
+    "description",
+    "author",
+    "license",
+    "workspaces",
+    "scripts",
+    "dependencies",
+    "devDependencies"
+  ]
+}
