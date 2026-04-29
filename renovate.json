@@ -1,60 +1,60 @@
 {
-	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": ["config:recommended", "customManagers:biomeVersions"],
-	"dependencyDashboard": true,
-	"enabledManagers": ["bun", "npm", "github-actions"],
-	"lockFileMaintenance": {
-		"enabled": true
-	},
-	"packageRules": [
-		{
-			"matchManagers": ["bun", "npm"],
-			"rangeStrategy": "bump"
-		},
-		{
-			"matchManagers": ["bun", "npm"],
-			"matchPackageNames": ["typescript", "@biomejs/biome", "turbo", "lefthook", "bun-types"],
-			"groupName": "workspace tooling"
-		},
-		{
-			"matchManagers": ["bun", "npm"],
-			"matchPackageNames": ["react", "@types/react", "react-redux", "react-router"],
-			"groupName": "react ecosystem"
-		},
-		{
-			"matchManagers": ["bun", "npm"],
-			"matchPackageNames": ["@opentui/core", "@opentui/react"],
-			"groupName": "opentui ecosystem"
-		},
-		{
-			"matchManagers": ["bun", "npm"],
-			"matchPackageNames": ["ai", "@ai-sdk/google", "@openrouter/ai-sdk-provider", "ollama-ai-provider-v2"],
-			"groupName": "ai ecosystem"
-		},
-		{
-			"matchManagers": ["bun", "npm"],
-			"matchPackageNames": ["octokit", "@octokit/openapi-types"],
-			"groupName": "octokit ecosystem"
-		},
-		{
-			"matchManagers": ["bun", "npm"],
-			"matchPackageNames": ["es-toolkit"],
-			"groupName": "es-toolkit"
-		},
-		{
-			"matchManagers": ["bun", "npm"],
-			"matchPackageNames": ["i18next", "i18next-fs-backend", "react-i18next"],
-			"groupName": "i18next ecosystem"
-		},
-		{
-			"matchManagers": ["bun", "npm"],
-			"matchPackageNames": ["zod", "yaml", "neverthrow"],
-			"groupName": "shared schema and utils"
-		},
-		{
-			"matchManagers": ["github-actions"],
-			"matchPackageNames": ["oven-sh/setup-bun"],
-			"groupName": "bun github action"
-		}
-	]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", "customManagers:biomeVersions"],
+  "dependencyDashboard": true,
+  "enabledManagers": ["bun", "npm", "github-actions"],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["bun", "npm"],
+      "rangeStrategy": "bump"
+    },
+    {
+      "matchManagers": ["bun", "npm"],
+      "matchPackageNames": ["typescript", "@biomejs/biome", "turbo", "lefthook", "bun-types"],
+      "groupName": "workspace tooling"
+    },
+    {
+      "matchManagers": ["bun", "npm"],
+      "matchPackageNames": ["react", "@types/react", "react-redux", "react-router"],
+      "groupName": "react ecosystem"
+    },
+    {
+      "matchManagers": ["bun", "npm"],
+      "matchPackageNames": ["@opentui/core", "@opentui/react"],
+      "groupName": "opentui ecosystem"
+    },
+    {
+      "matchManagers": ["bun", "npm"],
+      "matchPackageNames": ["ai", "@ai-sdk/google", "@openrouter/ai-sdk-provider", "ollama-ai-provider-v2"],
+      "groupName": "ai ecosystem"
+    },
+    {
+      "matchManagers": ["bun", "npm"],
+      "matchPackageNames": ["octokit", "@octokit/openapi-types"],
+      "groupName": "octokit ecosystem"
+    },
+    {
+      "matchManagers": ["bun", "npm"],
+      "matchPackageNames": ["es-toolkit"],
+      "groupName": "es-toolkit"
+    },
+    {
+      "matchManagers": ["bun", "npm"],
+      "matchPackageNames": ["i18next", "i18next-fs-backend", "react-i18next"],
+      "groupName": "i18next ecosystem"
+    },
+    {
+      "matchManagers": ["bun", "npm"],
+      "matchPackageNames": ["zod", "yaml", "neverthrow"],
+      "groupName": "shared schema and utils"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchPackageNames": ["oven-sh/setup-bun"],
+      "groupName": "bun github action"
+    }
+  ]
 }

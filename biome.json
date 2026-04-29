@@ -1,182 +1,184 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.4.13/schema.json",
-	"vcs": {
-		"enabled": true,
-		"clientKind": "git",
-		"useIgnoreFile": true
-	},
-	"files": {
-		"ignoreUnknown": true,
-		"includes": [
-			"apps/**/*.ts",
-			"apps/**/*.tsx",
-			"apps/**/*.js",
-			"apps/**/*.jsx",
-			"apps/**/*.json",
-			"packages/**/*.ts",
-			"packages/**/*.tsx",
-			"packages/**/*.js",
-			"packages/**/*.jsx",
-			"packages/**/*.json",
-			"package.json",
-			"pnpm-workspace.yaml",
-			"biome.json",
-			"turbo.json",
-			"lefthook.yml",
-			"tsconfig.base.json",
-			"renovate.json",
-			"codecov.yml",
-			".dependency-cruiser.js",
-			".coderabbit.yaml"
-		]
-	},
-	"formatter": {
-		"lineWidth": 120
-	},
-	"javascript": {
-		"formatter": {
-			"quoteStyle": "double",
-			"semicolons": "always",
-			"trailingCommas": "all"
-		}
-	},
-	"json": {
-		"formatter": {
-			"enabled": true
-		}
-	},
-	"linter": {
-		"rules": {
-			"recommended": true,
-			"a11y": {
-				"recommended": true,
-				"noDistractingElements": "error",
-				"noHeaderScope": "error",
-				"noPositiveTabindex": "error",
-				"useAltText": "error",
-				"useAnchorContent": "error",
-				"useButtonType": "error",
-				"useValidAnchor": "error",
-				"useKeyWithClickEvents": "error",
-				"useKeyWithMouseEvents": "error",
-				"useSemanticElements": "error"
-			},
-			"complexity": {
-				"recommended": true,
-				"noExcessiveCognitiveComplexity": "error",
-				"noForEach": "error",
-				"noStaticOnlyClass": "error",
-				"noUselessFragments": "error",
-				"useFlatMap": "error",
-				"useLiteralKeys": "error",
-				"useOptionalChain": "error",
-				"useArrowFunction": "error",
-				"noUselessTernary": "error"
-			},
-			"correctness": {
-				"recommended": true,
-				"noConstantCondition": "error",
-				"noEmptyPattern": "error",
-				"noUnsafeOptionalChaining": "error",
-				"noUnusedImports": "error",
-				"noUnusedVariables": "error",
-				"useExhaustiveDependencies": "error",
-				"useHookAtTopLevel": "error",
-				"useIsNan": "error",
-				"noChildrenProp": "error"
-			},
-			"performance": {
-				"recommended": true,
-				"noAccumulatingSpread": "error",
-				"noDelete": "error",
-				"noReExportAll": "error",
-				"useTopLevelRegex": "error"
-			},
-			"security": {
-				"recommended": true,
-				"noDangerouslySetInnerHtml": "error",
-				"noDangerouslySetInnerHtmlWithChildren": "error",
-				"noGlobalEval": "error"
-			},
-			"suspicious": {
-				"recommended": true,
-				"noExplicitAny": "error",
-				"noConsole": "warn",
-				"noArrayIndexKey": "error",
-				"noAssignInExpressions": "error",
-				"useAwait": "error",
-				"noDoubleEquals": "error"
-			},
-			"style": {
-				"recommended": true,
-				"noParameterAssign": "error",
-				"useBlockStatements": "error",
-				"useConst": "error",
-				"useImportType": "error",
-				"useTemplate": "error",
-				"noNonNullAssertion": "error",
-				"useConsistentArrayType": "error",
-				"useNodejsImportProtocol": "error",
-				"useNamingConvention": {
-					"level": "error"
-				},
-				"useFilenamingConvention": {
-					"level": "error",
-					"options": {
-						"filenameCases": ["kebab-case"]
-					}
-				}
-			}
-		}
-	},
-	"assist": {
-		"enabled": true,
-		"actions": {
-			"source": {
-				"organizeImports": "on"
-			}
-		}
-	},
-	"overrides": [
-		{
-			"includes": ["**/*.tsx", "**/*.jsx"],
-			"linter": {
-				"rules": {
-					"style": {
-						"useFilenamingConvention": {
-							"level": "error",
-							"options": {
-								"filenameCases": ["PascalCase"]
-							}
-						}
-					}
-				}
-			}
-		},
-		{
-			"includes": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx", "**/*.d.ts"],
-			"linter": {
-				"rules": {
-					"style": {
-						"useFilenamingConvention": "off"
-					}
-				}
-			}
-		},
-		{
-			"includes": ["**/i18next.d.ts"],
-			"linter": {
-				"rules": {
-					"style": {
-						"useNamingConvention": {
-							"level": "error",
-							"options": {
-								"strictCase": false
-							}
-						}
-					}
-				}
-			}
-		}
-	]
+  "$schema": "https://biomejs.dev/schemas/2.4.13/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "apps/**/*.ts",
+      "apps/**/*.tsx",
+      "apps/**/*.js",
+      "apps/**/*.jsx",
+      "apps/**/*.json",
+      "packages/**/*.ts",
+      "packages/**/*.tsx",
+      "packages/**/*.js",
+      "packages/**/*.jsx",
+      "packages/**/*.json",
+      "package.json",
+      "pnpm-workspace.yaml",
+      "biome.json",
+      "turbo.json",
+      "lefthook.yml",
+      "tsconfig.base.json",
+      "renovate.json",
+      "codecov.yml",
+      ".dependency-cruiser.js",
+      ".coderabbit.yaml"
+    ]
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 120
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "all"
+    }
+  },
+  "json": {
+    "formatter": {
+      "enabled": true
+    }
+  },
+  "linter": {
+    "rules": {
+      "recommended": true,
+      "a11y": {
+        "recommended": true,
+        "noDistractingElements": "error",
+        "noHeaderScope": "error",
+        "noPositiveTabindex": "error",
+        "useAltText": "error",
+        "useAnchorContent": "error",
+        "useButtonType": "error",
+        "useValidAnchor": "error",
+        "useKeyWithClickEvents": "error",
+        "useKeyWithMouseEvents": "error",
+        "useSemanticElements": "error"
+      },
+      "complexity": {
+        "recommended": true,
+        "noExcessiveCognitiveComplexity": "error",
+        "noForEach": "error",
+        "noStaticOnlyClass": "error",
+        "noUselessFragments": "error",
+        "useFlatMap": "error",
+        "useLiteralKeys": "error",
+        "useOptionalChain": "error",
+        "useArrowFunction": "error",
+        "noUselessTernary": "error"
+      },
+      "correctness": {
+        "recommended": true,
+        "noConstantCondition": "error",
+        "noEmptyPattern": "error",
+        "noUnsafeOptionalChaining": "error",
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error",
+        "useExhaustiveDependencies": "error",
+        "useHookAtTopLevel": "error",
+        "useIsNan": "error",
+        "noChildrenProp": "error"
+      },
+      "performance": {
+        "recommended": true,
+        "noAccumulatingSpread": "error",
+        "noDelete": "error",
+        "noReExportAll": "error",
+        "useTopLevelRegex": "error"
+      },
+      "security": {
+        "recommended": true,
+        "noDangerouslySetInnerHtml": "error",
+        "noDangerouslySetInnerHtmlWithChildren": "error",
+        "noGlobalEval": "error"
+      },
+      "suspicious": {
+        "recommended": true,
+        "noExplicitAny": "error",
+        "noConsole": "warn",
+        "noArrayIndexKey": "error",
+        "noAssignInExpressions": "error",
+        "useAwait": "error",
+        "noDoubleEquals": "error"
+      },
+      "style": {
+        "recommended": true,
+        "noParameterAssign": "error",
+        "useBlockStatements": "error",
+        "useConst": "error",
+        "useImportType": "error",
+        "useTemplate": "error",
+        "noNonNullAssertion": "error",
+        "useConsistentArrayType": "error",
+        "useNodejsImportProtocol": "error",
+        "useNamingConvention": {
+          "level": "error"
+        },
+        "useFilenamingConvention": {
+          "level": "error",
+          "options": {
+            "filenameCases": ["kebab-case"]
+          }
+        }
+      }
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.tsx", "**/*.jsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useFilenamingConvention": {
+              "level": "error",
+              "options": {
+                "filenameCases": ["PascalCase"]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx", "**/*.d.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useFilenamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/i18next.d.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": {
+              "level": "error",
+              "options": {
+                "strictCase": false
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }

@@ -1,49 +1,49 @@
 {
-	"name": "@gitogito/vscode",
-	"version": "0.0.1",
-	"private": true,
-	"description": "AI-powered VS Code extension for generating smart commit messages and GitHub issues.",
-	"license": "MIT",
-	"scripts": {
-		"vscode:prepublish": "pnpm run build",
-		"build": "tsc -p ./",
-		"dev": "tsc -watch -p ./",
-		"check": "tsc --noEmit",
-		"format": "biome format --write src",
-		"lint": "biome check src",
-		"test": "vscode-test",
-		"test:coverage": "vscode-test --coverage --coverage-reporter lcov --coverage-output ./.coverage"
-	},
-	"dependencies": {
-		"@gitogito/core": "workspace:*",
-		"@gitogito/shared": "workspace:*",
-		"es-toolkit": "catalog:",
-		"neverthrow": "catalog:",
-		"yaml": "catalog:",
-		"zod": "catalog:"
-	},
-	"devDependencies": {
-		"@types/mocha": "^10.0.10",
-		"@types/node": "22.x",
-		"@types/vscode": "^1.110.0",
-		"@vscode/test-cli": "^0.0.12",
-		"@vscode/test-electron": "^2.5.2"
-	},
-	"activationEvents": [],
-	"categories": [
-		"Other"
-	],
-	"contributes": {
-		"commands": [
-			{
-				"command": "gitogito.helloWorld",
-				"title": "Hello World"
-			}
-		]
-	},
-	"displayName": "gitogito",
-	"engines": {
-		"vscode": "^1.110.0"
-	},
-	"main": "./out/extension.js"
+  "name": "@gitogito/vscode",
+  "version": "0.0.1",
+  "private": true,
+  "description": "AI-powered VS Code extension for generating smart commit messages and GitHub issues.",
+  "license": "MIT",
+  "scripts": {
+    "vscode:prepublish": "pnpm run build",
+    "build": "tsc -p ./",
+    "dev": "tsc -watch -p ./",
+    "check": "tsc --noEmit",
+    "format": "biome format --write src",
+    "lint": "biome check src",
+    "test": "vscode-test",
+    "test:coverage": "vscode-test --coverage --coverage-reporter lcov --coverage-output ./.coverage"
+  },
+  "dependencies": {
+    "@gitogito/core": "workspace:*",
+    "@gitogito/shared": "workspace:*",
+    "es-toolkit": "catalog:",
+    "neverthrow": "catalog:",
+    "yaml": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "@types/vscode": "^1.110.0",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2"
+  },
+  "activationEvents": [],
+  "categories": [
+    "Other"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "gitogito.helloWorld",
+        "title": "Hello World"
+      }
+    ]
+  },
+  "displayName": "gitogito",
+  "engines": {
+    "vscode": "^1.110.0"
+  },
+  "main": "./out/extension.js"
 }

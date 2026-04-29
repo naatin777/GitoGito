@@ -2,7 +2,7 @@ import { err, ok, type Result } from "neverthrow";
 import type { z } from "zod";
 
 export function parseAsResult<T>(schema: z.ZodType<T>, data: unknown): Result<T, z.ZodError<T>> {
-	const result = schema.safeParse(data);
+  const result = schema.safeParse(data);
 
-	return result.success ? ok(result.data) : err(result.error);
+  return result.success ? ok(result.data) : err(result.error);
 }

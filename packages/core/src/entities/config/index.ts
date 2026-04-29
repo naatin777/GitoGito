@@ -1,9 +1,9 @@
 export type { ConfigFile } from "./model/config-file.js";
 export {
-	CONFIG_MERGE_LAYER_ORDER,
-	type ConfigLayerPartials,
-	type ConfigMergeLayer,
-	mergeConfigLayers,
+  CONFIG_MERGE_LAYER_ORDER,
+  type ConfigLayerPartials,
+  type ConfigMergeLayer,
+  mergeConfigLayers,
 } from "./model/config-merge.js";
 export type { ConfigScope } from "./model/config-scope.js";
 export type { ConfigService, SetScalarError, SetScalarResult } from "./model/config-service.js";

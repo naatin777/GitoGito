@@ -1,10 +1,10 @@
 {
-	"extends": "../../tsconfig.base.json",
-	"compilerOptions": {
-		"lib": ["ESNext"],
-		"noEmit": true,
-		"allowImportingTsExtensions": true,
-		"resolveJsonModule": true
-	},
-	"include": ["src/**/*", "tests"]
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*", "tests"]
 }

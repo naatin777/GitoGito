@@ -1,31 +1,31 @@
 {
-	"name": "@gitogito/core",
-	"version": "0.0.1",
-	"private": true,
-	"description": "Core utilities for the gitogito project.",
-	"license": "MIT",
-	"scripts": {
-		"format": "biome format --write src",
-		"lint": "biome check src",
-		"test": "vitest run",
-		"test:watch": "vitest run --watch",
-		"test:coverage": "vitest run --coverage"
-	},
-	"dependencies": {
-		"@gitogito/shared": "workspace:*",
-		"@reduxjs/toolkit": "^2.11.2",
-		"es-toolkit": "catalog:",
-		"neverthrow": "catalog:",
-		"yaml": "catalog:",
-		"zod": "catalog:"
-	},
-	"devDependencies": {
-		"@vitest/coverage-v8": "^4.1.5",
-		"vitest": "^4.1.5"
-	},
-	"displayName": "gitogito",
-	"exports": {
-		".": "./src/index.ts"
-	},
-	"type": "module"
+  "name": "@gitogito/core",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Core utilities for the gitogito project.",
+  "license": "MIT",
+  "scripts": {
+    "format": "biome format --write src",
+    "lint": "biome check src",
+    "test": "vitest run",
+    "test:watch": "vitest run --watch",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@gitogito/shared": "workspace:*",
+    "@reduxjs/toolkit": "^2.11.2",
+    "es-toolkit": "catalog:",
+    "neverthrow": "catalog:",
+    "yaml": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.5",
+    "vitest": "^4.1.5"
+  },
+  "displayName": "gitogito",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "type": "module"
 }

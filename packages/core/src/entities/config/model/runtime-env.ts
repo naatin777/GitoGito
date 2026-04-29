@@ -3,7 +3,7 @@
  * Concrete process adapters live in apps. In-memory fakes: `../testing/memory-runtime-env.ts`.
  */
 export interface RuntimeEnv {
-	getCwd(): string;
-	getHome(): string;
-	getXdgConfigHome(): string | undefined;
+  getCwd(): string;
+  getHome(): string;
+  getXdgConfigHome(): string | undefined;
 }

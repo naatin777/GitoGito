@@ -2,21 +2,21 @@ import type { RuntimeEnv } from "../src/entities/config/index.js";
 
 /** Test double for controlled cwd / home / XDG; not a production code path. */
 export class MemoryRuntimeEnv implements RuntimeEnv {
-	constructor(
-		private readonly cwd: string,
-		private readonly home: string,
-		private readonly xdg: string | undefined,
-	) {}
+  constructor(
+    private readonly cwd: string,
+    private readonly home: string,
+    private readonly xdg: string | undefined,
+  ) {}
 
-	getCwd(): string {
-		return this.cwd;
-	}
+  getCwd(): string {
+    return this.cwd;
+  }
 
-	getHome(): string {
-		return this.home;
-	}
+  getHome(): string {
+    return this.home;
+  }
 
-	getXdgConfigHome(): string | undefined {
-		return this.xdg;
-	}
+  getXdgConfigHome(): string | undefined {
+    return this.xdg;
+  }
 }
