@@ -30,6 +30,6 @@
     "@changesets/cli": "^2.31.0",
     "lefthook": "^2.1.6",
     "turbo": "^2.9.6",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }
